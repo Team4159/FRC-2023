@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import frc.robot.SwerveModule;
+import frc.robot.autos.exampleAuto;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -21,6 +22,9 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
+
+    private TeleopState teleopState;
+
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID);
         gyro.configFactoryDefault();
@@ -34,9 +38,13 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
+
+        teleopState = TeleopState.NORMAL;
+
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                 fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -51,6 +59,14 @@ public class Swerve extends SubsystemBase {
                                     rotation)
                                 );
         SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+
+        if (teleopState == TeleopState.LOCKED)
+        {
+            swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45));
+            swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45));
+            swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45));
+            swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45));
+        }
 
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -108,4 +124,10 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
         }
     }
+
+    public static enum TeleopState {
+        NORMAL,
+        LOCKED // for defense, makes an x formation
+    }
+
 }
