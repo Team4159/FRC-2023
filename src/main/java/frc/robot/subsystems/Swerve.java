@@ -8,19 +8,23 @@ import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public SwerveDriveOdometry swerveOdometry;
+    public SwerveDrivePoseEstimator poseEstimator;
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
+
+    private Pose2d targetAimPose;
 
 
     private TeleopState teleopState;
@@ -30,7 +34,7 @@ public class Swerve extends SubsystemBase {
         gyro.configFactoryDefault();
         zeroGyro();
         
-        swerveOdometry = new SwerveDriveOdometry(Constants.Swerve.swerveKinematics, getYaw(), getPositions());
+        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), /*__initialpose__*/ null);
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -58,15 +62,32 @@ public class Swerve extends SubsystemBase {
                                     translation.getY(), 
                                     rotation)
                                 );
-        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
-        if (teleopState == TeleopState.LOCKED)
-        {
-            swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45));
-            swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45));
-            swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45));
-            swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45));
-        }
+        switch (teleopState) { 
+            case LOCKED:
+                swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // neeeeed to check
+                swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45));
+                swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45));
+                swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45));
+            /*case AIMBOT:
+                Transform2d difference = targetAimPose.minus(getPose());
+                swerveModuleStates = 
+                Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+                    fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                                        MathUtil.clamp(difference.getX(), -1, 1), 
+                                        MathUtil.clamp(difference.getY(), -1, 1), 
+                                        difference.getRotation()., 
+                                        getYaw()
+                                    )
+                                    : new ChassisSpeeds(
+                                        translation.getX(), 
+                                        translation.getY(), 
+                                        rotation)
+                                    );*/
+                
+        } 
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
 
         for(SwerveModule mod : mSwerveMods){
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
@@ -83,11 +104,15 @@ public class Swerve extends SubsystemBase {
     }    
 
     public Pose2d getPose() {
-        return swerveOdometry.getPoseMeters();
+        return poseEstimator.getEstimatedPosition();
+    }
+
+    public void setTargetPose(Pose2d pose) {
+        targetAimPose = pose;
     }
 
     public void resetOdometry(Pose2d pose) {
-        swerveOdometry.resetPosition(getYaw(), getPositions(), pose);
+        poseEstimator.resetPosition(getYaw(), getPositions(), pose);
     }
 
     public SwerveModuleState[] getStates(){
@@ -116,7 +141,7 @@ public class Swerve extends SubsystemBase {
 
     @Override
     public void periodic(){
-        swerveOdometry.update(getYaw(), getPositions());  
+        poseEstimator.update(getYaw(), getPositions());  
 
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
@@ -125,9 +150,17 @@ public class Swerve extends SubsystemBase {
         }
     }
 
+    public void updatePoseEstimator(Pose2d pose, double latency) {
+        if (getPose().getTranslation().getDistance(pose.getTranslation()) < 1) 
+            poseEstimator.addVisionMeasurement(pose, latency);
+        else
+            System.out.println("fuck we moved too far");
+    }
+
     public static enum TeleopState {
         NORMAL,
-        LOCKED // for defense, makes an x formation
+        LOCKED, // for defense, makes an x formation
+        AIMBOT
     }
 
 }
