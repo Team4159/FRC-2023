@@ -49,41 +49,36 @@ public class Swerve extends SubsystemBase {
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
 
-        SwerveModuleState[] swerveModuleStates =
-            Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation, 
-                                    getYaw()
-                                )
-                                : new ChassisSpeeds(
-                                    translation.getX(), 
-                                    translation.getY(), 
-                                    rotation)
-                                );
+        SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
         switch (teleopState) { 
+            case NORMAL:
+                swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+                    fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
+                        translation.getX(), 
+                        translation.getY(), 
+                        rotation, 
+                        getYaw()
+                    ) : new ChassisSpeeds(
+                        translation.getX(), 
+                        translation.getY(), 
+                        rotation)
+                );
             case LOCKED:
                 swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // neeeeed to check
                 swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45));
                 swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45));
                 swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45));
-            /*case AIMBOT:
+            case AIMBOT:
                 Transform2d difference = targetAimPose.minus(getPose());
-                swerveModuleStates = 
-                Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                    fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
-                                        MathUtil.clamp(difference.getX(), -1, 1), 
-                                        MathUtil.clamp(difference.getY(), -1, 1), 
-                                        difference.getRotation()., 
-                                        getYaw()
-                                    )
-                                    : new ChassisSpeeds(
-                                        translation.getX(), 
-                                        translation.getY(), 
-                                        rotation)
-                                    );*/
+                swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+                    ChassisSpeeds.fromFieldRelativeSpeeds(
+                        MathUtil.clamp(difference.getX(), -1, 1), 
+                        MathUtil.clamp(difference.getY(), -1, 1), 
+                        difference.getRotation().getDegrees()/180d,
+                        getYaw()
+                        )
+                );
                 
         } 
 
