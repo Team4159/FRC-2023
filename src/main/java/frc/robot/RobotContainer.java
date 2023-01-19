@@ -28,11 +28,16 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
+    private final JoystickButton alignRobot = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
 
+    /* Vision */
+    public static final Command updateVision = new UpdateVision(s_Swerve);
+    public static final Command swapToRetro = new SwapPipeline(0);
+    public static final Command swapToApril = new SwapPipeline(1);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -45,6 +50,7 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
+        updateVision.repeatedly().schedule();
 
         // Configure the button bindings
         configureButtonBindings();
@@ -59,6 +65,7 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
     }
 
     /**
