@@ -11,12 +11,12 @@ public class SwapVisionPipeline extends CommandBase {
     }
 
     @Override
-    public void execute() {
+    public void execute() { // send the new pipeline # to NetworkTables
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(num);
     }
 
     @Override
-    public boolean isFinished() {
+    public boolean isFinished() { // check whether the pipeline has in fact been changed
         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getInteger(-1) == num;
     }
 }

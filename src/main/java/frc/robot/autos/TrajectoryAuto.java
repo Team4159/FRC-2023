@@ -7,7 +7,7 @@ import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
 
-public class TrajectoryAuto extends SwerveControllerCommand {
+public class TrajectoryAuto extends SwerveControllerCommand { // trust the process
     private static ProfiledPIDController thetaController = new ProfiledPIDController(
         Constants.AutoConstants.kPThetaController, 0, 0, Constants.AutoConstants.kThetaControllerConstraints
     );
