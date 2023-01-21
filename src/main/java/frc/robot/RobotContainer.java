@@ -1,15 +1,19 @@
 package frc.robot;
 
+import java.util.Map;
+
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.autos.*;
-import frc.robot.commands.*;
-import frc.robot.subsystems.*;
+import frc.robot.commands.SwapVisionPipeline;
+import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.UpdateVision;
+import frc.robot.subsystems.Swerve;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -18,6 +22,8 @@ import frc.robot.subsystems.*;
  * subsystems, commands, and button mappings) should be declared here.
  */
 public class RobotContainer {
+    private final DataBoard dataBoard = new DataBoard();
+
     /* Controllers */
     private final Joystick driver = new Joystick(0);
 
@@ -34,10 +40,10 @@ public class RobotContainer {
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
 
-    /* Vision */
+    /* Vision Commands */
     public static final Command updateVision = new UpdateVision(s_Swerve);
-    public static final Command swapToRetro = new SwapPipeline(0);
-    public static final Command swapToApril = new SwapPipeline(1);
+    public static final Command swapToRetro = new SwapVisionPipeline(0);
+    public static final Command swapToApril = new SwapVisionPipeline(1);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -68,13 +74,40 @@ public class RobotContainer {
         alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
     }
 
-    /**
-     * Use this to pass the autonomous command to the main {@link Robot} class.
-     *
-     * @return the command to run in autonomous
-     */
+    public static enum AutoMode {Dock, Normal}
+    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
+        DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
+            0, Map.<AutoMode, Command>of( // Station 1
+                AutoMode.Dock, null, // Dock
+                AutoMode.Normal, null // Don't Dock
+            ),
+            1, Map.<AutoMode, Command>of( // Station 2
+                AutoMode.Dock, null,
+                AutoMode.Normal, null
+            ),
+            2, Map.<AutoMode, Command>of( // Station 3
+                AutoMode.Dock, null,
+                AutoMode.Normal, null
+            )
+        ),
+        DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
+            0, Map.<AutoMode, Command>of( // Station 1
+                AutoMode.Dock, null, // Dock
+                AutoMode.Normal, null // Don't Dock
+            ),
+            1, Map.<AutoMode, Command>of( // Station 2
+                AutoMode.Dock, null,
+                AutoMode.Normal, null
+            ),
+            2, Map.<AutoMode, Command>of( // Station 3
+                AutoMode.Dock, null,
+                AutoMode.Normal, null
+            )
+        )
+    );
     public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return autos.get(DriverStation.getAlliance())
+            .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
+            .get(dataBoard.getAutoMode());
     }
 }
