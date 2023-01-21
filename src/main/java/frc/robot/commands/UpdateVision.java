@@ -17,9 +17,9 @@ public class UpdateVision extends CommandBase {
     }
 
     public void execute() {
-        NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight");
-        double[] pose = limelight.getValue("pose").getDoubleArray();
-        swerve.updatePoseEstimator(
+        NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight"); // Fetches the limelight section of the networktables
+        double[] pose = limelight.getValue("pose").getDoubleArray(); // gets the pose portion as an array of doubles [x, y, ?, ?, ?, rotation]
+        swerve.updatePoseEstimator( // sends new data to swerve
             new Pose2d(pose[0], pose[1], new Rotation2d(pose[5])),
             limelight.getEntry("tl").getDouble(0)
         );

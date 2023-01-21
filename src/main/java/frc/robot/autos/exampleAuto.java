@@ -20,12 +20,12 @@ public class ExampleAuto extends SequentialCommandGroup {
     public ExampleAuto(Swerve s_Swerve) {
         String trajectoryJSON = "Red1Dock";
         try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON); // find out where your trajectory is in the files
+            Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath); // load the json into a trajectory
             
-            addCommands(
-                new InstantCommand(() -> s_Swerve.resetOdometry(trajectory.getInitialPose())),
-                new TrajectoryAuto(s_Swerve, trajectory)
+            addCommands( // create the sequence of subcommands that will be running
+                new InstantCommand(() -> s_Swerve.resetOdometry(trajectory.getInitialPose())), // use an inline function to reset the odometry to your initial position
+                new TrajectoryAuto(s_Swerve, trajectory) // the actual command that asks the swerve to run along this trajectory
             );
         } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
