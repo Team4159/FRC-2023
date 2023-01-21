@@ -3,7 +3,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.sensors.Pigeon2;
 
 import frc.robot.SwerveModule;
-import frc.robot.autos.exampleAuto;
 import frc.robot.Constants;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
