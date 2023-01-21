@@ -13,7 +13,7 @@ public class UpdateVision extends CommandBase {
     public UpdateVision(Swerve swerve) {
         this.swerve = swerve;
 
-        addRequirements(swerve);
+        addRequirements(swerve); // ensure the swerve subsystem has loaded first
     }
 
     public void execute() {
