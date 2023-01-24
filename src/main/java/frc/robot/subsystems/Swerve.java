@@ -32,7 +32,7 @@ public class Swerve extends SubsystemBase {
         gyro.configFactoryDefault();
         zeroGyro();
         
-        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), /*__initialpose__*/ null);
+        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), /*__initialpose__*/ null); //TODO: Fix
 
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -61,11 +61,11 @@ public class Swerve extends SubsystemBase {
                         rotation)
                 );
             case LOCKED:
-                swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // neeeeed to check
-                swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45));
-                swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45));
-                swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45));
-            case AIMBOT:
+                swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // TODO: neeeeed to check for correct angle
+                swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
+                swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
+                swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
+            case AIMBOT: // TODO: test
                 Transform2d difference = targetAimPose.minus(getPose());
                 swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
