@@ -28,18 +28,19 @@ public class Swerve extends SubsystemBase {
     private TeleopState teleopState;
 
     public Swerve() {
-        gyro = new Pigeon2(Constants.Swerve.pigeonID);
+        gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.drivetrainCANbusName);
         gyro.configFactoryDefault();
         zeroGyro();
         
-        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), /*__initialpose__*/ null); //TODO: Fix
-
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
             new SwerveModule(1, Constants.Swerve.Mod1.constants),
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
+        
+        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), new Pose2d()); //TODO: Fix
+
 
         teleopState = TeleopState.NORMAL;
     }
@@ -49,6 +50,7 @@ public class Swerve extends SubsystemBase {
 
         switch (teleopState) { 
             case NORMAL:
+                System.out.println("Translation: " + translation + "rotation: " + rotation + "yaw: " + getYaw());
                 swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(), 
@@ -65,7 +67,7 @@ public class Swerve extends SubsystemBase {
                 swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
                 swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
                 swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
-            case AIMBOT: // TODO: test
+            /*case AIMBOT: // TODO: test
                 Transform2d difference = targetAimPose.minus(getPose());
                 swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                     ChassisSpeeds.fromFieldRelativeSpeeds(
@@ -74,7 +76,7 @@ public class Swerve extends SubsystemBase {
                         difference.getRotation().getDegrees()/180d,
                         getYaw()
                         )
-                );
+                );*/
                 
         } 
 

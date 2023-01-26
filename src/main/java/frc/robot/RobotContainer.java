@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.DataBoard.UpdateDataBoard;
+import frc.robot.autos.B1S1;
 import frc.robot.commands.SwapVisionPipeline;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.UpdateVision;
@@ -78,7 +79,7 @@ public class RobotContainer {
     }
 
     public static enum AutoMode {Dock, Normal}
-    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
+    /*private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
             0, Map.<AutoMode, Command>of( // Station 1
                 AutoMode.Dock, null, // Dock
@@ -107,10 +108,12 @@ public class RobotContainer {
                 AutoMode.Normal, null
             )
         )
-    );
+    );*/
+
     public Command getAutonomousCommand() {
-        return autos.get(DriverStation.getAlliance())
+        return new B1S1(s_Swerve);
+        /*return autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());
+            .get(dataBoard.getAutoMode());*/
     }
 }
