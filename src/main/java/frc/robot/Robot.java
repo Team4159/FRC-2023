@@ -60,12 +60,10 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // schedule the autonomous command (example)
+    // schedule the autonomous command if it exists
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
-    } else {
-      DriverStation.reportError("Unable to get autonomous command.", false);
-    }
+    } else DriverStation.reportError("Unable to get autonomous command.", false);
   }
 
   /** This function is called periodically during autonomous. */

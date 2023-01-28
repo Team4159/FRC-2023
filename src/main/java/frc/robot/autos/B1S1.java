@@ -20,7 +20,7 @@ public class B1S1 extends SequentialCommandGroup {
     public B1S1(Swerve s_Swerve) {
         String trajectoryJSON = "B1S1";
         try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("./output/"+trajectoryJSON); // find out where your trajectory is in the files
+            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve("./output/"+trajectoryJSON+".wpilib.json"); // find out where your trajectory is in the files
             Trajectory trajectory = TrajectoryUtil.fromPathweaverJson(trajectoryPath); // load the json into a trajectory
             
             addCommands( // create the sequence of subcommands that will be running
