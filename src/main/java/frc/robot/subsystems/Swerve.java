@@ -94,6 +94,7 @@ public class Swerve extends SubsystemBase {
 
         for (SwerveModule mod : mSwerveMods)
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
+
     }    
 
     /* Used by SwerveControllerCommand in Auto */
@@ -156,10 +157,10 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updatePoseEstimator(Pose2d pose, double latency) {
-        if (this.getPose().getTranslation().getDistance(pose.getTranslation()) < 1) 
+        //if (this.getPose().getTranslation().getDistance(pose.getTranslation()) < 1) 
             poseEstimator.addVisionMeasurement(pose, latency);
-        else
-            DriverStation.reportWarning("WARNING: Vision measurements are too far from poseEstimator!", false);
+        /*else
+            DriverStation.reportWarning("WARNING: Vision measurements are too far from poseEstimator!", false);*/
     }
 
     public static enum TeleopState {

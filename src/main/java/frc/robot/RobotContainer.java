@@ -10,7 +10,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.DataBoard.UpdateDataBoard;
 import frc.robot.commands.SwapVisionPipeline;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.UpdateVision;
@@ -25,8 +24,8 @@ import frc.robot.autos.*;
  */
 public class RobotContainer {
     private final DataBoard dataBoard = new DataBoard();
-    private final UpdateDataBoard updateDataBoard = dataBoard.new UpdateDataBoard();
-
+    private final UpdateVision updateVision;
+    
     /* Controllers */
     private final Joystick driver = new Joystick(0);
 
@@ -44,7 +43,7 @@ public class RobotContainer {
     public static final Swerve s_Swerve = new Swerve();
 
     /* Vision Commands */
-    private static final Command updateVision = new UpdateVision(s_Swerve);
+    //private static final Command updateVision = new UpdateVision(s_Swerve);
     private static final Command swapToRetro = new SwapVisionPipeline(0);
     private static final Command swapToApril = new SwapVisionPipeline(1);
 
@@ -59,8 +58,8 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
-        updateVision.repeatedly().schedule();
-        updateDataBoard.repeatedly().schedule();
+        //updateVision.repeatedly().schedule();
+        updateVision = new UpdateVision(s_Swerve);
 
         // Configure the button bindings
         configureButtonBindings();
