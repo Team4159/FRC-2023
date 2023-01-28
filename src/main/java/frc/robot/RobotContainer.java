@@ -79,7 +79,7 @@ public class RobotContainer {
     }
 
     public static enum AutoMode {Dock, Normal}
-    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
+    /*private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
             0, Map.<AutoMode, Command>of( // Station 1
                 AutoMode.Dock, null, // Dock
@@ -108,11 +108,12 @@ public class RobotContainer {
                 AutoMode.Normal, null
             )
         )
-    );
+    );*/
 
     public Command getAutonomousCommand() {
-        return autos.get(DriverStation.getAlliance())
+        /*return autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());
+            .get(dataBoard.getAutoMode());*/
+        return new B1S1(s_Swerve);
     }
 }

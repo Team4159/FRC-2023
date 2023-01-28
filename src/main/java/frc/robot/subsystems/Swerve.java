@@ -15,6 +15,7 @@ import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -38,6 +39,9 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(2, Constants.Swerve.Mod2.constants),
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
+
+        Timer.delay(0.1);
+        resetModulesToAbsolute();
         
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), new Pose2d()); //TODO: Fix
 
@@ -50,7 +54,7 @@ public class Swerve extends SubsystemBase {
 
         switch (teleopState) { 
             case NORMAL:
-                System.out.println("Translation: " + translation + "rotation: " + rotation + "yaw: " + getYaw());
+                //System.out.println("Translation: " + translation + "rotation: " + rotation + "yaw: " + getYaw());
                 swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(), 
@@ -62,11 +66,16 @@ public class Swerve extends SubsystemBase {
                         translation.getY(), 
                         rotation)
                 );
+                break;
             case LOCKED:
-                swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // TODO: neeeeed to check for correct angle
-                swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
-                swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
-                swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
+                System.out.println("LOCKED");
+                swerveModuleStates[0] = new SwerveModuleState(0.1, new Rotation2d(45)); // TODO: neeeeed to check for correct angle
+                swerveModuleStates[1] = new SwerveModuleState(0.1, new Rotation2d(135)); // TODO
+                swerveModuleStates[2] = new SwerveModuleState(0.1, new Rotation2d(135)); // TODO
+                swerveModuleStates[3] = new SwerveModuleState(0.1, new Rotation2d(45)); // TODO
+                break;
+            case AIMBOT:
+                System.out.println("AIMBOT");
             /*case AIMBOT: // TODO: test
                 Transform2d difference = targetAimPose.minus(getPose());
                 swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
@@ -77,6 +86,7 @@ public class Swerve extends SubsystemBase {
                         getYaw()
                         )
                 );*/
+                break;
                 
         } 
 
@@ -136,6 +146,12 @@ public class Swerve extends SubsystemBase {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+        }
+    }
+
+    public void resetModulesToAbsolute(){
+        for(SwerveModule mod : mSwerveMods){
+            mod.resetToAbsolute();
         }
     }
 
