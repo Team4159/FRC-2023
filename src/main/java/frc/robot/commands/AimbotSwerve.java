@@ -18,6 +18,11 @@ public class AimbotSwerve extends SequentialCommandGroup {
 
     public AimbotSwerve(Swerve s_Swerve, Pose2d targetPose) {
 
+        if (targetPose == null) {
+            System.err.println("TARGET NOT FOUND");
+            return;
+        }
+
         trajectory = generateStraightTrajectory(s_Swerve.getPose(), targetPose);
 
 
