@@ -2,7 +2,6 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer.AutoMode;
 
@@ -12,7 +11,7 @@ import frc.robot.RobotContainer.AutoMode;
  * and post them to the Shuffleboard with the SmartDashboard class!
  *  - Max
  */
-public class DataBoard extends SubsystemBase{
+public class DataBoard extends SubsystemBase {
     private Field2d field = new Field2d(); // initialize the field for pose estimation
 
     public DataBoard() {
@@ -27,5 +26,4 @@ public class DataBoard extends SubsystemBase{
     public void periodic() {
         field.setRobotPose(RobotContainer.s_Swerve.getPose()); // updates the robot's estimated position on the field
     }
-
 }

@@ -1,6 +1,6 @@
 package frc.robot;
 
-import java.util.Map;
+// import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -24,7 +24,6 @@ import frc.robot.autos.*;
  */
 public class RobotContainer {
     private final DataBoard dataBoard = new DataBoard();
-    private final UpdateVision updateVision;
     
     /* Controllers */
     private final Joystick driver = new Joystick(0);
@@ -46,6 +45,8 @@ public class RobotContainer {
     //private static final Command updateVision = new UpdateVision(s_Swerve);
     private static final Command swapToRetro = new SwapVisionPipeline(0);
     private static final Command swapToApril = new SwapVisionPipeline(1);
+    
+    private final Command updateVision = new UpdateVision(s_Swerve);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -58,8 +59,7 @@ public class RobotContainer {
                 () -> robotCentric.getAsBoolean()
             )
         );
-        //updateVision.repeatedly().schedule();
-        updateVision = new UpdateVision(s_Swerve);
+        updateVision.repeatedly().schedule();
 
         // Configure the button bindings
         configureButtonBindings();
@@ -113,6 +113,9 @@ public class RobotContainer {
         /*return autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
             .get(dataBoard.getAutoMode());*/
+        System.out.println(DriverStation.getAlliance().toString());
+        System.out.println(NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger());
+        System.out.println(dataBoard.getAutoMode());
         return new B1S1(s_Swerve);
     }
 }
