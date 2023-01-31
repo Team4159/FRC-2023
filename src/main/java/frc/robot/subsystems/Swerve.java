@@ -24,8 +24,6 @@ public class Swerve extends SubsystemBase {
     public SwerveModule[] mSwerveMods;
     public Pigeon2 gyro;
 
-    private Pose2d targetAimPose;
-
     private TeleopState teleopState;
 
     public Swerve() {
@@ -54,7 +52,6 @@ public class Swerve extends SubsystemBase {
 
         switch (teleopState) { 
             case NORMAL:
-                //System.out.println("Translation: " + translation + "rotation: " + rotation + "yaw: " + getYaw());
                 swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
                     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(), 
@@ -69,23 +66,13 @@ public class Swerve extends SubsystemBase {
                 break;
             case LOCKED:
                 System.out.println("LOCKED");
-                swerveModuleStates[0] = new SwerveModuleState(0.1, new Rotation2d(45)); // TODO: neeeeed to check for correct angle
-                swerveModuleStates[1] = new SwerveModuleState(0.1, new Rotation2d(135)); // TODO
-                swerveModuleStates[2] = new SwerveModuleState(0.1, new Rotation2d(135)); // TODO
-                swerveModuleStates[3] = new SwerveModuleState(0.1, new Rotation2d(45)); // TODO
+                swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // TODO: neeeeed to check for correct angle
+                swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(135)); // TODO
+                swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(135)); // TODO
+                swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
                 break;
             case AIMBOT:
-                System.out.println("AIMBOT");
-            /*case AIMBOT: // TODO: test
-                Transform2d difference = targetAimPose.minus(getPose());
-                swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
-                    ChassisSpeeds.fromFieldRelativeSpeeds(
-                        MathUtil.clamp(difference.getX(), -1, 1), 
-                        MathUtil.clamp(difference.getY(), -1, 1), 
-                        difference.getRotation().getDegrees()/180d,
-                        getYaw()
-                        )
-                );*/
+                System.err.println("AIMBOT"); // If this is ever printed something bad has happened
                 break;
                 
         } 
@@ -123,10 +110,6 @@ public class Swerve extends SubsystemBase {
         return positions;
     }
 
-    public void setTargetPose(Pose2d pose) {
-        targetAimPose = pose;
-    }
-
     public void resetOdometry(Pose2d pose) {
         poseEstimator.resetPosition(getYaw(), getPositions(), pose);
     }
@@ -158,6 +141,14 @@ public class Swerve extends SubsystemBase {
     public void updatePoseEstimator(Pose2d pose, double latency) {
         poseEstimator.addVisionMeasurement(pose, latency);
     } // it already checks to see if the measurement is too far off
+
+    public void setSwerveState(TeleopState newState) {
+        teleopState = newState;
+    }
+
+    public Pose2d getTargetPose() {
+        return new Pose2d(); // TODO: add logic to find the closest target (cone pole or block platform) and get the wanted to pose
+    }
 
     public static enum TeleopState {
         NORMAL,

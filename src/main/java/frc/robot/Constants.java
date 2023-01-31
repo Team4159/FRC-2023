@@ -147,4 +147,27 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class JoystickConstants {
+
+        public static final class PrimaryDrive {
+            public static final int drivePort = 0;
+
+            public static final int zeroGyro = 1;
+            public static final int lockedMode = 2;
+        }
+
+        public static final class PrimaryTurn {
+            public static final int turnPort = 1;
+
+            public static final int aimbot = 1;
+        }
+
+        public static final class Secondary {
+            public static final int secondaryPort = 2;
+
+
+        }
+
+    }
 }

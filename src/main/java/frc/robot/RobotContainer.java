@@ -6,10 +6,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+
+import frc.robot.Constants.JoystickConstants.*;
+import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.SwapVisionPipeline;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.UpdateVision;
@@ -26,17 +29,27 @@ public class RobotContainer {
     private final DataBoard dataBoard = new DataBoard();
     
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort);
+    private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort);
+
+    private final Joystick secondary = new Joystick(Secondary.secondaryPort);
 
     /* Drive Controls */
     private final int translationAxis = Joystick.AxisType.kY.value;
     private final int strafeAxis = Joystick.AxisType.kX.value;
-    private final int rotationAxis = Joystick.AxisType.kZ.value;
+
+    private final int rotationAxis = Joystick.AxisType.kX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton alignRobot = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro);
+    private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode);
+
+    private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot);
+
+
+    //private final JoystickButton alignRobot = new JoystickButton(primaryDrive, XboxController.Axis.kLeftTrigger.value); TODO: fix
+
+    //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -53,10 +66,10 @@ public class RobotContainer {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> -primaryDrive.getRawAxis(translationAxis), 
+                () -> -primaryDrive.getRawAxis(strafeAxis), 
+                () -> -primaryTurn.getRawAxis(rotationAxis), 
+                () -> false // TODO: robotCentric button?
             )
         );
         updateVision.repeatedly().schedule();
@@ -74,7 +87,19 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
+
+        lockedMode
+            .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.LOCKED)))
+            .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
+        ;
+
+        aimbot
+            .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
+            .whileTrue(new AimbotSwerve(s_Swerve, s_Swerve.getTargetPose()))
+            .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
+        ;
+        
+        //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
     }
 
     public static enum AutoMode {Dock, Normal}
