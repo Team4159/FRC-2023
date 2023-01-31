@@ -29,10 +29,10 @@ public class RobotContainer {
     private final DataBoard dataBoard = new DataBoard();
     
     /* Controllers */
-    private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort);
-    private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort);
+    private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
+    private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
 
-    private final Joystick secondary = new Joystick(Secondary.secondaryPort);
+    private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
     /* Drive Controls */
     private final int translationAxis = Joystick.AxisType.kY.value;
@@ -41,10 +41,10 @@ public class RobotContainer {
     private final int rotationAxis = Joystick.AxisType.kX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro);
-    private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode);
+    private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro); // zeroes the gyro based on the current robot rotation
+    private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
 
-    private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot);
+    private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot); // lines up for scoring automatically
 
 
     //private final JoystickButton alignRobot = new JoystickButton(primaryDrive, XboxController.Axis.kLeftTrigger.value); TODO: fix

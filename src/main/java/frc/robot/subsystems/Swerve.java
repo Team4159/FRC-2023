@@ -47,7 +47,7 @@ public class Swerve extends SubsystemBase {
         teleopState = TeleopState.NORMAL;
     }
 
-    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
+    public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) { // teleop manual driving
         SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
         switch (teleopState) { 
@@ -133,12 +133,12 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    public void resetModulesToAbsolute(){
+    public void resetModulesToAbsolute(){ // tells the swerve modules to set the integrated encoders on the angle falcons based on the absolute cancoders
         for(SwerveModule mod : mSwerveMods)
             mod.resetToAbsolute();
     }
 
-    public void updatePoseEstimator(Pose2d pose, double latency) {
+    public void updatePoseEstimator(Pose2d pose, double latency) { // updates the pose estimator from vision
         poseEstimator.addVisionMeasurement(pose, latency);
     } // it already checks to see if the measurement is too far off
 
@@ -146,7 +146,7 @@ public class Swerve extends SubsystemBase {
         teleopState = newState;
     }
 
-    public Pose2d getTargetPose(Pose2d initialPose) {
+    public Pose2d getTargetPose(Pose2d initialPose) { // returns the closest pose for scoring at the grid
 
         String region = lookupRegion(initialPose);
         if (region.equals("M")) return null;
@@ -181,7 +181,7 @@ public class Swerve extends SubsystemBase {
         return null; // if it can't find a pose, return null and cry
     }
 
-    private String lookupRegion(Pose2d pose) {
+    private String lookupRegion(Pose2d pose) { // finds the scoring region that the pose parameter is currently in
 
         double x = pose.getX();
         double y = pose.getY();
