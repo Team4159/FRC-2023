@@ -1,5 +1,6 @@
 package frc.robot;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,13 +14,19 @@ import frc.robot.RobotContainer.AutoMode;
  */
 public class DataBoard extends SubsystemBase {
     private Field2d field = new Field2d(); // initialize the field for pose estimation
+    private Field2d visionField = new Field2d(); // initialize the field for pose estimation
 
     public DataBoard() {
         SmartDashboard.putData("field", field); // send the field object to the shuffleboard
+        SmartDashboard.putData("visionField", visionField);
     }
 
     public AutoMode getAutoMode() { // fetches whether to dock or not during auto, according to a button
         return SmartDashboard.setDefaultBoolean("autoDock", false) ? AutoMode.Dock : AutoMode.Normal;
+    }
+
+    public void setVisionPose(Pose2d pose) {
+        visionField.setRobotPose(pose);
     }
 
     @Override

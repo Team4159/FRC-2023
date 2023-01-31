@@ -1,6 +1,6 @@
 package frc.robot;
 
-// import java.util.Map;
+import java.util.Map;
 
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -46,7 +46,7 @@ public class RobotContainer {
     private static final Command swapToRetro = new SwapVisionPipeline(0);
     private static final Command swapToApril = new SwapVisionPipeline(1);
     
-    private final Command updateVision = new UpdateVision(s_Swerve);
+    private final Command updateVision = new UpdateVision(s_Swerve, dataBoard);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -78,7 +78,7 @@ public class RobotContainer {
     }
 
     public static enum AutoMode {Dock, Normal}
-    /*private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
+    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
             0, Map.<AutoMode, Command>of( // Station 1
                 AutoMode.Dock, null, // Dock
@@ -107,7 +107,7 @@ public class RobotContainer {
                 AutoMode.Normal, null
             )
         )
-    );*/
+    );
 
     public Command getAutonomousCommand() {
         /*return autos.get(DriverStation.getAlliance())

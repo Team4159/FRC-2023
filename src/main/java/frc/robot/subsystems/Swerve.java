@@ -40,8 +40,8 @@ public class Swerve extends SubsystemBase {
             new SwerveModule(3, Constants.Swerve.Mod3.constants)
         };
 
-        Timer.delay(0.1);
-        resetModulesToAbsolute();
+        Timer.delay(0.1); // wow ok
+        resetModulesToAbsolute(); // works but should preferably be threaded
         
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), new Pose2d()); //TODO: Fix
 
@@ -151,17 +151,13 @@ public class Swerve extends SubsystemBase {
     }
 
     public void resetModulesToAbsolute(){
-        for(SwerveModule mod : mSwerveMods){
+        for(SwerveModule mod : mSwerveMods)
             mod.resetToAbsolute();
-        }
     }
 
     public void updatePoseEstimator(Pose2d pose, double latency) {
-        //if (this.getPose().getTranslation().getDistance(pose.getTranslation()) < 1) 
-            poseEstimator.addVisionMeasurement(pose, latency);
-        /*else
-            DriverStation.reportWarning("WARNING: Vision measurements are too far from poseEstimator!", false);*/
-    }
+        poseEstimator.addVisionMeasurement(pose, latency);
+    } // it already checks to see if the measurement is too far off
 
     public static enum TeleopState {
         NORMAL,
