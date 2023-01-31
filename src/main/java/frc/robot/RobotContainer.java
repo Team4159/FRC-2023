@@ -95,7 +95,7 @@ public class RobotContainer {
 
         aimbot
             .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
-            .whileTrue(new AimbotSwerve(s_Swerve, s_Swerve.getTargetPose(s_Swerve.getPose())))  // TODO: Handle null targets
+            .whileTrue(new AimbotSwerve(s_Swerve, s_Swerve.getTargetPose(s_Swerve.getPose())))
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
         ;
         

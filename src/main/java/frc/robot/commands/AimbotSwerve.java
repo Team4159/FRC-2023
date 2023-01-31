@@ -6,6 +6,7 @@ import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ProfiledPIDCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
@@ -19,7 +20,7 @@ public class AimbotSwerve extends SequentialCommandGroup {
     public AimbotSwerve(Swerve s_Swerve, Pose2d targetPose) {
 
         if (targetPose == null) {
-            System.err.println("TARGET NOT FOUND");
+            DriverStation.reportWarning("TARGET NOT FOUND", false);
             return;
         }
 

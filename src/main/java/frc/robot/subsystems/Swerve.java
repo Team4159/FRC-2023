@@ -72,7 +72,7 @@ public class Swerve extends SubsystemBase {
                 swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
                 break;
             case AIMBOT:
-                System.err.println("AIMBOT"); // If this is ever printed something bad has happened
+                DriverStation.reportError("AIMBOT", false); // If this is ever printed something bad has happened
                 break;
                 
         } 
