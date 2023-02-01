@@ -170,4 +170,10 @@ public final class Constants {
         }
 
     }
+
+    public static final class VisionConstants {
+        public static final double fieldWidth = 16.54;
+        public static final double fieldHeight= 8;
+        public static final double maximumOffset = 3; // Metres
+    }
 }

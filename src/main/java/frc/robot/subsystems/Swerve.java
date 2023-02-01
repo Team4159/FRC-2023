@@ -7,11 +7,9 @@ import frc.robot.SwerveModule;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -65,15 +63,14 @@ public class Swerve extends SubsystemBase {
                 );
                 break;
             case LOCKED:
-                System.out.println("LOCKED"); // TODO: once tested, this print can be removed
-                swerveModuleStates[0] = new SwerveModuleState(0, new Rotation2d(45)); // TODO: neeeeed to check for correct angle
-                swerveModuleStates[1] = new SwerveModuleState(0, new Rotation2d(135)); // TODO
-                swerveModuleStates[2] = new SwerveModuleState(0, new Rotation2d(135)); // TODO
-                swerveModuleStates[3] = new SwerveModuleState(0, new Rotation2d(45)); // TODO
+                swerveModuleStates[0] = new SwerveModuleState(0.01, new Rotation2d(45)); // TODO: why need speed? lock wheels please
+                swerveModuleStates[1] = new SwerveModuleState(0.01, new Rotation2d(-45));
+                swerveModuleStates[2] = new SwerveModuleState(0.01, new Rotation2d(-45));
+                swerveModuleStates[3] = new SwerveModuleState(0.01, new Rotation2d(45));
                 break;
             case AIMBOT:
                 DriverStation.reportError("AIMBOT", false); // If this is ever printed something bad has happened
-                break;
+                return;
                 
         } 
 
@@ -139,22 +136,21 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updatePoseEstimator(Pose2d pose, double latency) { // updates the pose estimator from vision
-        poseEstimator.addVisionMeasurement(pose, latency);
-    } // it already checks to see if the measurement is too far off
+        if (pose.getTranslation().getDistance(poseEstimator.getEstimatedPosition().getTranslation()) < Constants.VisionConstants.maximumOffset)
+            poseEstimator.addVisionMeasurement(pose, latency);
+    }
 
     public void setSwerveState(TeleopState newState) {
         teleopState = newState;
     }
 
     public Pose2d getTargetPose(Pose2d initialPose) { // returns the closest pose for scoring at the grid
-
         String region = lookupRegion(initialPose);
         if (region.equals("M")) return null;
 
         Rotation2d rot = Rotation2d.fromDegrees((region.charAt(0) == 'B') ? 180 : 0); // point left is scoring in blue and right if scoring in red
 
         double x = (region.charAt(0) == 'B') ?  1.98 : 14.56; // trust the numbers, this one has the robot bumper sit an inch from the little seperators on the grid
-
 
         switch (region.charAt(1)) {
             case '9':
@@ -239,4 +235,6 @@ public class Swerve extends SubsystemBase {
         LOCKED, // for defense, makes an x formation
         AIMBOT
     }
+
+    // TODO: For the future, split all region claculation into its own class
 }

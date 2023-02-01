@@ -7,7 +7,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -15,8 +14,8 @@ import frc.robot.Constants.JoystickConstants.*;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.SwapVisionPipeline;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.UpdateVision;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
 import frc.robot.autos.*;
 
 /**
@@ -25,9 +24,8 @@ import frc.robot.autos.*;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
-    private final DataBoard dataBoard = new DataBoard();
-    
+@SuppressWarnings("unused") // FIXME remove
+public class RobotContainer {    
     /* Controllers */
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
     private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
@@ -53,13 +51,12 @@ public class RobotContainer {
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
+    public static final Vision vision = new Vision();
+    public static final DataBoard dataBoard = new DataBoard();
 
     /* Vision Commands */
-    //private static final Command updateVision = new UpdateVision(s_Swerve);
     private static final Command swapToRetro = new SwapVisionPipeline(0);
     private static final Command swapToApril = new SwapVisionPipeline(1);
-    
-    private final Command updateVision = new UpdateVision(s_Swerve, dataBoard);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -72,7 +69,6 @@ public class RobotContainer {
                 () -> false // TODO: robotCentric button?
             )
         );
-        updateVision.repeatedly().schedule();
 
         // Configure the button bindings
         configureButtonBindings();
@@ -106,41 +102,37 @@ public class RobotContainer {
     private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
             0, Map.<AutoMode, Command>of( // Station 1
-                AutoMode.Dock, null, // Dock
-                AutoMode.Normal, new B1S1(s_Swerve) // Don't Dock
-            ),
-            1, Map.<AutoMode, Command>of( // Station 2
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            ),
-            2, Map.<AutoMode, Command>of( // Station 3
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            )
-        ),
-        DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
-            0, Map.<AutoMode, Command>of( // Station 1
-                AutoMode.Dock, null, // Dock
-                AutoMode.Normal, null // Don't Dock
-            ),
-            1, Map.<AutoMode, Command>of( // Station 2
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            ),
-            2, Map.<AutoMode, Command>of( // Station 3
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            )
-        )
+                // AutoMode.Dock, null, // Dock
+                AutoMode.Normal, new B1(s_Swerve) // Don't Dock
+            )//,
+            // 1, Map.<AutoMode, Command>of( // Station 2
+            //     AutoMode.Dock, null,
+            //     AutoMode.Normal, null
+            // ),
+            // 2, Map.<AutoMode, Command>of( // Station 3
+            //     AutoMode.Dock, null,
+            //     AutoMode.Normal, null
+            // )
+        )//,
+        // DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
+        //     0, Map.<AutoMode, Command>of( // Station 1
+        //         AutoMode.Dock, null, // Dock
+        //         AutoMode.Normal, null // Don't Dock
+        //     ),
+        //     1, Map.<AutoMode, Command>of( // Station 2
+        //         AutoMode.Dock, null,
+        //         AutoMode.Normal, null
+        //     ),
+        //     2, Map.<AutoMode, Command>of( // Station 3
+        //         AutoMode.Dock, null,
+        //         AutoMode.Normal, null
+        //     )
+        // )
     );
 
     public Command getAutonomousCommand() {
-        /*return autos.get(DriverStation.getAlliance())
+        return autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());*/
-        System.out.println(DriverStation.getAlliance().toString());
-        System.out.println(NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger());
-        System.out.println(dataBoard.getAutoMode());
-        return new B1S1(s_Swerve);
+            .get(dataBoard.getAutoMode());
     }
 }
