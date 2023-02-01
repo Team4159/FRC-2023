@@ -41,7 +41,6 @@ public class Swerve extends SubsystemBase {
         
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), new Pose2d()); //TODO: Fix
 
-
         teleopState = TeleopState.NORMAL;
     }
 
@@ -126,7 +125,8 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Integrated", mod.getState().angle.getDegrees());
-            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond);    
+            SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Velocity", mod.getState().speedMetersPerSecond); 
+               
         }
     }
 
@@ -149,6 +149,5 @@ public class Swerve extends SubsystemBase {
         LOCKED, // for defense, makes an x formation
         AIMBOT
     }
-
-    // TODO: For the future, split all region claculation into its own class
 }
+
