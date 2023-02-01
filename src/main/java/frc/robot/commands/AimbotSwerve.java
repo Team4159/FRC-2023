@@ -10,22 +10,19 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.Constants;
+import frc.robot.FieldRegion;
 import frc.robot.subsystems.Swerve;
 
 public class AimbotSwerve extends SequentialCommandGroup {
-
-    private Trajectory trajectory;
-
-    public AimbotSwerve(Swerve s_Swerve, Pose2d targetPose) {
-        if (targetPose == null) {
+    public AimbotSwerve(Swerve s_Swerve, FieldRegion region) {
+        Pose2d pose = region.getTargetPose();
+        if (pose == null) {
             DriverStation.reportWarning("TARGET NOT FOUND", false);
             return;
         }
 
-        trajectory = generateStraightTrajectory(s_Swerve.getPose(), targetPose);
-
         addCommands(
-            TrajectoryCommand.generate(s_Swerve, trajectory),
+            TrajectoryCommand.generate(s_Swerve, generateStraightTrajectory(s_Swerve.getPose(), pose)),
             new InstantCommand(() -> s_Swerve.resetModulesToAbsolute())
         );
     }
@@ -43,5 +40,4 @@ public class AimbotSwerve extends SequentialCommandGroup {
             config
         );
     }
-
 }

@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.JoystickConstants.*;
 import frc.robot.commands.AimbotSwerve;
-import frc.robot.commands.SwapVisionPipeline;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
@@ -24,12 +23,12 @@ import frc.robot.autos.*;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-@SuppressWarnings("unused") // FIXME remove
 public class RobotContainer {    
     /* Controllers */
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
     private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
 
+    @SuppressWarnings("unused")
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
     /* Drive Controls */
@@ -44,19 +43,12 @@ public class RobotContainer {
 
     private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot); // lines up for scoring automatically
 
-
-    //private final JoystickButton alignRobot = new JoystickButton(primaryDrive, XboxController.Axis.kLeftTrigger.value); TODO: fix
-
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
-
-    /* Vision Commands */
-    private static final Command swapToRetro = new SwapVisionPipeline(0);
-    private static final Command swapToApril = new SwapVisionPipeline(1);
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -91,7 +83,7 @@ public class RobotContainer {
 
         aimbot
             .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
-            .whileTrue(new AimbotSwerve(s_Swerve, s_Swerve.getTargetPose(s_Swerve.getPose())))
+            .whileTrue(new AimbotSwerve(s_Swerve, FieldRegion.lookup(s_Swerve.getPose())))
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
         ;
         
