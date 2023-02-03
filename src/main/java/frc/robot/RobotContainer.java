@@ -83,7 +83,7 @@ public class RobotContainer {
 
         aimbot
             .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
-            .whileTrue(new AimbotSwerve(s_Swerve, FieldRegion.lookup(s_Swerve.getPose())))
+            .whileTrue(new AimbotSwerve(s_Swerve, FieldRegion.lookup(s_Swerve.getPose()))) // may want to disable this when too far from goal
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
         ;
         
