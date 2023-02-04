@@ -147,4 +147,15 @@ public final class Constants {
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
     }
+
+    public static final class RotatingArmConstants {
+        public static final int rotatingArmID = 0; 
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double lowSetpoint = 0;
+        public static final double midSetpoint = 0;
+        public static final double highSetpoint = 0;
+        public static final double offSetpoint = 0;
+    }
 }
