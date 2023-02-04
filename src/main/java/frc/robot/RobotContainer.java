@@ -12,7 +12,9 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.JoystickConstants.*;
 import frc.robot.commands.AimbotSwerve;
+import frc.robot.commands.RunPincerArm;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.autos.*;
@@ -45,10 +47,13 @@ public class RobotContainer {
 
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
+    private final JoystickButton runPincerArmButton = new JoystickButton(secondary, 1);
+
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
+    private final PincerArm pincerArm = new PincerArm();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -88,6 +93,7 @@ public class RobotContainer {
         ;
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
+        runPincerArmButton.onTrue(new RunPincerArm(pincerArm));
     }
 
     public static enum AutoMode {Dock, Normal}
