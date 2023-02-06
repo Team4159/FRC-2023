@@ -6,13 +6,13 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 import frc.robot.Constants.JoystickConstants.*;
 import frc.robot.commands.AimbotSwerve;
-import frc.robot.commands.RunPincerArm;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.Swerve;
@@ -47,7 +47,8 @@ public class RobotContainer {
 
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
-    private final JoystickButton runPincerArmButton = new JoystickButton(secondary, 1);
+    private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
+
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -93,7 +94,8 @@ public class RobotContainer {
         ;
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
-        runPincerArmButton.onTrue(new RunPincerArm(pincerArm));
+        togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+        
     }
 
     public static enum AutoMode {Dock, Normal}
