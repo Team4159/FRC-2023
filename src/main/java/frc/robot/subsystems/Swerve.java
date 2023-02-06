@@ -146,8 +146,10 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updatePoseEstimator(Pose2d pose, double latency) { // updates the pose estimator from vision
-        if (pose.getTranslation().getDistance(poseEstimator.getEstimatedPosition().getTranslation()) < Constants.VisionConstants.maximumOffset)
+        if (pose.getTranslation().getDistance(poseEstimator.getEstimatedPosition().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
             poseEstimator.addVisionMeasurement(pose, latency);
+        else
+            System.out.println("Bad vision data recieved");
     }
 
     public void setSwerveState(TeleopState newState) {
