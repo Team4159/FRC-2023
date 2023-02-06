@@ -23,11 +23,13 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
 
     private TeleopState teleopState;
+    private Rotation2d userGyroOffset; // gyro should not ever be zeroed during teleop, zero rotation is toward the positive x direction on the field -- facing the red alliance grid
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.drivetrainCANbusName);
         gyro.configFactoryDefault();
         zeroGyro();
+        userGyroOffset = Rotation2d.fromDegrees(0);
         
         mSwerveMods = new SwerveModule[] {
             new SwerveModule(0, Constants.Swerve.Mod0.constants),
@@ -54,7 +56,7 @@ public class Swerve extends SubsystemBase {
                         translation.getX(), 
                         translation.getY(), 
                         rotation, 
-                        getYaw()
+                        getYaw().plus(userGyroOffset)
                     ) : new ChassisSpeeds(
                         translation.getX(), 
                         translation.getY(), 
@@ -112,6 +114,14 @@ public class Swerve extends SubsystemBase {
 
     public void zeroGyro(){
         gyro.setYaw(0);
+    }
+
+    public void zeroGyroOffset() {
+        userGyroOffset = Rotation2d.fromDegrees(0).minus(getYaw()); // makes the front of the robot for the driver the current front of the robot TODO: check if this works
+    }
+
+    public void setGyroOffset(Rotation2d offset) {
+        userGyroOffset = offset;
     }
 
     public Rotation2d getYaw() {
