@@ -71,19 +71,19 @@ public final class Constants {
         public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
-        public static final double driveKF = 0.0;
+        public static final double driveKF = 0.0; // no touching
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.32 / 12); //TODO: This must be tuned to specific robot
-        public static final double driveKV = (1.51 / 12);
-        public static final double driveKA = (0.27 / 12);
+        public static final double driveKS = (0.2424 / 12); //TODO: This must be tuned to specific robot
+        public static final double driveKV = (0.7146 / 12);
+        public static final double driveKA = (0.0773 / 12);
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 4.5; //TODO: This must be tuned to specific robot
+        public static final double maxSpeed = 4.5;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0; //TODO: This must be tuned to specific robot
+        public static final double maxAngularVelocity = 10.0;
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -95,7 +95,7 @@ public final class Constants {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(2.5488);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(92.9004);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -105,7 +105,7 @@ public final class Constants {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 2;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(191.9531);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(283.1836);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -115,7 +115,7 @@ public final class Constants {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(199.6875);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(289.9512);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -125,7 +125,7 @@ public final class Constants {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 4;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(119.2676);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(200.8301);
             public static final SwerveModuleConstants constants = 
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -157,5 +157,34 @@ public final class Constants {
         public static final double scoringOneSetpoint = 0;
         public static final double scoringTwoSetpoint = 0; 
         public static final double offSetpoint = 0;
+    }
+    
+    public static final class JoystickConstants {
+
+        public static final class PrimaryDrive {
+            public static final int drivePort = 0;
+
+            public static final int zeroGyro = 1;
+            public static final int lockedMode = 2;
+        }
+
+        public static final class PrimaryTurn {
+            public static final int turnPort = 1;
+
+            public static final int aimbot = 1;
+        }
+
+        public static final class Secondary {
+            public static final int secondaryPort = 2;
+
+
+        }
+
+    }
+
+    public static final class VisionConstants {
+        public static final double fieldWidth = 16.54;
+        public static final double fieldHeight= 8;
+        public static final double maximumOffset = 1; // Meters
     }
 }

@@ -2,20 +2,22 @@ package frc.robot;
 
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.robot.DataBoard.UpdateDataBoard;
-import frc.robot.autos.B1S1;
-import frc.robot.commands.SwapVisionPipeline;
+
+import frc.robot.Constants.JoystickConstants.*;
+import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.UpdateVision;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
+import frc.robot.autos.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -23,44 +25,44 @@ import frc.robot.subsystems.Swerve;
  * periodic methods (other than the scheduler calls). Instead, the structure of the robot (including
  * subsystems, commands, and button mappings) should be declared here.
  */
-public class RobotContainer {
-    private final DataBoard dataBoard = new DataBoard();
-    private final UpdateDataBoard updateDataBoard = dataBoard.new UpdateDataBoard();
-
+public class RobotContainer {    
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
+    private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
+    private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
+
+    @SuppressWarnings("unused")
+    private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
     /* Drive Controls */
     private final int translationAxis = Joystick.AxisType.kY.value;
     private final int strafeAxis = Joystick.AxisType.kX.value;
-    private final int rotationAxis = Joystick.AxisType.kZ.value;
+
+    private final int rotationAxis = Joystick.AxisType.kX.value;
 
     /* Driver Buttons */
-    private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton alignRobot = new JoystickButton(driver, XboxController.Axis.kLeftTrigger.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro); // zeroes the gyro based on the current robot rotation
+    private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
+
+    private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot); // lines up for scoring automatically
+
+    //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
-
-    /* Vision Commands */
-    private static final Command updateVision = new UpdateVision(s_Swerve);
-    private static final Command swapToRetro = new SwapVisionPipeline(0);
-    private static final Command swapToApril = new SwapVisionPipeline(1);
+    public static final Vision vision = new Vision();
+    public static final DataBoard dataBoard = new DataBoard();
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
             new TeleopSwerve(
                 s_Swerve, 
-                () -> -driver.getRawAxis(translationAxis), 
-                () -> -driver.getRawAxis(strafeAxis), 
-                () -> -driver.getRawAxis(rotationAxis), 
-                () -> robotCentric.getAsBoolean()
+                () -> -primaryDrive.getRawAxis(translationAxis), 
+                () -> -primaryDrive.getRawAxis(strafeAxis), 
+                () -> -primaryTurn.getRawAxis(rotationAxis), 
+                () -> false // TODO: robotCentric button?
             )
         );
-        updateVision.repeatedly().schedule();
-        updateDataBoard.repeatedly().schedule();
 
         // Configure the button bindings
         configureButtonBindings();
@@ -74,46 +76,64 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
-        alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyroOffset()));
+
+        lockedMode
+            .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.LOCKED)))
+            .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
+        ;
+
+        aimbot
+            .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
+            .whileTrue(new AimbotSwerve(s_Swerve, FieldRegion.lookup(s_Swerve.getPose()))) // may want to disable this when too far from goal
+            .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
+        ;
+        
+        //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
+    }
+
+    public void teleopInit() {
+        s_Swerve.setGyroOffset((DriverStation.getAlliance().equals(Alliance.Red)) // sets the user gyro offset depending on if the driver is on the red or blue alliance TODO: test
+            ? Rotation2d.fromDegrees(180)
+            : Rotation2d.fromDegrees(0)
+        );
     }
 
     public static enum AutoMode {Dock, Normal}
-    /*private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
+    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
             0, Map.<AutoMode, Command>of( // Station 1
-                AutoMode.Dock, null, // Dock
-                AutoMode.Normal, null // Don't Dock
-            ),
-            1, Map.<AutoMode, Command>of( // Station 2
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            ),
-            2, Map.<AutoMode, Command>of( // Station 3
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            )
-        ),
-        DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
-            0, Map.<AutoMode, Command>of( // Station 1
-                AutoMode.Dock, null, // Dock
-                AutoMode.Normal, null // Don't Dock
-            ),
-            1, Map.<AutoMode, Command>of( // Station 2
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            ),
-            2, Map.<AutoMode, Command>of( // Station 3
-                AutoMode.Dock, null,
-                AutoMode.Normal, null
-            )
-        )
-    );*/
+                // AutoMode.Dock, null, // Dock
+                AutoMode.Normal, new B1(s_Swerve) // Don't Dock
+            )//,
+            // 1, Map.<AutoMode, Command>of( // Station 2
+            //     AutoMode.Dock, null,
+            //     AutoMode.Normal, null
+            // ),
+            // 2, Map.<AutoMode, Command>of( // Station 3
+            //     AutoMode.Dock, null,
+            //     AutoMode.Normal, null
+            // )
+        )//,
+        // DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
+        //     0, Map.<AutoMode, Command>of( // Station 1
+        //         AutoMode.Dock, null, // Dock
+        //         AutoMode.Normal, null // Don't Dock
+        //     ),
+        //     1, Map.<AutoMode, Command>of( // Station 2
+        //         AutoMode.Dock, null,
+        //         AutoMode.Normal, null
+        //     ),
+        //     2, Map.<AutoMode, Command>of( // Station 3
+        //         AutoMode.Dock, null,
+        //         AutoMode.Normal, null
+        //     )
+        // )
+    );
 
     public Command getAutonomousCommand() {
-        return new B1S1(s_Swerve);
-        /*return autos.get(DriverStation.getAlliance())
+        return autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());*/
+            .get(dataBoard.getAutoMode());
     }
 }
