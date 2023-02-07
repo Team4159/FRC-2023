@@ -25,19 +25,26 @@ public class CascadingArm extends SubsystemBase {
     @Override
     public void periodic() {
         switch (armState) {
-            case LOW:
-                setArmSpeed(runArmPID(armSpark.getSelectedSensorPosition(), Constants.CascadingArmConstants.lowSetpoint));
+            case INTAKING:
+                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.intakingSetpoint));
                 break;
-            case MID:
-                setArmSpeed(runArmPID(armSpark.getSelectedSensorPosition(), Constants.CascadingArmConstants.midSetpoint));
+            case SCORING1:
+                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.scoringOneSetpoint));
                 break;
-            case HIGH:
-                setArmSpeed(runArmPID(armSpark.getSelectedSensorPosition(), Constants.CascadingArmConstants.highSetpoint));
+            case SCORING2:
+                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.scoringTwoSetpoint));
+                break;
+            case SCORING3:
+                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.scoringThreeSetpoint));
                 break;
             case OFF:
-                setArmSpeed(runArmPID(armSpark.getSelectedSensorPosition(), Constants.CascadingArmConstants.offSetpoint));
+                setArmSpeed(0);
                 break;
         }
+    }
+
+    public double getEncoderPosition() {
+        return armSpark.getEncoder().getPosition();
     }
 
     public void setArmState(ArmState armState) {
@@ -58,6 +65,7 @@ public class CascadingArm extends SubsystemBase {
         INTAKING,
         SCORING1,
         SCORING2,
+        SCORING3,
         OFF
     }
 }

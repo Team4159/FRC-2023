@@ -155,10 +155,10 @@ public final class Constants {
         public static final double kD = 0;
         public static final double intakingSetpoint = 0;
         public static final double scoringOneSetpoint = 0;
-        public static final double scoringTwoSetpoint = 0; 
-        public static final double offSetpoint = 0;
+        public static final double scoringTwoSetpoint = 0;
+        public static final double scoringThreeSetpoint = 0;
     }
-    
+
     public static final class JoystickConstants {
 
         public static final class PrimaryDrive {
