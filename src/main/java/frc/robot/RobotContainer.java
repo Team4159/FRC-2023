@@ -2,11 +2,12 @@ package frc.robot;
 
 import java.util.Map;
 
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -80,7 +81,7 @@ public class RobotContainer {
      */
     private void configureButtonBindings() {
         /* Driver Buttons */
-        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyro()));
+        zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyroOffset()));
 
         lockedMode
             .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.LOCKED)))
@@ -96,6 +97,13 @@ public class RobotContainer {
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
         
+    }
+
+    public void teleopInit() {
+        s_Swerve.setGyroOffset((DriverStation.getAlliance().equals(Alliance.Red)) // sets the user gyro offset depending on if the driver is on the red or blue alliance TODO: test
+            ? Rotation2d.fromDegrees(180)
+            : Rotation2d.fromDegrees(0)
+        );
     }
 
     public static enum AutoMode {Dock, Normal}
