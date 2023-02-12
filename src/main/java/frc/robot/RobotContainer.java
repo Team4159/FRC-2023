@@ -1,23 +1,34 @@
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.Constants.JoystickConstants.*;
+import frc.robot.Constants.JoystickConstants.PrimaryDrive;
+import frc.robot.Constants.JoystickConstants.PrimaryTurn;
+import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
-import frc.robot.autos.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -52,6 +63,25 @@ public class RobotContainer {
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
 
+    
+
+    
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TestPath", new PathConstraints(4, 4));
+
+    public static final Map<String, Command> eventMap = new HashMap<>();
+
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        s_Swerve::getPose, // Pose2d supplier
+        s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+        Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+        new PIDConstants(Constants.AutoConstants.kPXController, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
+        eventMap,
+        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
+    );
+
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
         s_Swerve.setDefaultCommand(
@@ -63,6 +93,9 @@ public class RobotContainer {
                 () -> false // TODO: robotCentric button?
             )
         );
+
+        // Configure the event map for auto
+        configureEventMap();
 
         // Configure the button bindings
         configureButtonBindings();
@@ -99,12 +132,33 @@ public class RobotContainer {
         );
     }
 
+    private void configureEventMap() {
+        eventMap.put("Print1", new PrintCommand("Print 1"));
+        eventMap.put("Print2", new PrintCommand("Print 2"));
+        eventMap.put("Print3", new PrintCommand("Print 3"));
+        eventMap.put("RotateArmDown", null); // TODO: finish these commands
+        eventMap.put("RotateArmUp", null);
+        eventMap.put("RotateArmIntake", null);
+        eventMap.put("CascadeIntake", null);
+        eventMap.put("CascadeIn", null);
+        eventMap.put("CascadeOne", null);
+        eventMap.put("CascadeTwo", null);
+        eventMap.put("CascadeThree", null);
+        eventMap.put("PincerIn", null);
+        eventMap.put("PincerOut", null);
+        eventMap.put("Wait0.1", new WaitCommand(0.1));
+        eventMap.put("Wait0.5", new WaitCommand(0.5));
+        eventMap.put("Wait1", new WaitCommand(1));
+        eventMap.put("Wait2", new WaitCommand(2));
+        eventMap.put("Wait5", new WaitCommand(5));
+    }
+
     public static enum AutoMode {Dock, Normal}
-    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
-        DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
-            0, Map.<AutoMode, Command>of( // Station 1
+    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>> autos = Map.of(
+        DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>of( // Red Alliance
+            0, Map.<AutoMode, List<PathPlannerTrajectory>>of( // Station 1
                 // AutoMode.Dock, null, // Dock
-                AutoMode.Normal, new B1(s_Swerve) // Don't Dock
+                AutoMode.Normal, loadPathGroup("B1") // Don't Dock
             )//,
             // 1, Map.<AutoMode, Command>of( // Station 2
             //     AutoMode.Dock, null,
@@ -131,9 +185,13 @@ public class RobotContainer {
         // )
     );
 
+    private List<PathPlannerTrajectory> loadPathGroup(String s) {
+        return PathPlanner.loadPathGroup(s, Constants.AutoConstants.kPathConstraints);
+    }
+
     public Command getAutonomousCommand() {
-        return autos.get(DriverStation.getAlliance())
+        return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());
+            .get(dataBoard.getAutoMode()));
     }
 }
