@@ -23,7 +23,7 @@ public class AimbotSwerve extends SequentialCommandGroup {
 
         addCommands(
             new InstantCommand(() -> s_Swerve.resetModulesToAbsolute()),
-            s_Swerve.followTrajectoryCommand(generateStraightTrajectory(s_Swerve.getPose(), pose), isFinished()),
+            s_Swerve.followTrajectoryCommand(generateStraightTrajectory(s_Swerve.getPose(), pose), false),
             new InstantCommand(() -> s_Swerve.resetModulesToAbsolute())
         );
     }
