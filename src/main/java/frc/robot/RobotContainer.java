@@ -20,11 +20,11 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryTurn;
 import frc.robot.Constants.JoystickConstants.Secondary;
-import frc.robot.autos.B1;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
@@ -69,9 +69,6 @@ public class RobotContainer {
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TestPath", new PathConstraints(4, 4));
 
     public static final Map<String, Command> eventMap = new HashMap<>();
-    /*eventMap.put("marker1", new PrintCommand("Passed marker 1"));
-    eventMap.put("marker2", new PrintCommand("Passed marker 2"));
-    eventMap.put("marker3", new PrintCommand("Passed marker 3"));*/
 
     SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
         s_Swerve::getPose, // Pose2d supplier
@@ -96,6 +93,9 @@ public class RobotContainer {
                 () -> false // TODO: robotCentric button?
             )
         );
+
+        // Configure the event map for auto
+        configureEventMap();
 
         // Configure the button bindings
         configureButtonBindings();
@@ -132,12 +132,33 @@ public class RobotContainer {
         );
     }
 
+    private void configureEventMap() {
+        eventMap.put("Print1", new PrintCommand("Print 1"));
+        eventMap.put("Print2", new PrintCommand("Print 2"));
+        eventMap.put("Print3", new PrintCommand("Print 3"));
+        eventMap.put("RotateArmDown", null); // TODO: finish these commands
+        eventMap.put("RotateArmUp", null);
+        eventMap.put("RotateArmIntake", null);
+        eventMap.put("CascadeIntake", null);
+        eventMap.put("CascadeIn", null);
+        eventMap.put("CascadeOne", null);
+        eventMap.put("CascadeTwo", null);
+        eventMap.put("CascadeThree", null);
+        eventMap.put("PincerIn", null);
+        eventMap.put("PincerOut", null);
+        eventMap.put("Wait0.1", new WaitCommand(0.1));
+        eventMap.put("Wait0.5", new WaitCommand(0.5));
+        eventMap.put("Wait1", new WaitCommand(1));
+        eventMap.put("Wait2", new WaitCommand(2));
+        eventMap.put("Wait5", new WaitCommand(5));
+    }
+
     public static enum AutoMode {Dock, Normal}
-    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, Command>>> autos = Map.of(
-        DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, Command>>of( // Red Alliance
-            0, Map.<AutoMode, Command>of( // Station 1
+    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>> autos = Map.of(
+        DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>of( // Red Alliance
+            0, Map.<AutoMode, List<PathPlannerTrajectory>>of( // Station 1
                 // AutoMode.Dock, null, // Dock
-                AutoMode.Normal, new B1(s_Swerve) // Don't Dock
+                AutoMode.Normal, loadPathGroup("B1") // Don't Dock
             )//,
             // 1, Map.<AutoMode, Command>of( // Station 2
             //     AutoMode.Dock, null,
@@ -164,10 +185,13 @@ public class RobotContainer {
         // )
     );
 
+    private List<PathPlannerTrajectory> loadPathGroup(String s) {
+        return PathPlanner.loadPathGroup(s, Constants.AutoConstants.kPathConstraints);
+    }
+
     public Command getAutonomousCommand() {
-        return /*autos.get(DriverStation.getAlliance())
+        return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());*/
-            s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("TestPath", new PathConstraints(4, 4)), true);
+            .get(dataBoard.getAutoMode()));
     }
 }
