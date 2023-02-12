@@ -32,7 +32,7 @@ public class AimbotSwerve extends SequentialCommandGroup {
         return PathPlanner.generatePath( // TODO: account for initial velocity
             Constants.AutoConstants.kPathConstraints, 
             new PathPoint(initialPose.getTranslation(), getHeading(initialPose, targetPose), initialPose.getRotation()),
-            new PathPoint(targetPose.getTranslation(), getHeading(initialPose, targetPose), targetPose.getRotation())
+            new PathPoint(targetPose.getTranslation(), getHeading(targetPose, initialPose), targetPose.getRotation())
         );
     }
 
