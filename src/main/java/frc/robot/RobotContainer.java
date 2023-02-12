@@ -1,23 +1,34 @@
 package frc.robot;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
-import frc.robot.Constants.JoystickConstants.*;
+import frc.robot.Constants.JoystickConstants.PrimaryDrive;
+import frc.robot.Constants.JoystickConstants.PrimaryTurn;
+import frc.robot.Constants.JoystickConstants.Secondary;
+import frc.robot.autos.B1;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
-import frc.robot.autos.*;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -51,6 +62,28 @@ public class RobotContainer {
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
+
+    
+
+    
+    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TestPath", new PathConstraints(4, 4));
+
+    public static final Map<String, Command> eventMap = new HashMap<>();
+    /*eventMap.put("marker1", new PrintCommand("Passed marker 1"));
+    eventMap.put("marker2", new PrintCommand("Passed marker 2"));
+    eventMap.put("marker3", new PrintCommand("Passed marker 3"));*/
+
+    SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+        s_Swerve::getPose, // Pose2d supplier
+        s_Swerve::resetOdometry, // Pose2d consumer, used to reset odometry at the beginning of auto
+        Constants.Swerve.swerveKinematics, // SwerveDriveKinematics
+        new PIDConstants(Constants.AutoConstants.kPXController, 0.0, 0.0), // PID constants to correct for translation error (used to create the X and Y PID controllers)
+        new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
+        s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
+        eventMap,
+        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
+    );
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
     public RobotContainer() {
@@ -132,8 +165,9 @@ public class RobotContainer {
     );
 
     public Command getAutonomousCommand() {
-        return autos.get(DriverStation.getAlliance())
+        return /*autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode());
+            .get(dataBoard.getAutoMode());*/
+            s_Swerve.followTrajectoryCommand(PathPlanner.loadPath("TestPath", new PathConstraints(4, 4)), true);
     }
 }

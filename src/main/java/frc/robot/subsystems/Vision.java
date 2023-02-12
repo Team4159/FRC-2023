@@ -9,7 +9,7 @@ import frc.robot.Constants;
 import frc.robot.RobotContainer;
 
 public class Vision extends SubsystemBase {
-    private NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight"); // Fetches the limelight section of the networktables
+    /*private NetworkTable limelight = NetworkTableInstance.getDefault().getTable("limelight"); // Fetches the limelight section of the networktables
 
     public void setPipeline(int num) {
         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(num);
@@ -27,5 +27,5 @@ public class Vision extends SubsystemBase {
         var pose = new Pose2d(poseData[0] + Constants.VisionConstants.fieldWidth/2, poseData[1] + Constants.VisionConstants.fieldHeight/2, Rotation2d.fromDegrees(poseData[5]));
         RobotContainer.s_Swerve.updatePoseEstimator(pose,latency+0.011); // sends new data to swerve TODO: Latency Constant
         RobotContainer.dataBoard.setVisionPose(pose);
-    }
+    }*/
 }
