@@ -29,6 +29,7 @@ import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
+import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.CascadingArm.ArmState;
@@ -61,11 +62,15 @@ public class RobotContainer {
 
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
+    private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
+
+
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
+    private final PincerArm pincerArm = new PincerArm();
 
     
 
@@ -127,6 +132,8 @@ public class RobotContainer {
         ;
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
+        togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+        
     }
 
     public void teleopInit() {
