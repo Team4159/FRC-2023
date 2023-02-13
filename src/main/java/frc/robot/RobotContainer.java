@@ -28,8 +28,10 @@ import frc.robot.Constants.JoystickConstants.PrimaryTurn;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.CascadingArm.ArmState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -63,6 +65,7 @@ public class RobotContainer {
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
+    public static final CascadingArm cascadingArm = new CascadingArm();
 
     
 
@@ -140,11 +143,11 @@ public class RobotContainer {
         eventMap.put("RotateArmDown", null); // TODO: finish these commands
         eventMap.put("RotateArmUp", null);
         eventMap.put("RotateArmIntake", null);
-        eventMap.put("CascadeIntake", null);
-        eventMap.put("CascadeIn", null);
-        eventMap.put("CascadeOne", null);
-        eventMap.put("CascadeTwo", null);
-        eventMap.put("CascadeThree", null);
+        eventMap.put("CascadeIntake", new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING)));
+        eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
+        eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING1)));
+        eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING2)));
+        eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING3)));
         eventMap.put("PincerIn", null);
         eventMap.put("PincerOut", null);
         eventMap.put("FullIntake", new SequentialCommandGroup(null));
