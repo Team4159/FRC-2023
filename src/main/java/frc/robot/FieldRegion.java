@@ -43,7 +43,7 @@ public class FieldRegion {
     }
 
     private static final double[] gridIndexY = {
-        0.0d, 0.51, 1.07, 1.63, 219, 2.75, 3.31, 3.87, 4.43, 4.99
+        0.0d, 0.51, 1.07, 1.63, 2.19, 2.75, 3.31, 3.87, 4.43, 4.99
     };
     public Pose2d getTargetPose() { // returns the closest pose for scoring at the grid
         if (this.alliance.equals(Alliance.Invalid) || this.gridIndex <= 0) return null;
