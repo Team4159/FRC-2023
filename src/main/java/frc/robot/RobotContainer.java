@@ -17,6 +17,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -70,7 +71,7 @@ public class RobotContainer {
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
-    private final PincerArm pincerArm = new PincerArm();
+    public static final PincerArm pincerArm = new PincerArm();
 
     
 
@@ -87,7 +88,7 @@ public class RobotContainer {
         new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
         eventMap,
-        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true TODO: think about this :)
         s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
@@ -155,8 +156,8 @@ public class RobotContainer {
         eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING1)));
         eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING2)));
         eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING3)));
-        eventMap.put("PincerIn", null);
-        eventMap.put("PincerOut", null);
+        eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
+        eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
         eventMap.put("FullIntake", new SequentialCommandGroup(null));
         eventMap.put("ScoreLow", new SequentialCommandGroup(null));
         eventMap.put("ScoreMid", new SequentialCommandGroup(null));
