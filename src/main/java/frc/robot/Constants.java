@@ -149,6 +149,8 @@ public final class Constants {
         public static final double scoringOneSetpoint = 0;
         public static final double scoringTwoSetpoint = 0;
         public static final double scoringThreeSetpoint = 0;
+        public static final double lowSpeed = -0.5;
+        public static final double highSpeed = 0.5;
     }
 
     public static final class JoystickConstants {

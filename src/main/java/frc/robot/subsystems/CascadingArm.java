@@ -1,6 +1,4 @@
 package frc.robot.subsystems;
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -52,7 +50,7 @@ public class CascadingArm extends SubsystemBase {
     }
 
     public void setArmSpeed(double speed) {
-        speed = MathUtil.clamp(speed, -0.5, 0.5);
+        speed = MathUtil.clamp(speed, Constants.CascadingArmConstants.lowSpeed, Constants.CascadingArmConstants.highSpeed);
         armSpark.set(speed);
     }
 
