@@ -140,6 +140,17 @@ public final class Constants {
         public static final double kPThetaController = 10;
     }
 
+    public static final class CascadingArmConstants {
+        public static final int cascadingArmId = 0; 
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double intakingSetpoint = 0;
+        public static final double scoringOneSetpoint = 0;
+        public static final double scoringTwoSetpoint = 0;
+        public static final double scoringThreeSetpoint = 0;
+    }
+
     public static final class JoystickConstants {
 
         public static final class PrimaryDrive {
