@@ -58,7 +58,6 @@ public class CascadingArm extends SubsystemBase {
         return pid.calculate(currentPos, setPoint);
     }
 
-
     public static enum ArmState {
         INTAKING,
         SCORING1,

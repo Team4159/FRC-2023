@@ -19,8 +19,7 @@ public class PincerArm extends SubsystemBase {
   }
 
   public void setPincerArm(Value value) {
-    if (value.equals(Value.kForward)) extended = true;
-    if (value.equals(Value.kReverse)) extended = false;
+    extended = value.equals(Value.kForward);
     dS.set((extended) ? Value.kForward : Value.kReverse);
   }
 
