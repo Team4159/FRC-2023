@@ -21,7 +21,6 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
@@ -46,7 +45,6 @@ public class RobotContainer {
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
     private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
 
-    @SuppressWarnings("unused")
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
     /* Drive Controls */
@@ -72,9 +70,6 @@ public class RobotContainer {
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
     public static final PincerArm pincerArm = new PincerArm();
-
-    
-
     
     List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TestPath", new PathConstraints(4, 4));
 
@@ -158,13 +153,13 @@ public class RobotContainer {
         eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING3)));
         eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
         eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
-        eventMap.put("FullIntake", new SequentialCommandGroup(null));
-        eventMap.put("ScoreLow", new SequentialCommandGroup(null));
-        eventMap.put("ScoreMid", new SequentialCommandGroup(null));
-        eventMap.put("ScoreHigh", new SequentialCommandGroup(null));
-        eventMap.put("Autobalance", null);
-        eventMap.put("LEDYellow", null);
-        eventMap.put("LEDPurple", null);
+        // eventMap.put("FullIntake", new SequentialCommandGroup(null));
+        // eventMap.put("ScoreLow", new SequentialCommandGroup(null));
+        // eventMap.put("ScoreMid", new SequentialCommandGroup(null));
+        // eventMap.put("ScoreHigh", new SequentialCommandGroup(null));
+        // eventMap.put("Autobalance", null);
+        // eventMap.put("LEDYellow", null);
+        // eventMap.put("LEDPurple", null);
         eventMap.put("Wait0.1", new WaitCommand(0.1));
         eventMap.put("Wait0.5", new WaitCommand(0.5));
         eventMap.put("Wait1", new WaitCommand(1));
@@ -177,7 +172,7 @@ public class RobotContainer {
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>of( // Red Alliance
             0, Map.<AutoMode, List<PathPlannerTrajectory>>of( // Station 1
                 // AutoMode.Dock, null, // Dock
-                AutoMode.Normal, loadPathGroup("B1") // Don't Dock
+                AutoMode.Normal, loadPathGroup("Bsimple1") // Don't Dock
             )//,
             // 1, Map.<AutoMode, Command>of( // Station 2
             //     AutoMode.Dock, null,
