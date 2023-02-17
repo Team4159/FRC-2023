@@ -3,9 +3,12 @@ package frc.robot;
 import com.ctre.phoenix.motorcontrol.NeutralMode;
 import com.pathplanner.lib.PathConstraints;
 
+import edu.wpi.first.math.VecBuilder;
+import edu.wpi.first.math.Vector;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
@@ -20,6 +23,9 @@ public final class Constants {
         public static final boolean invertGyro = false; // Always ensure Gyro is CCW+ CW-
 
         public static final COTSFalconSwerveConstants chosenModule = COTSFalconSwerveConstants.SDSMK4i(COTSFalconSwerveConstants.driveGearRatios.SDSMK4i_L2);
+
+        public static final Vector<N3> stateStdDevs = VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)); // standard deviations for x, y, and rotation for gyro/encoder measurements. This is how much the numbers are trusted -- bigger number = less trust
+        public static final Vector<N3> visionMeasurementStdDevs = VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)); // standard deviations for x, y, and rotation for vision
 
         /* Drivetrain Constants */
         public static final double trackWidth = Units.inchesToMeters(23.75); 
@@ -135,9 +141,22 @@ public final class Constants {
     public static final class AutoConstants {
         public static final PathConstraints kPathConstraints = new PathConstraints(4, 3);
     
-        public static final double kPXController = 0.01;
-        public static final double kPYController = 0.01;
+        public static final double kPXController = 8;
+        public static final double kPYController = 8;
         public static final double kPThetaController = 10;
+    }
+
+    public static final class CascadingArmConstants {
+        public static final int cascadingArmId = 0; 
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double intakingSetpoint = 0;
+        public static final double scoringOneSetpoint = 0;
+        public static final double scoringTwoSetpoint = 0;
+        public static final double scoringThreeSetpoint = 0;
+        public static final double lowSpeed = -0.5;
+        public static final double highSpeed = 0.5;
     }
 
     public static final class JoystickConstants {
@@ -158,6 +177,7 @@ public final class Constants {
         public static final class Secondary {
             public static final int secondaryPort = 2;
 
+            public static final int togglePincerArm = 1;
 
         }
 

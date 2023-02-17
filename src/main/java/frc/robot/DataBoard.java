@@ -3,6 +3,8 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -21,6 +23,7 @@ public class DataBoard extends SubsystemBase {
     public DataBoard() {
         SmartDashboard.putData("field", field); // send the field object to the shuffleboard
         SmartDashboard.putData("visionField", visionField);
+        Shuffleboard.getTab("Testing").addDouble("Pigeon2Gyro", () -> RobotContainer.s_Swerve.gyro.getYaw()).withWidget(BuiltInWidgets.kGyro).close();
         DriverStation.getMatchTime();
     }
 
@@ -39,7 +42,6 @@ public class DataBoard extends SubsystemBase {
         for(int i = 0; i < 4; i++) {
             SmartDashboard.putNumber("swerveMod" + i, positions[i].angle.getDegrees());
         }
-
         SmartDashboard.putNumber("Game Timer", DriverStation.getMatchTime());
         // SmartDashboard.putNumber("swerveMod0", positions[0].angle.getDegrees());
 
