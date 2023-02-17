@@ -135,8 +135,8 @@ public final class Constants {
     public static final class AutoConstants {
         public static final PathConstraints kPathConstraints = new PathConstraints(4, 3);
     
-        public static final double kPXController = 0.01;
-        public static final double kPYController = 0.01;
+        public static final double kPXController = 8;
+        public static final double kPYController = 8;
         public static final double kPThetaController = 10;
     }
 
