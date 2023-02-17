@@ -9,12 +9,14 @@ import frc.robot.SwerveModule;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -24,12 +26,27 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Swerve extends SubsystemBase {
-    public SwerveDrivePoseEstimator poseEstimator;
-    public SwerveModule[] mSwerveMods;
+
+    private final SwerveModule[] mSwerveMods = new SwerveModule[] {
+        new SwerveModule(0, Constants.Swerve.Mod0.constants),
+        new SwerveModule(1, Constants.Swerve.Mod1.constants),
+        new SwerveModule(2, Constants.Swerve.Mod2.constants),
+        new SwerveModule(3, Constants.Swerve.Mod3.constants)
+    };
+    
     public Pigeon2 gyro;
 
     private TeleopState teleopState;
     private Rotation2d userGyroOffset; // gyro should not ever be zeroed during teleop, zero rotation is toward the positive x direction on the field -- facing the red alliance grid
+
+    private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
+        Constants.Swerve.swerveKinematics, 
+        getYaw(), 
+        getPositions(), 
+        new Pose2d(), //TODO: Fix
+        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
+        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+    );
 
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.drivetrainCANbusName);
@@ -37,17 +54,9 @@ public class Swerve extends SubsystemBase {
         zeroGyro();
         userGyroOffset = Rotation2d.fromDegrees(0);
         
-        mSwerveMods = new SwerveModule[] {
-            new SwerveModule(0, Constants.Swerve.Mod0.constants),
-            new SwerveModule(1, Constants.Swerve.Mod1.constants),
-            new SwerveModule(2, Constants.Swerve.Mod2.constants),
-            new SwerveModule(3, Constants.Swerve.Mod3.constants)
-        };
 
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
-        
-        poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getYaw(), getPositions(), new Pose2d()); //TODO: Fix
 
         teleopState = TeleopState.NORMAL;
     }
@@ -152,10 +161,10 @@ public class Swerve extends SubsystemBase {
     }
 
     public void updatePoseEstimator(Pose2d pose, double latency) { // updates the pose estimator from vision
-        if (pose.getTranslation().getDistance(poseEstimator.getEstimatedPosition().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
+        if (pose.getTranslation().getDistance(getPose().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
             poseEstimator.addVisionMeasurement(pose, latency);
         else
-            System.out.println("Bad vision data recieved");
+            System.out.println("Bad vision data recieved; distance: " + pose.getTranslation().getDistance(getPose().getTranslation()) + "; latency: " + latency);
     }
 
     public void setSwerveState(TeleopState newState) {
