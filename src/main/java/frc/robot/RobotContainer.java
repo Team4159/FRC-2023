@@ -70,8 +70,6 @@ public class RobotContainer {
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
     public static final PincerArm pincerArm = new PincerArm();
-    
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TestPath", new PathConstraints(4, 4));
 
     public static final Map<String, Command> eventMap = new HashMap<>();
 
