@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
@@ -17,6 +16,7 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -27,8 +27,11 @@ import frc.robot.Constants.JoystickConstants.PrimaryTurn;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.CascadingArm;
+import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.CascadingArm.ArmState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -41,7 +44,6 @@ public class RobotContainer {
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
     private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
 
-    @SuppressWarnings("unused")
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
     /* Drive Controls */
@@ -58,15 +60,15 @@ public class RobotContainer {
 
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
+    private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
+
+
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
-
-    
-
-    
-    List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup("TestPath", new PathConstraints(4, 4));
+    public static final CascadingArm cascadingArm = new CascadingArm();
+    public static final PincerArm pincerArm = new PincerArm();
 
     public static final Map<String, Command> eventMap = new HashMap<>();
 
@@ -78,7 +80,7 @@ public class RobotContainer {
         new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
         eventMap,
-        false, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
+        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true TODO: think about this :)
         s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
@@ -123,6 +125,8 @@ public class RobotContainer {
         ;
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
+        togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+        
     }
 
     public void teleopInit() {
@@ -139,13 +143,20 @@ public class RobotContainer {
         eventMap.put("RotateArmDown", null); // TODO: finish these commands
         eventMap.put("RotateArmUp", null);
         eventMap.put("RotateArmIntake", null);
-        eventMap.put("CascadeIntake", null);
-        eventMap.put("CascadeIn", null);
-        eventMap.put("CascadeOne", null);
-        eventMap.put("CascadeTwo", null);
-        eventMap.put("CascadeThree", null);
-        eventMap.put("PincerIn", null);
-        eventMap.put("PincerOut", null);
+        eventMap.put("CascadeIntake", new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING)));
+        eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
+        eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING1)));
+        eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING2)));
+        eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING3)));
+        eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
+        eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
+        // eventMap.put("FullIntake", new SequentialCommandGroup(null));
+        // eventMap.put("ScoreLow", new SequentialCommandGroup(null));
+        // eventMap.put("ScoreMid", new SequentialCommandGroup(null));
+        // eventMap.put("ScoreHigh", new SequentialCommandGroup(null));
+        // eventMap.put("Autobalance", null);
+        // eventMap.put("LEDYellow", null);
+        // eventMap.put("LEDPurple", null);
         eventMap.put("Wait0.1", new WaitCommand(0.1));
         eventMap.put("Wait0.5", new WaitCommand(0.5));
         eventMap.put("Wait1", new WaitCommand(1));
@@ -158,7 +169,7 @@ public class RobotContainer {
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>of( // Red Alliance
             0, Map.<AutoMode, List<PathPlannerTrajectory>>of( // Station 1
                 // AutoMode.Dock, null, // Dock
-                AutoMode.Normal, loadPathGroup("B1") // Don't Dock
+                AutoMode.Normal, loadPathGroup("Bsimple1") // Don't Dock
             )//,
             // 1, Map.<AutoMode, Command>of( // Station 2
             //     AutoMode.Dock, null,

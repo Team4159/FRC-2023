@@ -74,6 +74,11 @@ public class Conversions {
         return wheelMPS;
     }
 
+    public static double falconToMeters(double positioncounts, double circumference, double gearRatio) {
+        double wheelPosition = falconToDegrees(positioncounts, gearRatio) / 360 * circumference;
+        return wheelPosition;
+    }
+
     /**
      * @param velocity Velocity MPS
      * @param circumference Circumference of Wheel
