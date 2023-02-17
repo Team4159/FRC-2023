@@ -9,14 +9,12 @@ import frc.robot.SwerveModule;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -44,8 +42,8 @@ public class Swerve extends SubsystemBase {
         getYaw(), 
         getPositions(), 
         new Pose2d(), //TODO: Fix
-        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)), // standard deviations for x, y, and rotation for gyro/encoder measurements. This is how much the numbers are trusted -- bigger number = less trust
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)) // standard deviations for x, y, and rotation for vision
+        Constants.Swerve.stateStdDevs,
+        Constants.Swerve.visionMeasurementStdDevs
     );
 
     public Swerve() {
