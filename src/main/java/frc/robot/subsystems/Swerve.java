@@ -33,7 +33,7 @@ public class Swerve extends SubsystemBase {
         new SwerveModule(2, Constants.Swerve.Mod2.constants),
         new SwerveModule(3, Constants.Swerve.Mod3.constants)
     };
-    
+
     public Pigeon2 gyro;
 
     private TeleopState teleopState;
@@ -44,8 +44,8 @@ public class Swerve extends SubsystemBase {
         getYaw(), 
         getPositions(), 
         new Pose2d(), //TODO: Fix
-        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)),
-        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30))
+        VecBuilder.fill(0.05, 0.05, Units.degreesToRadians(5)), // standard deviations for x, y, and rotation for gyro/encoder measurements. This is how much the numbers are trusted -- bigger number = less trust
+        VecBuilder.fill(0.5, 0.5, Units.degreesToRadians(30)) // standard deviations for x, y, and rotation for vision
     );
 
     public Swerve() {
