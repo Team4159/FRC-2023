@@ -168,10 +168,11 @@ public final class Constants {
             public static final int lockedMode = 2;
         }
 
-        public static final class PrimaryTurn {
-            public static final int turnPort = 1;
+        public static final class PrimaryLeft {
+            public static final int leftPort = 1;
 
             public static final int aimbot = 1;
+            public static final int forceAcceptVision = 2;
         }
 
         public static final class Secondary {

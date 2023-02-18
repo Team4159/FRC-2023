@@ -37,6 +37,8 @@ public class Swerve extends SubsystemBase {
     private TeleopState teleopState;
     private Rotation2d userGyroOffset; // gyro should not ever be zeroed during teleop, zero rotation is toward the positive x direction on the field -- facing the red alliance grid
 
+    private boolean forceAcceptNextVision;
+
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         Constants.Swerve.swerveKinematics, 
         new Rotation2d(), 
@@ -58,6 +60,8 @@ public class Swerve extends SubsystemBase {
         resetModulesToAbsolute(); // works but should preferably be threaded
 
         teleopState = TeleopState.NORMAL;
+
+        forceAcceptNextVision = false;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) { // teleop manual driving
@@ -159,7 +163,16 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
     }
 
+    public void forceAcceptNextVision() {
+        forceAcceptNextVision = true;
+    }
+
     public void updatePoseEstimator(Pose2d pose, double latency) { // updates the pose estimator from vision
+        if (forceAcceptNextVision) {
+            resetOdometry(pose);
+            forceAcceptNextVision = false;
+            return;
+        }
         if (pose.getTranslation().getDistance(getPose().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
             poseEstimator.addVisionMeasurement(pose, latency);
         else

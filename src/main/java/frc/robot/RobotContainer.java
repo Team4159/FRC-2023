@@ -23,7 +23,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
-import frc.robot.Constants.JoystickConstants.PrimaryTurn;
+import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
@@ -42,7 +42,7 @@ import frc.robot.subsystems.CascadingArm.ArmState;
 public class RobotContainer {    
     /* Controllers */
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
-    private final Joystick primaryLeft = new Joystick(PrimaryTurn.turnPort); // rotational movement
+    private final Joystick primaryLeft = new Joystick(PrimaryLeft.leftPort); // rotational movement
 
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
@@ -56,7 +56,8 @@ public class RobotContainer {
     private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro); // zeroes the gyro based on the current robot rotation
     private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
 
-    private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryTurn.aimbot); // lines up for scoring automatically
+    private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
+    private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
@@ -123,6 +124,8 @@ public class RobotContainer {
             .whileTrue(new AimbotSwerve(s_Swerve, FieldRegion.lookup(s_Swerve.getPose()))) // may want to disable this when too far from goal
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
         ;
+
+        forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
