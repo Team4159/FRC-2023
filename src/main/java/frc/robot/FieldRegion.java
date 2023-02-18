@@ -54,6 +54,15 @@ public class FieldRegion {
         );
     }
 
+    public Pose2d getChargePose() { // returns the closest pose for scoring at the grid
+        if (this.alliance.equals(Alliance.Invalid)) return null;
+        return new Pose2d(
+            this.alliance.equals(Alliance.Blue) ? 3.89 : 12.65,
+            gridIndexY[5],
+            Rotation2d.fromDegrees(this.alliance.equals(Alliance.Blue) ? 180 : 0)
+        );
+    }
+
     /* NO DELETE >:( This took like four hours
      * 
      * 
@@ -62,14 +71,14 @@ public class FieldRegion {
      * 
      * Region names:
      * 
-     * Cone     B9       R9     4.99
-     * Cube     B8       R8     4.43
-     * Cone     B7       R7     3.87
-     * Cone     B6       R6     3.31
-     * Cube     B5   M   R5     2.75
-     * Cone     B4       R4     2.19
-     * Cone     B3       R3     1.63
-     * Cube     B2       R2     1.07
-     * Cone     B1       R1     0.51
+     * Cone     B9                      R9     4.99
+     * Cube     B8                      R8     4.43
+     * Cone     B7                      R7     3.87
+     * Cone     B6                      R6     3.31
+     * Cube     B5   BC     M    RC     R5     2.75
+     * Cone     B4                      R4     2.19
+     * Cone     B3                      R3     1.63
+     * Cube     B2                      R2     1.07
+     * Cone     B1                      R1     0.51
      */
 }

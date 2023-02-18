@@ -135,7 +135,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyroOffset() {
-        userGyroOffset = Rotation2d.fromDegrees(0).minus(getYaw()); // makes the front of the robot for the driver the current front of the robot TODO: check if this works
+        userGyroOffset = Rotation2d.fromDegrees(0).minus(getYaw()); // makes the front of the robot for the driver the current front of the robot
     }
 
     public void setGyroOffset(Rotation2d offset) {

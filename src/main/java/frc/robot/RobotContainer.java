@@ -81,7 +81,7 @@ public class RobotContainer {
         new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
         eventMap,
-        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true TODO: think about this :)
+        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
         s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
@@ -133,7 +133,7 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
-        s_Swerve.setGyroOffset((DriverStation.getAlliance().equals(Alliance.Red)) // sets the user gyro offset depending on if the driver is on the red or blue alliance TODO: test
+        s_Swerve.setGyroOffset((DriverStation.getAlliance().equals(Alliance.Red)) // sets the user gyro offset depending on if the driver is on the red or blue alliance
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0)
         );
