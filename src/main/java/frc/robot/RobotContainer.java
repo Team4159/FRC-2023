@@ -42,7 +42,7 @@ import frc.robot.subsystems.CascadingArm.ArmState;
 public class RobotContainer {    
     /* Controllers */
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
-    private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
+    private final Joystick primaryLeft = new Joystick(PrimaryTurn.turnPort); // rotational movement
 
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
@@ -50,13 +50,13 @@ public class RobotContainer {
     private final int translationAxis = Joystick.AxisType.kY.value;
     private final int strafeAxis = Joystick.AxisType.kX.value;
 
-    private final int rotationAxis = Joystick.AxisType.kX.value;
+    private final int rotationAxis = Joystick.AxisType.kZ.value;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro); // zeroes the gyro based on the current robot rotation
     private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
 
-    private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot); // lines up for scoring automatically
+    private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryTurn.aimbot); // lines up for scoring automatically
 
     //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
 
@@ -91,7 +91,7 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -primaryDrive.getRawAxis(translationAxis), 
                 () -> -primaryDrive.getRawAxis(strafeAxis), 
-                () -> -primaryTurn.getRawAxis(rotationAxis), 
+                () -> -primaryDrive.getRawAxis(rotationAxis), 
                 () -> false // TODO: robotCentric button?
             )
         );

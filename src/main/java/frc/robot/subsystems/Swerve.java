@@ -39,7 +39,7 @@ public class Swerve extends SubsystemBase {
 
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         Constants.Swerve.swerveKinematics, 
-        getYaw(), 
+        new Rotation2d(), 
         getPositions(), 
         new Pose2d(), //TODO: Fix
         Constants.Swerve.stateStdDevs,
@@ -52,6 +52,7 @@ public class Swerve extends SubsystemBase {
         zeroGyro();
         userGyroOffset = Rotation2d.fromDegrees(0);
         
+        poseEstimator.resetPosition(getYaw(), getPositions(), new Pose2d());
 
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
