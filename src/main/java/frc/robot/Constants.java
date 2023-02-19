@@ -146,6 +146,17 @@ public final class Constants {
         public static final double kPThetaController = 10;
     }
 
+    public static final class RotatingArmConstants {
+        public static final int rotatingArmID = 0; 
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double lowSetpoint = 0;
+        public static final double midSetpoint = 0;
+        public static final double highSetpoint = 0;
+        public static final double offSetpoint = 0;
+    }
+    
     public static final class CascadingArmConstants {
         public static final int cascadingArmId = 0; 
         public static final double kP = 0;
