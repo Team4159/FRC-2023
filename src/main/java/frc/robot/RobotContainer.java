@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
@@ -143,7 +144,7 @@ public class RobotContainer {
         eventMap.put("RotateArmDown", null); // TODO: finish these commands
         eventMap.put("RotateArmUp", null);
         eventMap.put("RotateArmIntake", null);
-        eventMap.put("CascadeIntake", new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING)));
+        eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
         eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
         eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING1)));
         eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING2)));

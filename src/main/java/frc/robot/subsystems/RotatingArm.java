@@ -80,7 +80,31 @@ public class RotatingArm extends SubsystemBase {
         TUCKED,
         OFF
     }
-    
+
+    public boolean atDesiredSetPoint() {
+        double setpoint = 0;
+        switch (armState) {
+            case LOW:
+                setpoint = RotatingArmConstants.lowSetpoint;
+                break;
+            case MID:
+                setpoint = RotatingArmConstants.midSetpoint;
+                break;
+            case HIGH:
+                setpoint = RotatingArmConstants.highSetpoint;
+                break;
+            case INTAKING:
+                setpoint = RotatingArmConstants.intakingSetpoint;
+                break;
+            case TUCKED:
+                setpoint = RotatingArmConstants.tuckedSetpoint;
+                break;
+            case OFF:
+                return true;
+        }
+        return isAtSetpoint(setpoint, RotatingArmConstants.setpointTolerance);
+    }
+
     public boolean isAtSetpoint(double setpoint) {
         return getEncoderPosition() == setpoint;
     }

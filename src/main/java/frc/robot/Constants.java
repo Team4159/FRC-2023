@@ -154,6 +154,8 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
+        
+        public static final double setpointTolerance = 0;
 
         public static final int rotateContinuousCurrentLimit = 35;
         public static final int rotatePeakCurrentLimit = 45;
@@ -183,6 +185,8 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
+
+        public static final double setpointTolerance = 0;
 
         public static final int cascadeContinuousCurrentLimit = 30;
         public static final int cascadePeakCurrentLimit = 45;

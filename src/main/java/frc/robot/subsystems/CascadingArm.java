@@ -71,6 +71,30 @@ public class CascadingArm extends SubsystemBase {
         OFF
     }
 
+    public boolean atDesiredSetPoint() {
+        double setpoint = 0;
+        switch (armState) {
+            case SCORING1:
+                setpoint = CascadingArmConstants.scoringOneSetpoint;
+                break;
+            case SCORING2:
+                setpoint = CascadingArmConstants.scoringTwoSetpoint;
+                break;
+            case SCORING3:
+                setpoint = CascadingArmConstants.scoringThreeSetpoint;
+                break;
+            case INTAKING:
+                setpoint = CascadingArmConstants.intakingSetpoint;
+                break;
+            case TUCKED:
+                setpoint = CascadingArmConstants.tuckedSetpoint;
+                break;
+            case OFF:
+                return true;
+        }
+        return isAtSetpoint(setpoint, CascadingArmConstants.setpointTolerance);
+    }
+
     public boolean isAtSetpoint(double setpoint) {
         return getEncoderPosition() == setpoint;
     }
