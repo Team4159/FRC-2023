@@ -146,28 +146,63 @@ public final class Constants {
         public static final double kPThetaController = 10;
     }
 
-    public static final class RotatingArmConstants {
-        public static final int rotatingArmID = 0; 
+    public static final class RotatingArmConstants { // TODO: tune
+        public static final int rotatingArmID1 = 0; 
+        public static final int rotatingArmID2 = 0;
+
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
+        public static final double kF = 0;
+
+        public static final int rotateContinuousCurrentLimit = 35;
+        public static final int rotatePeakCurrentLimit = 45;
+        public static final double rotatePeakCurrentDuration = 0.1;
+        public static final boolean rotateEnableCurrentLimit = true;
+        
+        public static final double openLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.0;
+        
+        public static final boolean rotateMotorInvert = false;
+        public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
+
+        public static final double intakingSetpoint = 0;
         public static final double lowSetpoint = 0;
         public static final double midSetpoint = 0;
         public static final double highSetpoint = 0;
-        public static final double offSetpoint = 0;
+        public static final double tuckedSetpoint = 0;
+
+        public static final double lowSpeed = -1; // maximum speed rotating down
+        public static final double highSpeed = 1; // maximum speed rotating up
     }
     
     public static final class CascadingArmConstants {
         public static final int cascadingArmId = 0; 
+
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
+        public static final double kF = 0;
+
+        public static final int cascadeContinuousCurrentLimit = 30;
+        public static final int cascadePeakCurrentLimit = 45;
+        public static final double cascadePeakCurrentDuration = 0.1;
+        public static final boolean cascadeEnableCurrentLimit = true;
+        
+        public static final double openLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.0;
+
+        public static final boolean cascadeMotorInvert = false;
+        public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
+
         public static final double intakingSetpoint = 0;
         public static final double scoringOneSetpoint = 0;
         public static final double scoringTwoSetpoint = 0;
         public static final double scoringThreeSetpoint = 0;
-        public static final double lowSpeed = -0.5;
-        public static final double highSpeed = 0.5;
+        public static final double tuckedSetpoint = 0;
+
+        public static final double lowSpeed = -1; // maximum speed retracting
+        public static final double highSpeed = 1; // maximum speed extending
     }
 
     public static final class JoystickConstants {

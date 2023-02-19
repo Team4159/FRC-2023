@@ -12,10 +12,16 @@ public final class CTREConfigs {
     public TalonFXConfiguration swerveDriveFXConfig;
     public CANCoderConfiguration swerveCanCoderConfig;
 
+    public TalonFXConfiguration cascadeFXConfig;
+    public TalonFXConfiguration rotateFXConfig;
+
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();
         swerveDriveFXConfig = new TalonFXConfiguration();
         swerveCanCoderConfig = new CANCoderConfiguration();
+
+        cascadeFXConfig = new TalonFXConfiguration();
+        rotateFXConfig = new TalonFXConfiguration();
 
         /* Swerve Angle Motor Configurations */
         SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(
@@ -50,5 +56,37 @@ public final class CTREConfigs {
         swerveCanCoderConfig.sensorDirection = Constants.Swerve.canCoderInvert;
         swerveCanCoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
         swerveCanCoderConfig.sensorTimeBase = SensorTimeBase.PerSecond;
+
+        /* Cascade Motor Configuration */
+        SupplyCurrentLimitConfiguration cascadeSupplyLimit = new SupplyCurrentLimitConfiguration(
+            Constants.CascadingArmConstants.cascadeEnableCurrentLimit,
+            Constants.CascadingArmConstants.cascadeContinuousCurrentLimit,
+            Constants.CascadingArmConstants.cascadePeakCurrentLimit,
+            Constants.CascadingArmConstants.cascadePeakCurrentDuration
+        );
+
+        cascadeFXConfig.slot0.kP = Constants.CascadingArmConstants.kP;
+        cascadeFXConfig.slot0.kI = Constants.CascadingArmConstants.kI;
+        cascadeFXConfig.slot0.kD = Constants.CascadingArmConstants.kD;
+        cascadeFXConfig.slot0.kF = Constants.CascadingArmConstants.kF;
+        cascadeFXConfig.supplyCurrLimit = cascadeSupplyLimit;
+        cascadeFXConfig.openloopRamp = Constants.CascadingArmConstants.openLoopRamp;
+        cascadeFXConfig.closedloopRamp = Constants.CascadingArmConstants.closedLoopRamp;
+        
+        /* Rotate Motor Configuration */
+        SupplyCurrentLimitConfiguration rotateSupplyLimit = new SupplyCurrentLimitConfiguration(
+            Constants.RotatingArmConstants.rotateEnableCurrentLimit,
+            Constants.RotatingArmConstants.rotateContinuousCurrentLimit,
+            Constants.RotatingArmConstants.rotatePeakCurrentLimit,
+            Constants.RotatingArmConstants.rotatePeakCurrentDuration
+        );
+
+        rotateFXConfig.slot0.kP = Constants.RotatingArmConstants.kP;
+        rotateFXConfig.slot0.kI = Constants.RotatingArmConstants.kI;
+        rotateFXConfig.slot0.kD = Constants.RotatingArmConstants.kD;
+        rotateFXConfig.slot0.kF = Constants.RotatingArmConstants.kF;
+        rotateFXConfig.supplyCurrLimit = rotateSupplyLimit;
+        rotateFXConfig.openloopRamp = Constants.RotatingArmConstants.openLoopRamp;
+        rotateFXConfig.closedloopRamp = Constants.RotatingArmConstants.closedLoopRamp;
     }
 }
