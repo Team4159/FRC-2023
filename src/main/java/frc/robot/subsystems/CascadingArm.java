@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Constants.CascadingArmConstants;
@@ -70,5 +69,14 @@ public class CascadingArm extends SubsystemBase {
         SCORING3,
         TUCKED,
         OFF
+    }
+
+    public boolean isAtSetpoint(double setpoint) {
+        return getEncoderPosition() == setpoint;
+    }
+    
+    public boolean isAtSetpoint(double setpoint, double tolerance) {
+        double pos = getEncoderPosition();
+        return setpoint - tolerance <= pos && setpoint + tolerance >= pos;
     }
 }

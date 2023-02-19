@@ -80,4 +80,13 @@ public class RotatingArm extends SubsystemBase {
         TUCKED,
         OFF
     }
+    
+    public boolean isAtSetpoint(double setpoint) {
+        return getEncoderPosition() == setpoint;
+    }
+    
+    public boolean isAtSetpoint(double setpoint, double tolerance) {
+        double pos = getEncoderPosition();
+        return setpoint - tolerance <= pos && setpoint + tolerance >= pos;
+    }
 }
