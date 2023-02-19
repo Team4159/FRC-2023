@@ -14,9 +14,11 @@ public class CascadingArm extends SubsystemBase {
 
     public CascadingArm() {
         armSpark = new CANSparkMax(Constants.CascadingArmConstants.cascadingArmId, MotorType.kBrushless);
-        pid = new PIDController(Constants.CascadingArmConstants.kP,
-                                Constants.CascadingArmConstants.kI,
-                                Constants.CascadingArmConstants.kD);
+        pid = new PIDController(
+            Constants.CascadingArmConstants.kP,
+            Constants.CascadingArmConstants.kI,
+            Constants.CascadingArmConstants.kD
+        );
         armState = ArmState.OFF;
     }
 

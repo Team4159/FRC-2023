@@ -58,8 +58,6 @@ public class RobotContainer {
     private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
-    //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
-
     private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
 
 
@@ -92,7 +90,7 @@ public class RobotContainer {
                 () -> -primaryDrive.getRawAxis(translationAxis), 
                 () -> -primaryDrive.getRawAxis(strafeAxis), 
                 () -> -primaryDrive.getRawAxis(rotationAxis), 
-                () -> false // TODO: robotCentric button?
+                () -> false
             )
         );
 
