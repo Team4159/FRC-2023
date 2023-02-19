@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.server.PathPlannerServer;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -30,6 +32,8 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
     robotContainer = new RobotContainer();
+
+    PathPlannerServer.startServer(5811); // TODO: remove after testing completed
   }
 
   /**
