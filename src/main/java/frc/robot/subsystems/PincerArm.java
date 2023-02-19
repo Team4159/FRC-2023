@@ -9,12 +9,13 @@ public class PincerArm extends SubsystemBase {
   private PneumaticHub pH;
   private DoubleSolenoid dS;
 
-  private boolean extended = false;
+  private boolean extended;
 
   public PincerArm(){
     pH = new PneumaticHub(1);
     dS = new DoubleSolenoid(1, PneumaticsModuleType.REVPH, 0, 1);
     pH.enableCompressorDigital();
+    extended = false;
     dS.set(Value.kReverse);
   }
 

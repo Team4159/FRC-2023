@@ -1,10 +1,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.sensors.Pigeon2;
+import com.pathplanner.lib.PathPlanner;
 import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.PathPoint;
 import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 
 import frc.robot.Constants;
+import frc.robot.FieldRegion;
 import frc.robot.SwerveModule;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
@@ -22,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public class Swerve extends SubsystemBase {
 
@@ -37,9 +41,11 @@ public class Swerve extends SubsystemBase {
     private TeleopState teleopState;
     private Rotation2d userGyroOffset; // gyro should not ever be zeroed during teleop, zero rotation is toward the positive x direction on the field -- facing the red alliance grid
 
+    private boolean forceAcceptNextVision;
+
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         Constants.Swerve.swerveKinematics, 
-        getYaw(), 
+        new Rotation2d(), 
         getPositions(), 
         new Pose2d(), //TODO: Fix
         Constants.Swerve.stateStdDevs,
@@ -52,11 +58,14 @@ public class Swerve extends SubsystemBase {
         zeroGyro();
         userGyroOffset = Rotation2d.fromDegrees(0);
         
+        poseEstimator.resetPosition(getYaw(), getPositions(), new Pose2d());
 
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
 
         teleopState = TeleopState.NORMAL;
+
+        forceAcceptNextVision = false;
     }
 
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) { // teleop manual driving
@@ -130,7 +139,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public void zeroGyroOffset() {
-        userGyroOffset = Rotation2d.fromDegrees(0).minus(getYaw()); // makes the front of the robot for the driver the current front of the robot TODO: check if this works
+        userGyroOffset = Rotation2d.fromDegrees(0).minus(getYaw()); // makes the front of the robot for the driver the current front of the robot
     }
 
     public void setGyroOffset(Rotation2d offset) {
@@ -158,7 +167,16 @@ public class Swerve extends SubsystemBase {
             mod.resetToAbsolute();
     }
 
+    public void forceAcceptNextVision() {
+        forceAcceptNextVision = true;
+    }
+
     public void updatePoseEstimator(Pose2d pose, double latency) { // updates the pose estimator from vision
+        if (forceAcceptNextVision) {
+            resetOdometry(pose);
+            forceAcceptNextVision = false;
+            return;
+        }
         if (pose.getTranslation().getDistance(getPose().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
             poseEstimator.addVisionMeasurement(pose, latency);
         else
@@ -191,6 +209,37 @@ public class Swerve extends SubsystemBase {
                 false,
                 this
             )
+        );
+    }
+
+    public Command aimbot() {
+        Pose2d targetPose = FieldRegion.lookup(getPose()).getTargetPose();
+
+        if (targetPose == null) {
+            DriverStation.reportWarning("TARGET NOT FOUND", false);
+            return null;
+        }
+
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> resetModulesToAbsolute()),
+            new WaitCommand(0.1),
+            followTrajectoryCommand(generateStraightTrajectory(getPose(), targetPose), false),
+            new InstantCommand(() -> resetModulesToAbsolute()),
+            new WaitCommand(0.1)
+        );
+    }
+
+    public static PathPlannerTrajectory generateStraightTrajectory(Pose2d initialPose, Pose2d targetPose) {
+        return PathPlanner.generatePath( // TODO: account for initial velocity
+            Constants.AutoConstants.kPathConstraints, 
+            new PathPoint(initialPose.getTranslation(), getHeading(initialPose, targetPose), initialPose.getRotation()),
+            new PathPoint(targetPose.getTranslation(), getHeading(targetPose, initialPose), targetPose.getRotation())
+        );
+    }
+
+    public static Rotation2d getHeading(Pose2d one, Pose2d two) {
+        return Rotation2d.fromRadians(
+            Math.atan2(two.getY() - one.getY(), two.getX() - one.getX())
         );
     }
 }

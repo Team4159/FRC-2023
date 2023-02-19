@@ -20,12 +20,12 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
-import frc.robot.Constants.JoystickConstants.PrimaryTurn;
+import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
-import frc.robot.commands.AimbotSwerve;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.PincerArm;
@@ -42,7 +42,7 @@ import frc.robot.subsystems.CascadingArm.ArmState;
 public class RobotContainer {    
     /* Controllers */
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
-    private final Joystick primaryTurn = new Joystick(PrimaryTurn.turnPort); // rotational movement
+    private final Joystick primaryLeft = new Joystick(PrimaryLeft.leftPort); // rotational movement
 
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
@@ -50,15 +50,14 @@ public class RobotContainer {
     private final int translationAxis = Joystick.AxisType.kY.value;
     private final int strafeAxis = Joystick.AxisType.kX.value;
 
-    private final int rotationAxis = Joystick.AxisType.kX.value;
+    private final int rotationAxis = Joystick.AxisType.kZ.value;
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro); // zeroes the gyro based on the current robot rotation
     private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
 
-    private final JoystickButton aimbot = new JoystickButton(primaryTurn, PrimaryTurn.aimbot); // lines up for scoring automatically
-
-    //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value); TODO: is this even necessary?
+    private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
+    private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
     private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
 
@@ -80,7 +79,7 @@ public class RobotContainer {
         new PIDConstants(Constants.AutoConstants.kPThetaController, 0.0, 0.0), // PID constants to correct for rotation error (used to create the rotation controller)
         s_Swerve::setModuleStates, // Module states consumer used to output to the drive subsystem
         eventMap,
-        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true TODO: think about this :)
+        true, // Should the path be automatically mirrored depending on alliance color. Optional, defaults to true
         s_Swerve // The drive subsystem. Used to properly set the requirements of path following commands
     );
 
@@ -91,8 +90,8 @@ public class RobotContainer {
                 s_Swerve, 
                 () -> -primaryDrive.getRawAxis(translationAxis), 
                 () -> -primaryDrive.getRawAxis(strafeAxis), 
-                () -> -primaryTurn.getRawAxis(rotationAxis), 
-                () -> false // TODO: robotCentric button?
+                () -> -primaryDrive.getRawAxis(rotationAxis), 
+                () -> false
             )
         );
 
@@ -120,9 +119,11 @@ public class RobotContainer {
 
         aimbot
             .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
-            .whileTrue(new AimbotSwerve(s_Swerve, FieldRegion.lookup(s_Swerve.getPose()))) // may want to disable this when too far from goal
+            .whileTrue(s_Swerve.aimbot())
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
         ;
+
+        forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
@@ -130,7 +131,7 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
-        s_Swerve.setGyroOffset((DriverStation.getAlliance().equals(Alliance.Red)) // sets the user gyro offset depending on if the driver is on the red or blue alliance TODO: test
+        s_Swerve.setGyroOffset((DriverStation.getAlliance().equals(Alliance.Red)) // sets the user gyro offset depending on if the driver is on the red or blue alliance
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0)
         );
@@ -143,7 +144,7 @@ public class RobotContainer {
         eventMap.put("RotateArmDown", null); // TODO: finish these commands
         eventMap.put("RotateArmUp", null);
         eventMap.put("RotateArmIntake", null);
-        eventMap.put("CascadeIntake", new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING)));
+        eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
         eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
         eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING1)));
         eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING2)));

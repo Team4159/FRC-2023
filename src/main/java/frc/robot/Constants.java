@@ -74,14 +74,14 @@ public final class Constants {
         public static final double angleKF = chosenModule.angleKF;
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.05; //TODO: This must be tuned to specific robot
+        public static final double driveKP = 0.07;
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0; // no touching
 
         /* Drive Motor Characterization Values 
          * Divide SYSID values by 12 to convert from volts to percent output for CTRE */
-        public static final double driveKS = (0.2424 / 12); //TODO: This must be tuned to specific robot
+        public static final double driveKS = (0.2424 / 12); // TODO: get constants again when robot heavier
         public static final double driveKV = (0.7146 / 12);
         public static final double driveKA = (0.0773 / 12);
 
@@ -97,7 +97,7 @@ public final class Constants {
 
         /* Module Specific Constants */
         /* Front Left Module - Module 0 */
-        public static final class Mod0 { //TODO: This must be tuned to specific robot
+        public static final class Mod0 {
             public static final int driveMotorID = 1;
             public static final int angleMotorID = 2;
             public static final int canCoderID = 1;
@@ -107,7 +107,7 @@ public final class Constants {
         }
 
         /* Front Right Module - Module 1 */
-        public static final class Mod1 { //TODO: This must be tuned to specific robot
+        public static final class Mod1 {
             public static final int driveMotorID = 3;
             public static final int angleMotorID = 4;
             public static final int canCoderID = 2;
@@ -117,7 +117,7 @@ public final class Constants {
         }
         
         /* Back Left Module - Module 2 */
-        public static final class Mod2 { //TODO: This must be tuned to specific robot
+        public static final class Mod2 {
             public static final int driveMotorID = 5;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 3;
@@ -127,7 +127,7 @@ public final class Constants {
         }
 
         /* Back Right Module - Module 3 */
-        public static final class Mod3 { //TODO: This must be tuned to specific robot
+        public static final class Mod3 {
             public static final int driveMotorID = 7;
             public static final int angleMotorID = 8;
             public static final int canCoderID = 4;
@@ -141,22 +141,72 @@ public final class Constants {
     public static final class AutoConstants {
         public static final PathConstraints kPathConstraints = new PathConstraints(4, 3);
     
-        public static final double kPXController = 8;
-        public static final double kPYController = 8;
+        public static final double kPXController = 15;
+        public static final double kPYController = 15;
         public static final double kPThetaController = 10;
     }
 
-    public static final class CascadingArmConstants {
-        public static final int cascadingArmId = 0; 
+    public static final class RotatingArmConstants { // TODO: tune
+        public static final int rotatingArmID1 = 0; 
+        public static final int rotatingArmID2 = 0;
+
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
+        public static final double kF = 0;
+        
+        public static final double setpointTolerance = 0;
+
+        public static final int rotateContinuousCurrentLimit = 35;
+        public static final int rotatePeakCurrentLimit = 45;
+        public static final double rotatePeakCurrentDuration = 0.1;
+        public static final boolean rotateEnableCurrentLimit = true;
+        
+        public static final double openLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.0;
+        
+        public static final boolean rotateMotorInvert = false;
+        public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
+
+        public static final double intakingSetpoint = 0;
+        public static final double lowSetpoint = 0;
+        public static final double midSetpoint = 0;
+        public static final double highSetpoint = 0;
+        public static final double tuckedSetpoint = 0;
+
+        public static final double lowSpeed = -1; // maximum speed rotating down
+        public static final double highSpeed = 1; // maximum speed rotating up
+    }
+    
+    public static final class CascadingArmConstants {
+        public static final int cascadingArmId = 0; 
+
+        public static final double kP = 0;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kF = 0;
+
+        public static final double setpointTolerance = 0;
+
+        public static final int cascadeContinuousCurrentLimit = 30;
+        public static final int cascadePeakCurrentLimit = 45;
+        public static final double cascadePeakCurrentDuration = 0.1;
+        public static final boolean cascadeEnableCurrentLimit = true;
+        
+        public static final double openLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.0;
+
+        public static final boolean cascadeMotorInvert = false;
+        public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
+
         public static final double intakingSetpoint = 0;
         public static final double scoringOneSetpoint = 0;
         public static final double scoringTwoSetpoint = 0;
         public static final double scoringThreeSetpoint = 0;
-        public static final double lowSpeed = -0.5;
-        public static final double highSpeed = 0.5;
+        public static final double tuckedSetpoint = 0;
+
+        public static final double lowSpeed = -1; // maximum speed retracting
+        public static final double highSpeed = 1; // maximum speed extending
     }
 
     public static final class JoystickConstants {
@@ -168,10 +218,11 @@ public final class Constants {
             public static final int lockedMode = 2;
         }
 
-        public static final class PrimaryTurn {
-            public static final int turnPort = 1;
+        public static final class PrimaryLeft {
+            public static final int leftPort = 1;
 
             public static final int aimbot = 1;
+            public static final int forceAcceptVision = 2;
         }
 
         public static final class Secondary {

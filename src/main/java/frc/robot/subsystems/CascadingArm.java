@@ -1,61 +1,65 @@
 package frc.robot.subsystems;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.Constants.CascadingArmConstants;
 
 public class CascadingArm extends SubsystemBase {
-    private CANSparkMax armSpark;
-    private PIDController pid;
+    private TalonFX armTalon;
     private ArmState armState;
 
     public CascadingArm() {
-        armSpark = new CANSparkMax(Constants.CascadingArmConstants.cascadingArmId, MotorType.kBrushless);
-        pid = new PIDController(Constants.CascadingArmConstants.kP,
-                                Constants.CascadingArmConstants.kI,
-                                Constants.CascadingArmConstants.kD);
+        armTalon = new TalonFX(CascadingArmConstants.cascadingArmId);
+        configMotor();
+
         armState = ArmState.OFF;
+    }
+
+    public void configMotor() {
+        armTalon.configFactoryDefault();
+        armTalon.configAllSettings(Robot.ctreConfigs.cascadeFXConfig);
+        armTalon.setInverted(CascadingArmConstants.cascadeMotorInvert);
+        armTalon.setNeutralMode(CascadingArmConstants.cascadeNeutralMode);
+        armTalon.setSelectedSensorPosition(0); // resets the arm talon encoder to 0 
     }
 
     @Override
     public void periodic() {
         switch (armState) {
             case INTAKING:
-                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.intakingSetpoint));
+                setArmPosition(CascadingArmConstants.intakingSetpoint);
                 break;
             case SCORING1:
-                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.scoringOneSetpoint));
+                setArmPosition(CascadingArmConstants.scoringOneSetpoint);
                 break;
             case SCORING2:
-                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.scoringTwoSetpoint));
+                setArmPosition(CascadingArmConstants.scoringTwoSetpoint);
                 break;
             case SCORING3:
-                setArmSpeed(runArmPID(getEncoderPosition(), Constants.CascadingArmConstants.scoringThreeSetpoint));
+                setArmPosition(CascadingArmConstants.scoringThreeSetpoint);
+                break;
+            case TUCKED:
+                setArmPosition(CascadingArmConstants.tuckedSetpoint);
                 break;
             case OFF:
-                setArmSpeed(0);
+                armTalon.set(ControlMode.PercentOutput, 0);
                 break;
         }
     }
 
     public double getEncoderPosition() {
-        return armSpark.getEncoder().getPosition();
+        return armTalon.getSelectedSensorPosition();
     }
 
     public void setArmState(ArmState armState) {
         this.armState = armState;
     }
 
-    public void setArmSpeed(double speed) {
-        speed = MathUtil.clamp(speed, Constants.CascadingArmConstants.lowSpeed, Constants.CascadingArmConstants.highSpeed);
-        armSpark.set(speed);
-    }
-
-    public double runArmPID(double currentPos, double setPoint) {
-        return pid.calculate(currentPos, setPoint);
+    public void setArmPosition(double position) {
+        //speed = MathUtil.clamp(speed, CascadingArmConstants.lowSpeed, CascadingArmConstants.highSpeed);
+        armTalon.set(ControlMode.Position, position);
     }
 
     public static enum ArmState {
@@ -63,6 +67,40 @@ public class CascadingArm extends SubsystemBase {
         SCORING1,
         SCORING2,
         SCORING3,
+        TUCKED,
         OFF
+    }
+
+    public boolean atDesiredSetPoint() {
+        double setpoint = 0;
+        switch (armState) {
+            case SCORING1:
+                setpoint = CascadingArmConstants.scoringOneSetpoint;
+                break;
+            case SCORING2:
+                setpoint = CascadingArmConstants.scoringTwoSetpoint;
+                break;
+            case SCORING3:
+                setpoint = CascadingArmConstants.scoringThreeSetpoint;
+                break;
+            case INTAKING:
+                setpoint = CascadingArmConstants.intakingSetpoint;
+                break;
+            case TUCKED:
+                setpoint = CascadingArmConstants.tuckedSetpoint;
+                break;
+            case OFF:
+                return true;
+        }
+        return isAtSetpoint(setpoint, CascadingArmConstants.setpointTolerance);
+    }
+
+    public boolean isAtSetpoint(double setpoint) {
+        return getEncoderPosition() == setpoint;
+    }
+    
+    public boolean isAtSetpoint(double setpoint, double tolerance) {
+        double pos = getEncoderPosition();
+        return setpoint - tolerance <= pos && setpoint + tolerance >= pos;
     }
 }
