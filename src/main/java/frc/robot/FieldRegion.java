@@ -48,7 +48,7 @@ public class FieldRegion {
     public Pose2d getTargetPose() { // returns the closest pose for scoring at the grid
         if (this.alliance.equals(Alliance.Invalid) || this.gridIndex <= 0) return null;
         return new Pose2d(
-            this.alliance.equals(Alliance.Blue) ? 1.98 : 14.56,
+            this.alliance.equals(Alliance.Blue) ? 2.00 : 14.54,
             gridIndexY[this.gridIndex],
             Rotation2d.fromDegrees(this.alliance.equals(Alliance.Blue) ? 180 : 0)
         );
