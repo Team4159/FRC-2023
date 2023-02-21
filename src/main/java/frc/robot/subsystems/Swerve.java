@@ -207,8 +207,35 @@ public class Swerve extends SubsystemBase {
         );
     }
 
-    public void testPrintPose() {
-        System.out.println(getPose());
+    public Command aimbot() {
+        Pose2d targetPose = FieldRegion.lookup(getPose()).getTargetPose();
+
+        if (targetPose == null) {
+            DriverStation.reportWarning("TARGET NOT FOUND", false);
+            return null;
+        }
+
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> resetModulesToAbsolute()),
+            new WaitCommand(0.1),
+            followTrajectoryCommand(generateStraightTrajectory(getPose(), targetPose), false),
+            new InstantCommand(() -> resetModulesToAbsolute()),
+            new WaitCommand(0.1)
+        );
+    }
+
+    public static PathPlannerTrajectory generateStraightTrajectory(Pose2d initialPose, Pose2d targetPose) {
+        return PathPlanner.generatePath( // TODO: account for initial velocity
+            Constants.AutoConstants.kPathConstraints, 
+            new PathPoint(initialPose.getTranslation(), getHeading(initialPose, targetPose), initialPose.getRotation()),
+            new PathPoint(targetPose.getTranslation(), getHeading(targetPose, initialPose), targetPose.getRotation())
+        );
+    }
+
+    public static Rotation2d getHeading(Pose2d one, Pose2d two) {
+        return Rotation2d.fromRadians(
+            Math.atan2(two.getY() - one.getY(), two.getX() - one.getX())
+        );
     }
 }
 
