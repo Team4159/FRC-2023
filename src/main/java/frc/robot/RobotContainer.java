@@ -10,7 +10,7 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
+//import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -203,8 +203,12 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        if(dataBoard.getAutoPos() == 0) {
+            return new PrintCommand("Auto Disabled");
+        }
         return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
-            .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
+            .get(dataBoard.getAutoPos() - 1)
             .get(dataBoard.getAutoMode()));
     }
+
 }
