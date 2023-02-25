@@ -33,7 +33,8 @@ import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.RotatingArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
-import frc.robot.subsystems.CascadingArm.ArmState;
+import frc.robot.subsystems.CascadingArm.CascadeState;
+import frc.robot.subsystems.RotatingArm.RotateState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -139,10 +140,10 @@ public class RobotContainer {
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
 
-        setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.TUCKED)));
-        setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.INTAKING)));
-        setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.LOW)));
-        setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.MID)));
+        setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
+        setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
+        setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
+        setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
         
     }
 
@@ -160,11 +161,11 @@ public class RobotContainer {
         eventMap.put("RotateArmDown", null); // TODO: finish these commands
         eventMap.put("RotateArmUp", null);
         eventMap.put("RotateArmIntake", null);
-        eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(ArmState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
+        eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
         eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
-        eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING1)));
-        eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING2)));
-        eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(ArmState.SCORING3)));
+        eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
+        eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
+        eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING3)));
         eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
         eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
         // eventMap.put("FullIntake", new SequentialCommandGroup(null));

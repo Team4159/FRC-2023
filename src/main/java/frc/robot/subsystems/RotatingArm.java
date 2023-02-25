@@ -4,19 +4,19 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
-import frc.robot.Constants.RotatingArmConstants;;
+import frc.robot.Constants.RotatingArmConstants;
 
 public class RotatingArm extends SubsystemBase {
     private TalonFX armTalon1;
     private TalonFX armTalon2;
-    private ArmState armState;
+    private RotateState rotateState;
 
     public RotatingArm() {
         armTalon1 = new TalonFX(RotatingArmConstants.rotatingArmID1);
         armTalon2 = new TalonFX(RotatingArmConstants.rotatingArmID2);
         configMotors();
 
-        armState = ArmState.LOW;
+        rotateState = RotateState.OFF;
     }
 
     public void configMotors() {
@@ -37,7 +37,7 @@ public class RotatingArm extends SubsystemBase {
     @Override
     public void periodic() {
         System.out.println("rotate: " + getEncoderPosition());
-        switch (armState) {
+        switch (rotateState) {
             case LOW:
                 setArmPosition(RotatingArmConstants.lowSetpoint);
                 break;
@@ -63,15 +63,15 @@ public class RotatingArm extends SubsystemBase {
         return armTalon1.getSelectedSensorPosition();
     }
 
-    public void setArmState(ArmState armState) {
-        this.armState = armState;
+    public void setArmState(RotateState rotateState) {
+        this.rotateState = rotateState;
     }
 
     public void setArmPosition(double position) {
         armTalon1.set(ControlMode.Position, position);
     }
 
-    public static enum ArmState {
+    public static enum RotateState {
         LOW,
         MID,
         HIGH,
@@ -82,7 +82,7 @@ public class RotatingArm extends SubsystemBase {
 
     public boolean atDesiredSetPoint() {
         double setpoint = 0;
-        switch (armState) {
+        switch (rotateState) {
             case LOW:
                 setpoint = RotatingArmConstants.lowSetpoint;
                 break;
@@ -110,6 +110,6 @@ public class RotatingArm extends SubsystemBase {
     
     public boolean isAtSetpoint(double setpoint, double tolerance) {
         double pos = getEncoderPosition();
-        return setpoint - tolerance <= pos && setpoint + tolerance >= pos;
+        return Math.abs(setpoint-pos) < tolerance;
     }
 }

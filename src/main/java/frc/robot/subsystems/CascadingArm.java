@@ -8,13 +8,13 @@ import frc.robot.Constants.CascadingArmConstants;
 
 public class CascadingArm extends SubsystemBase {
     private TalonFX armTalon;
-    private ArmState armState;
+    private CascadeState cascadeState;
 
     public CascadingArm() {
         armTalon = new TalonFX(CascadingArmConstants.cascadingArmId);
         configMotor();
 
-        armState = ArmState.OFF;
+        cascadeState = CascadeState.OFF;
     }
 
     public void configMotor() {
@@ -28,7 +28,7 @@ public class CascadingArm extends SubsystemBase {
     @Override
     public void periodic() {
         System.out.println("cascade: " + getEncoderPosition());
-        switch (armState) {
+        switch (cascadeState) {
             case INTAKING:
                 setArmPosition(CascadingArmConstants.intakingSetpoint);
                 break;
@@ -54,8 +54,8 @@ public class CascadingArm extends SubsystemBase {
         return armTalon.getSelectedSensorPosition();
     }
 
-    public void setArmState(ArmState armState) {
-        this.armState = armState;
+    public void setArmState(CascadeState cascadeState) {
+        this.cascadeState = cascadeState;
     }
 
     public void setArmPosition(double position) {
@@ -63,7 +63,7 @@ public class CascadingArm extends SubsystemBase {
         armTalon.set(ControlMode.Position, position);
     }
 
-    public static enum ArmState {
+    public static enum CascadeState {
         INTAKING,
         SCORING1,
         SCORING2,
@@ -74,7 +74,7 @@ public class CascadingArm extends SubsystemBase {
 
     public boolean atDesiredSetPoint() {
         double setpoint = 0;
-        switch (armState) {
+        switch (cascadeState) {
             case SCORING1:
                 setpoint = CascadingArmConstants.scoringOneSetpoint;
                 break;
@@ -102,6 +102,6 @@ public class CascadingArm extends SubsystemBase {
     
     public boolean isAtSetpoint(double setpoint, double tolerance) {
         double pos = getEncoderPosition();
-        return setpoint - tolerance <= pos && setpoint + tolerance >= pos;
+        return Math.abs(setpoint-pos) < tolerance;
     }
 }
