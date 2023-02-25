@@ -178,8 +178,8 @@ public class Swerve extends SubsystemBase {
         }
         if (pose.getTranslation().getDistance(getPose().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
             poseEstimator.addVisionMeasurement(pose, latency);
-        //else
-            //System.out.println("Bad vision data recieved; distance: " + pose.getTranslation().getDistance(getPose().getTranslation()) + "; latency: " + latency);
+        else
+            System.out.println("Bad vision data recieved; distance: " + pose.getTranslation().getDistance(getPose().getTranslation()) + "; latency: " + latency);
     }
 
     public void setSwerveState(TeleopState newState) {

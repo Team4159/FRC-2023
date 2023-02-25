@@ -150,7 +150,7 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.01;
+        public static final double kP = 0.018;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
@@ -181,7 +181,7 @@ public final class Constants {
     public static final class CascadingArmConstants {
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0;
+        public static final double kP = 0.03;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;

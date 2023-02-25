@@ -72,6 +72,11 @@ public class RobotContainer {
     private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
     private final JoystickButton setRotateMid = new JoystickButton(secondary, 6);
 
+    private final JoystickButton setCascadeTucked = new JoystickButton(secondary, 16);
+    private final JoystickButton setCascadeIntakeOne = new JoystickButton(secondary, 14);
+    private final JoystickButton setCascadeLow = new JoystickButton(secondary, 13);
+    private final JoystickButton setCascadeMid = new JoystickButton(secondary, 12);
+
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -145,6 +150,10 @@ public class RobotContainer {
         setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
         setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
         
+        setCascadeTucked.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
+        setCascadeIntakeOne.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING)));
+        setCascadeLow.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
+        setCascadeMid.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
     }
 
     public void teleopInit() {
