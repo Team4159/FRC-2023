@@ -30,6 +30,7 @@ import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.PincerArm;
+import frc.robot.subsystems.RotatingArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.CascadingArm.ArmState;
@@ -60,7 +61,15 @@ public class RobotContainer {
     private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
+
+    /* Secondary buttons */
     private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
+
+
+    private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
+    private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
+    private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
+    private final JoystickButton setRotateMid = new JoystickButton(secondary, 6);
 
 
     /* Subsystems */
@@ -68,6 +77,7 @@ public class RobotContainer {
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
+    public static final RotatingArm rotatingArm = new RotatingArm();
     public static final PincerArm pincerArm = new PincerArm();
 
     public static final Map<String, Command> eventMap = new HashMap<>();
@@ -128,6 +138,11 @@ public class RobotContainer {
         
         //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+
+        setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.TUCKED)));
+        setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.INTAKING)));
+        setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.LOW)));
+        setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(frc.robot.subsystems.RotatingArm.ArmState.MID)));
         
     }
 

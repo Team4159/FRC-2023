@@ -147,15 +147,15 @@ public final class Constants {
     }
 
     public static final class RotatingArmConstants { // TODO: tune
-        public static final int rotatingArmID1 = 0; 
-        public static final int rotatingArmID2 = 0;
+        public static final int rotatingArmID1 = 1; 
+        public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0;
+        public static final double kP = 0.01;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
         
-        public static final double setpointTolerance = 0;
+        public static final double setpointTolerance = 400;
 
         public static final int rotateContinuousCurrentLimit = 35;
         public static final int rotatePeakCurrentLimit = 45;
@@ -168,9 +168,9 @@ public final class Constants {
         public static final boolean rotateMotorInvert = false;
         public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
 
-        public static final double intakingSetpoint = 0;
-        public static final double lowSetpoint = 0;
-        public static final double midSetpoint = 0;
+        public static final double intakingSetpoint = 22000;
+        public static final double lowSetpoint = 36000;
+        public static final double midSetpoint = 76000;
         public static final double highSetpoint = 0;
         public static final double tuckedSetpoint = 0;
 
@@ -179,14 +179,14 @@ public final class Constants {
     }
     
     public static final class CascadingArmConstants {
-        public static final int cascadingArmId = 0; 
+        public static final int cascadingArmId = 3; 
 
         public static final double kP = 0;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
 
-        public static final double setpointTolerance = 0;
+        public static final double setpointTolerance = 400;
 
         public static final int cascadeContinuousCurrentLimit = 30;
         public static final int cascadePeakCurrentLimit = 45;
@@ -199,9 +199,9 @@ public final class Constants {
         public static final boolean cascadeMotorInvert = false;
         public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
 
-        public static final double intakingSetpoint = 0;
-        public static final double scoringOneSetpoint = 0;
-        public static final double scoringTwoSetpoint = 0;
+        public static final double intakingSetpoint = 24000;
+        public static final double scoringOneSetpoint = 20000;
+        public static final double scoringTwoSetpoint = 38000;
         public static final double scoringThreeSetpoint = 0;
         public static final double tuckedSetpoint = 0;
 

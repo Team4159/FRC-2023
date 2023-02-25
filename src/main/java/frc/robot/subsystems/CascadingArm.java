@@ -27,6 +27,7 @@ public class CascadingArm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println("cascade: " + getEncoderPosition());
         switch (armState) {
             case INTAKING:
                 setArmPosition(CascadingArmConstants.intakingSetpoint);

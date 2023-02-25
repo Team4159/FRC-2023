@@ -2,7 +2,6 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Constants.RotatingArmConstants;;
@@ -17,18 +16,18 @@ public class RotatingArm extends SubsystemBase {
         armTalon2 = new TalonFX(RotatingArmConstants.rotatingArmID2);
         configMotors();
 
-        armState = ArmState.OFF;
+        armState = ArmState.LOW;
     }
 
     public void configMotors() {
         armTalon1.configFactoryDefault();
-        armTalon1.configAllSettings(Robot.ctreConfigs.cascadeFXConfig);
+        armTalon1.configAllSettings(Robot.ctreConfigs.rotateFXConfig);
         armTalon1.setInverted(RotatingArmConstants.rotateMotorInvert);
         armTalon1.setNeutralMode(RotatingArmConstants.rotateNeutralMode);
         armTalon1.setSelectedSensorPosition(0); // resets the arm talon encoder to 0
 
         armTalon2.configFactoryDefault();
-        armTalon2.configAllSettings(Robot.ctreConfigs.cascadeFXConfig);
+        armTalon2.configAllSettings(Robot.ctreConfigs.rotateFXConfig);
         armTalon2.setInverted(RotatingArmConstants.rotateMotorInvert);
         armTalon2.setNeutralMode(RotatingArmConstants.rotateNeutralMode);
         armTalon2.setSelectedSensorPosition(0); // resets the arm talon encoder to 0 
@@ -37,6 +36,7 @@ public class RotatingArm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println("rotate: " + getEncoderPosition());
         switch (armState) {
             case LOW:
                 setArmPosition(RotatingArmConstants.lowSetpoint);
@@ -67,9 +67,8 @@ public class RotatingArm extends SubsystemBase {
         this.armState = armState;
     }
 
-    public void setArmPosition(double speed) {
-        speed = MathUtil.clamp(speed, RotatingArmConstants.lowSpeed, RotatingArmConstants.highSpeed);
-        armTalon1.set(ControlMode.Velocity, speed);
+    public void setArmPosition(double position) {
+        armTalon1.set(ControlMode.Position, position);
     }
 
     public static enum ArmState {
