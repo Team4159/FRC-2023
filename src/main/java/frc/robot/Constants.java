@@ -89,7 +89,7 @@ public final class Constants {
         /** Meters per Second */
         public static final double maxSpeed = 4.5;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 10.0;
+        public static final double maxAngularVelocity = 4.0;
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -171,7 +171,7 @@ public final class Constants {
         public static final double intakingSetpoint = 22000;
         public static final double lowSetpoint = 36000;
         public static final double midSetpoint = 76000;
-        public static final double highSetpoint = 0;
+        public static final double highSetpoint = 90000;
         public static final double tuckedSetpoint = 0;
 
         public static final double lowSpeed = -1; // maximum speed rotating down

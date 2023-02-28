@@ -10,7 +10,6 @@ import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -71,6 +70,7 @@ public class RobotContainer {
     private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
     private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
     private final JoystickButton setRotateMid = new JoystickButton(secondary, 6);
+    private final JoystickButton setRotateHigh = new JoystickButton(secondary, 5);
 
     private final JoystickButton setCascadeTucked = new JoystickButton(secondary, 16);
     private final JoystickButton setCascadeIntakeOne = new JoystickButton(secondary, 14);
@@ -149,6 +149,7 @@ public class RobotContainer {
         setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
         setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
         setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
+        setRotateHigh.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.HIGH)));
         
         setCascadeTucked.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
         setCascadeIntakeOne.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING)));
@@ -228,8 +229,9 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
+        return autoBuilder.fullAuto(/*autos.get(DriverStation.getAlliance())
             .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode()));
+            .get(dataBoard.getAutoMode())*/
+            loadPathGroup("Bsimple2"));
     }
 }

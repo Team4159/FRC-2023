@@ -36,7 +36,7 @@ public class RotatingArm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("rotate: " + getEncoderPosition());
+        //System.out.println("rotate: " + getEncoderPosition());
         switch (rotateState) {
             case LOW:
                 setArmPosition(RotatingArmConstants.lowSetpoint);
