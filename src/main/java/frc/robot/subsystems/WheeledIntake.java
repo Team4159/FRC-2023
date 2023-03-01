@@ -20,6 +20,6 @@ public class WheeledIntake {
     }
 
     public void outtake(){
-        m1.set(WheeledIntakeConstants.wheeledIntakeSpeed * -1);
+        m1.set(WheeledIntakeConstants.wheeledOuttakeSpeed);
     }
 }

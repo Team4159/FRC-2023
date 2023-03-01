@@ -244,5 +244,6 @@ public final class Constants {
         public static final int wheeledIntake1id = 0;
         public static final int wheeledIntake2id = 1;
         public static final double wheeledIntakeSpeed = 1;
+        public static final double wheeledOuttakeSpeed = -1;
     }
 }
