@@ -9,7 +9,9 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.RobotContainer.AutoMode;
 
 
@@ -19,37 +21,25 @@ import frc.robot.RobotContainer.AutoMode;
  * and post them to the Shuffleboard with the SmartDashboard class!
  *  - Max
  */
-public class DataBoard extends SubsystemBase {
-    private SendableChooser<Integer> autoSelector = new SendableChooser<>();
+public class DataBoard {
+    private final SendableChooser<Integer> autoSelector = new SendableChooser<>();
     private Field2d field = new Field2d(); // initialize the field for pose estimation
     private Field2d visionField = new Field2d(); // initialize the field for pose estimation
 
-
-    public DataBoard() {
-        SmartDashboard.putData("field", field); // send the field object to the shuffleboard
-        SmartDashboard.putData("visionField", visionField);
-        Shuffleboard.getTab("Testing").addDouble("Pigeon2Gyro", () -> RobotContainer.s_Swerve.gyro.getYaw()).withWidget(BuiltInWidgets.kGyro).close();
-   
-        configureAutoSelector();
-    }
-
-
-    public void configureAutoSelector() {
-
-
+    public void init() {
         autoSelector.setDefaultOption("Disable", 0);
         autoSelector.addOption("Position 1",1);
         autoSelector.addOption("Position 2", 2);
         autoSelector.addOption("Position 3", 3);
-
-
-
 
         Shuffleboard.getTab("Pre-Match")
             .add("Auto Selector", autoSelector)
             .withWidget(BuiltInWidgets.kComboBoxChooser)
             .withSize(2, 2)
             .withPosition(0, 0);
+        SmartDashboard.putData("field", field); // send the field object to the shuffleboard
+        SmartDashboard.putData("visionField", visionField);
+        Shuffleboard.getTab("Testing").addDouble("Pigeon2Gyro", () -> RobotContainer.s_Swerve.gyro.getYaw()).withWidget(BuiltInWidgets.kGyro).close();
     }
 
 
@@ -67,8 +57,6 @@ public class DataBoard extends SubsystemBase {
         visionField.setRobotPose(pose);
     }
 
-
-    @Override
     public void periodic() {
         field.setRobotPose(RobotContainer.s_Swerve.getPose()); // updates the robot's estimated position on the field
         SwerveModulePosition[] positions = RobotContainer.s_Swerve.getPositions();
@@ -77,9 +65,18 @@ public class DataBoard extends SubsystemBase {
         }
         SmartDashboard.putNumber("Game Timer", DriverStation.getMatchTime());
         // SmartDashboard.putNumber("swerveMod0", positions[0].angle.getDegrees());
-
-
     }
-   
+
+    public Command getCommand() {return new DataBoardCommand().ignoringDisable(true).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);}
+    private class DataBoardCommand extends CommandBase {
+        @Override
+        public void initialize() {
+            init();
+        }
+        @Override
+        public void execute() {
+            periodic();
+        }
+    }
 }
 

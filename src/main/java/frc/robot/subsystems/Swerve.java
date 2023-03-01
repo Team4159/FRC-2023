@@ -46,7 +46,7 @@ public class Swerve extends SubsystemBase {
         Constants.Swerve.swerveKinematics, 
         new Rotation2d(), 
         getPositions(), 
-        new Pose2d(), //TODO: Fix
+        new Pose2d(),
         Constants.Swerve.stateStdDevs,
         Constants.Swerve.visionMeasurementStdDevs
     );

@@ -100,6 +100,8 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        dataBoard.getCommand().schedule();
     }
 
     /**
