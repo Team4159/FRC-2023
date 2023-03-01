@@ -32,6 +32,7 @@ import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.RotatingArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.WheeledIntake;
 import frc.robot.subsystems.CascadingArm.CascadeState;
 import frc.robot.subsystems.RotatingArm.RotateState;
 
@@ -65,6 +66,8 @@ public class RobotContainer {
     /* Secondary buttons */
     private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
 
+    private final JoystickButton intake = new JoystickButton(secondary, 2);
+    private final JoystickButton outtake = new JoystickButton(secondary, 2);
 
     private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
     private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
@@ -79,6 +82,7 @@ public class RobotContainer {
 
 
     /* Subsystems */
+    public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
@@ -143,6 +147,9 @@ public class RobotContainer {
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+
+        intake.onTrue(new InstantCommand(() -> wheeledIntake.intake()));
+        outtake.onTrue(new InstantCommand(() -> wheeledIntake.outtake()));
 
         setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
         setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));

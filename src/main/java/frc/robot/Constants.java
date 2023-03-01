@@ -239,4 +239,10 @@ public final class Constants {
         public static final double fieldHeight= 8;
         public static final double maximumOffset = 1; // Meters
     }
+
+    public static final class WheeledIntakeConstants {
+        public static final int wheeledIntake1id = 0;
+        public static final int wheeledIntake2id = 1;
+        public static final double wheeledIntakeSpeed = 1;
+    }
 }
