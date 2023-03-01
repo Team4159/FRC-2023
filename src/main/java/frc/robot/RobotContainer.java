@@ -142,7 +142,6 @@ public class RobotContainer {
 
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
-        //alignRobot.debounce(5).onTrue(swapToRetro).onFalse(swapToApril);
         togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
 
         setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
