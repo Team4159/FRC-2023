@@ -29,6 +29,7 @@ import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.LED.LEDState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -158,14 +159,19 @@ public class RobotContainer {
         eventMap.put("Print1", new PrintCommand("Print 1"));
         eventMap.put("Print2", new PrintCommand("Print 2"));
         eventMap.put("Print3", new PrintCommand("Print 3"));
-        eventMap.put("RotateArmDown", null); // TODO: finish these commands
-        eventMap.put("RotateArmUp", null);
-        eventMap.put("RotateArmIntake", null);
+
+        eventMap.put("RotateArmIntake", new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
+        eventMap.put("RotateArmTucked", new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
+        eventMap.put("RotateArmLow", new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
+        eventMap.put("RotateArmMid", new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
+        eventMap.put("RotateArmHigh", new InstantCommand(() -> rotatingArm.setArmState(RotateState.HIGH)));
+        
         eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
-        eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
+        eventMap.put("CascadeTucked", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
         eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
         eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
         eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING3)));
+        
         // eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
         // eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
         // eventMap.put("FullIntake", new SequentialCommandGroup(null));
@@ -173,8 +179,8 @@ public class RobotContainer {
         // eventMap.put("ScoreMid", new SequentialCommandGroup(null));
         // eventMap.put("ScoreHigh", new SequentialCommandGroup(null));
         // eventMap.put("Autobalance", null);
-        // eventMap.put("LEDYellow", null);
-        // eventMap.put("LEDPurple", null);
+        eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
+        eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
         eventMap.put("Wait0.1", new WaitCommand(0.1));
         eventMap.put("Wait0.5", new WaitCommand(0.5));
         eventMap.put("Wait1", new WaitCommand(1));
