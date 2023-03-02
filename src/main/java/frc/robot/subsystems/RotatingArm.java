@@ -1,10 +1,14 @@
 package frc.robot.subsystems;
+
+import java.util.List;
+
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Robot;
 import frc.robot.Constants.RotatingArmConstants;
+import frc.robot.Constants.RotatingArmConstants.RotateState;
+import frc.robot.Robot;
 
 public class RotatingArm extends SubsystemBase {
     private TalonFX armTalon1;
@@ -34,29 +38,14 @@ public class RotatingArm extends SubsystemBase {
         armTalon2.follow(armTalon1);
     }
 
+    public List<TalonFX> getMotors() {
+        return List.of(armTalon1, armTalon2);
+    }
+
     @Override
     public void periodic() {
-        //System.out.println("rotate: " + getEncoderPosition());
-        switch (rotateState) {
-            case LOW:
-                setArmPosition(RotatingArmConstants.lowSetpoint);
-                break;
-            case MID:
-                setArmPosition(RotatingArmConstants.midSetpoint);
-                break;
-            case HIGH:
-                setArmPosition(RotatingArmConstants.highSetpoint);
-                break;
-            case INTAKING:
-                setArmPosition(RotatingArmConstants.intakingSetpoint);
-                break;
-            case TUCKED:
-                setArmPosition(RotatingArmConstants.tuckedSetpoint);
-                break;
-            case OFF:
-                armTalon1.set(ControlMode.PercentOutput, 0);
-                break;
-        }
+        if (rotateState.equals(RotateState.OFF)) armTalon1.set(ControlMode.PercentOutput, 0);
+        setArmPosition(rotateState.setpoint);
     }
 
     public double getEncoderPosition() {
@@ -70,38 +59,10 @@ public class RotatingArm extends SubsystemBase {
     public void setArmPosition(double position) {
         armTalon1.set(ControlMode.Position, position);
     }
-
-    public static enum RotateState {
-        LOW,
-        MID,
-        HIGH,
-        INTAKING,
-        TUCKED,
-        OFF
-    }
-
+    
     public boolean atDesiredSetPoint() {
-        double setpoint = 0;
-        switch (rotateState) {
-            case LOW:
-                setpoint = RotatingArmConstants.lowSetpoint;
-                break;
-            case MID:
-                setpoint = RotatingArmConstants.midSetpoint;
-                break;
-            case HIGH:
-                setpoint = RotatingArmConstants.highSetpoint;
-                break;
-            case INTAKING:
-                setpoint = RotatingArmConstants.intakingSetpoint;
-                break;
-            case TUCKED:
-                setpoint = RotatingArmConstants.tuckedSetpoint;
-                break;
-            case OFF:
-                return true;
-        }
-        return isAtSetpoint(setpoint, RotatingArmConstants.setpointTolerance);
+        if (rotateState.equals(RotateState.OFF)) return true;
+        return isAtSetpoint(rotateState.setpoint, RotatingArmConstants.setpointTolerance);
     }
 
     public boolean isAtSetpoint(double setpoint) {
@@ -109,7 +70,6 @@ public class RotatingArm extends SubsystemBase {
     }
     
     public boolean isAtSetpoint(double setpoint, double tolerance) {
-        double pos = getEncoderPosition();
-        return Math.abs(setpoint-pos) < tolerance;
+        return Math.abs(setpoint-getEncoderPosition()) < tolerance;
     }
 }

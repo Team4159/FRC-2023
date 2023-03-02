@@ -5,6 +5,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonFX;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Constants.CascadingArmConstants;
+import frc.robot.Constants.CascadingArmConstants.CascadeState;
 
 public class CascadingArm extends SubsystemBase {
     private TalonFX armTalon;
@@ -27,27 +28,8 @@ public class CascadingArm extends SubsystemBase {
 
     @Override
     public void periodic() {
-        //System.out.println("cascade: " + getEncoderPosition());
-        switch (cascadeState) {
-            case INTAKING:
-                setArmPosition(CascadingArmConstants.intakingSetpoint);
-                break;
-            case SCORING1:
-                setArmPosition(CascadingArmConstants.scoringOneSetpoint);
-                break;
-            case SCORING2:
-                setArmPosition(CascadingArmConstants.scoringTwoSetpoint);
-                break;
-            case SCORING3:
-                setArmPosition(CascadingArmConstants.scoringThreeSetpoint);
-                break;
-            case TUCKED:
-                setArmPosition(CascadingArmConstants.tuckedSetpoint);
-                break;
-            case OFF:
-                armTalon.set(ControlMode.PercentOutput, 0);
-                break;
-        }
+        if (cascadeState.equals(CascadeState.OFF)) armTalon.set(ControlMode.PercentOutput, 0);
+        setArmPosition(cascadeState.setpoint);
     }
 
     public double getEncoderPosition() {
@@ -63,37 +45,9 @@ public class CascadingArm extends SubsystemBase {
         armTalon.set(ControlMode.Position, position);
     }
 
-    public static enum CascadeState {
-        INTAKING,
-        SCORING1,
-        SCORING2,
-        SCORING3,
-        TUCKED,
-        OFF
-    }
-
     public boolean atDesiredSetPoint() {
-        double setpoint = 0;
-        switch (cascadeState) {
-            case SCORING1:
-                setpoint = CascadingArmConstants.scoringOneSetpoint;
-                break;
-            case SCORING2:
-                setpoint = CascadingArmConstants.scoringTwoSetpoint;
-                break;
-            case SCORING3:
-                setpoint = CascadingArmConstants.scoringThreeSetpoint;
-                break;
-            case INTAKING:
-                setpoint = CascadingArmConstants.intakingSetpoint;
-                break;
-            case TUCKED:
-                setpoint = CascadingArmConstants.tuckedSetpoint;
-                break;
-            case OFF:
-                return true;
-        }
-        return isAtSetpoint(setpoint, CascadingArmConstants.setpointTolerance);
+        if (cascadeState.equals(CascadeState.OFF)) return true;
+        return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
     }
 
     public boolean isAtSetpoint(double setpoint) {
@@ -101,7 +55,6 @@ public class CascadingArm extends SubsystemBase {
     }
     
     public boolean isAtSetpoint(double setpoint, double tolerance) {
-        double pos = getEncoderPosition();
-        return Math.abs(setpoint-pos) < tolerance;
+        return Math.abs(setpoint-getEncoderPosition()) < tolerance;
     }
 }
