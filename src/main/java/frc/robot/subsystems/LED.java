@@ -127,7 +127,6 @@ public class LED extends SubsystemBase {
         private CycleLinearFlag(LED led, int[] colors) {
             super(led, (long dt) -> {
                 dt %= colors.length;
-                System.out.println(dt);
                 if (dt < 0) dt = -dt;
                 int color = colors[(int)dt];
                 return new Color(
