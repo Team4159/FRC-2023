@@ -32,6 +32,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     ctreConfigs = new CTREConfigs();
     robotContainer = new RobotContainer();
+    RobotContainer.led.startLED();
 
     PathPlannerServer.startServer(5811); // TODO: remove after testing completed
   }
@@ -54,7 +55,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+    RobotContainer.led.stopLED();
+  }
 
   @Override
   public void disabledPeriodic() {}

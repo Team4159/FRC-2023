@@ -52,17 +52,16 @@ public class LED extends SubsystemBase {
     };
     private AddressableLED strip;
     private AddressableLEDBuffer buffer;
-    private LEDState state;
+    private LEDState state = LEDState.BLACK;
 
     public LED() { 
         strip = new AddressableLED(Constants.Fun.ledPort);
         buffer = new AddressableLEDBuffer(300);
         strip.setLength(buffer.getLength());
-        state = LEDState.BLACK;
-        startLED();
     }
 
     public void setState(LEDState state) {
+        if (state.equals(this.state)) return;
         getStateCommand().cancel();
         this.state = state;
         startLED();
@@ -84,14 +83,13 @@ public class LED extends SubsystemBase {
     }
 
     private void setLED(int r, int g, int b) {
-        for (int i = 0; i < buffer.getLength(); i++) {
+        for (int i = 0; i < buffer.getLength(); i++) 
             buffer.setRGB(i, r, g, b);
-        }
         strip.setData(buffer);
     }
 
     public static class BlinkLED extends SequentialCommandGroup {
-        public BlinkLED(LED led){
+        public BlinkLED(LED led) {
             super(
                 new InstantCommand(() -> led.stopLED()),
                 new WaitCommand(0.5d),
@@ -113,7 +111,7 @@ public class LED extends SubsystemBase {
 
         @Override
         public void execute() {
-            final var color = supplier.get(System.currentTimeMillis());
+            final var color = supplier.get(System.currentTimeMillis()/200);
             for (int i = 0; i < led.buffer.getLength(); i++) led.buffer.setLED(i, color);
             led.strip.setData(led.buffer);
         }
@@ -128,7 +126,10 @@ public class LED extends SubsystemBase {
         private static double reductionFactor = 0.9;
         private CycleLinearFlag(LED led, int[] colors) {
             super(led, (long dt) -> {
-                int color = colors[(int)dt%colors.length];
+                dt %= colors.length;
+                System.out.println(dt);
+                if (dt < 0) dt = -dt;
+                int color = colors[(int)dt];
                 return new Color(
                     (int)Math.floor(((color >> 16)& 255) * reductionFactor),
                     (int)Math.floor(((color >> 8) & 255) * reductionFactor), 

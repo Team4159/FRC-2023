@@ -243,8 +243,6 @@ public final class Constants {
 
         public static final class Secondary {
             public static final int secondaryPort = 2;
-
-            public static final int togglePincerArm = 1;
         }
     }
 

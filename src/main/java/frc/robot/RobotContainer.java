@@ -57,7 +57,6 @@ public class RobotContainer {
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
     /* Secondary buttons */
-    // private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
     private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
     private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
     private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
@@ -71,6 +70,7 @@ public class RobotContainer {
 
     private final JoystickButton setLEDYellow = new JoystickButton(secondary, 9);
     private final JoystickButton setLEDPurple = new JoystickButton(secondary, 11);
+    private final JoystickButton setLEDPride = new JoystickButton(secondary, 15);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -132,7 +132,7 @@ public class RobotContainer {
 
         aimbot
             .onTrue(new InstantCommand(() -> {
-                led.setState(LEDState.RAINBOW);
+                led.setState(LEDState.RAINBOWCYCLE);
                 s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT);
             }))
             .whileTrue(new ProxyCommand(() -> s_Swerve.aimbot()))
@@ -144,14 +144,28 @@ public class RobotContainer {
 
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
-        setLEDYellow
+        setLEDYellow.and(setLEDPurple.negate())
             .onTrue(new InstantCommand(() -> led.setState(LEDState.YELLOW)))
             .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
-        setLEDPurple
+        setLEDPurple.and(setLEDYellow.negate())
             .onTrue(new InstantCommand(() -> led.setState(LEDState.PURPLE)))
             .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
-
-        // togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+        setLEDPride
+            .onTrue(new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)));
+            // .whileTrue(new SequentialCommandGroup(
+            //     new InstantCommand(() -> led.setState(LEDState.GAY)),
+            //     new WaitCommand(4),
+            //     new InstantCommand(() -> led.setState(LEDState.LESBIAN)),
+            //     new WaitCommand(4),
+            //     new InstantCommand(() -> led.setState(LEDState.BI)),
+            //     new WaitCommand(4),
+            //     new InstantCommand(() -> led.setState(LEDState.NONBINARY)),
+            //     new WaitCommand(4),
+            //     new InstantCommand(() -> led.setState(LEDState.GENDERFLUID)),
+            //     new WaitCommand(4),
+            //     new InstantCommand(() -> led.setState(LEDState.TRANS)),
+            //     new WaitCommand(4)
+            // ));
 
         setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
         setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
@@ -244,11 +258,13 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         if(dataBoard.getAutoPos() == 0) return new PrintCommand("Auto Disabled");
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> led.setState(LEDState.RAINBOW)),
-            autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
+        final var traj = autos.get(DriverStation.getAlliance())
                 .get(dataBoard.getAutoPos() - 1)
-                .get(dataBoard.getAutoMode())),
+                .get(dataBoard.getAutoMode());
+        if (traj == null) return null;
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)),
+            autoBuilder.fullAuto(traj),
             new InstantCommand(() -> led.setState(LEDState.BLACK))
         );
     }
