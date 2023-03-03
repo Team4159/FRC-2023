@@ -147,6 +147,20 @@ public final class Constants {
     }
 
     public static final class RotatingArmConstants { // TODO: tune
+        public static enum RotateState {
+            LOW(36000),
+            MID(76000),
+            HIGH(90000),
+            INTAKING(22000),
+            TUCKED(0),
+            OFF(-1);
+
+            public final double setpoint;
+            RotateState(double setpoint) {
+                this.setpoint = setpoint;
+            }
+        }
+
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
@@ -168,17 +182,25 @@ public final class Constants {
         public static final boolean rotateMotorInvert = false;
         public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
 
-        public static final double intakingSetpoint = 22000;
-        public static final double lowSetpoint = 36000;
-        public static final double midSetpoint = 76000;
-        public static final double highSetpoint = 90000;
-        public static final double tuckedSetpoint = 0;
-
         public static final double lowSpeed = -1; // maximum speed rotating down
         public static final double highSpeed = 1; // maximum speed rotating up
     }
     
     public static final class CascadingArmConstants {
+        public static enum CascadeState {
+            INTAKING(24000),
+            SCORING1(20000),
+            SCORING2(38000),
+            SCORING3(0),
+            TUCKED(0),
+            OFF(-1);
+
+            public final double setpoint;
+            CascadeState(double setpoint) {
+                this.setpoint = setpoint;
+            }
+        }
+
         public static final int cascadingArmId = 3; 
 
         public static final double kP = 0.03;
@@ -198,12 +220,6 @@ public final class Constants {
 
         public static final boolean cascadeMotorInvert = false;
         public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
-
-        public static final double intakingSetpoint = 24000;
-        public static final double scoringOneSetpoint = 20000;
-        public static final double scoringTwoSetpoint = 38000;
-        public static final double scoringThreeSetpoint = 0;
-        public static final double tuckedSetpoint = 0;
 
         public static final double lowSpeed = -1; // maximum speed retracting
         public static final double highSpeed = 1; // maximum speed extending
@@ -229,9 +245,7 @@ public final class Constants {
             public static final int secondaryPort = 2;
 
             public static final int togglePincerArm = 1;
-
         }
-
     }
 
     public static final class VisionConstants {
@@ -241,9 +255,22 @@ public final class Constants {
     }
 
     public static final class WheeledIntakeConstants {
-        public static final int wheeledIntake1id = 0;
-        public static final int wheeledIntake2id = 1;
-        public static final double wheeledIntakeSpeed = 1;
-        public static final double wheeledOuttakeSpeed = -1;
+        public static enum WheeledIntakeState{
+            INTAKE(1),
+            OUTTAKE(-1),
+            OFF(0);
+
+            public final double set;
+            WheeledIntakeState(double set) {
+                this.set = set;
+            }
+        }
+
+        public static int wheeledIntake1id = 0;
+        public static int wheeledIntake2id = 1;
+    }
+
+    public static final class Fun {
+        public static final int ledPort = 3;
     }
 }

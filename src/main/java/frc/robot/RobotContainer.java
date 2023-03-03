@@ -15,7 +15,6 @@ import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
@@ -23,10 +22,13 @@ import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.CascadingArmConstants.CascadeState;
+import frc.robot.Constants.RotatingArmConstants.RotateState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.TeleopSwerve;
+<<<<<<< HEAD
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.RotatingArm;
@@ -35,6 +37,10 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.WheeledIntake;
 import frc.robot.subsystems.CascadingArm.CascadeState;
 import frc.robot.subsystems.RotatingArm.RotateState;
+=======
+import frc.robot.subsystems.*;
+import frc.robot.subsystems.LED.LEDState;
+>>>>>>> 473ab90cdf651814f3154975c415924678ef50fd
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -46,13 +52,11 @@ public class RobotContainer {
     /* Controllers */
     private final Joystick primaryDrive = new Joystick(PrimaryDrive.drivePort); // translational movement
     private final Joystick primaryLeft = new Joystick(PrimaryLeft.leftPort); // rotational movement
-
     private final Joystick secondary = new Joystick(Secondary.secondaryPort); // other robot controls
 
     /* Drive Controls */
     private final int translationAxis = Joystick.AxisType.kY.value;
     private final int strafeAxis = Joystick.AxisType.kX.value;
-
     private final int rotationAxis = Joystick.AxisType.kZ.value;
 
     /* Driver Buttons */
@@ -62,13 +66,13 @@ public class RobotContainer {
     private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
-
     /* Secondary buttons */
     private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
 
     private final JoystickButton intake = new JoystickButton(secondary, 2);
     private final JoystickButton outtake = new JoystickButton(secondary, 2);
 
+    // private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
     private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
     private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
     private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
@@ -80,7 +84,6 @@ public class RobotContainer {
     private final JoystickButton setCascadeLow = new JoystickButton(secondary, 13);
     private final JoystickButton setCascadeMid = new JoystickButton(secondary, 12);
 
-
     /* Subsystems */
     public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final Swerve s_Swerve = new Swerve();
@@ -88,7 +91,7 @@ public class RobotContainer {
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
     public static final RotatingArm rotatingArm = new RotatingArm();
-    public static final PincerArm pincerArm = new PincerArm();
+    public static final LED led = new LED();
 
     public static final Map<String, Command> eventMap = new HashMap<>();
 
@@ -121,6 +124,8 @@ public class RobotContainer {
 
         // Configure the button bindings
         configureButtonBindings();
+
+        dataBoard.getCommand().schedule();
     }
 
     /**
@@ -146,7 +151,7 @@ public class RobotContainer {
 
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
-        togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
+        // togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
 
         intake.onTrue(new InstantCommand(() -> wheeledIntake.intake()));
         outtake.onTrue(new InstantCommand(() -> wheeledIntake.outtake()));
@@ -174,23 +179,28 @@ public class RobotContainer {
         eventMap.put("Print1", new PrintCommand("Print 1"));
         eventMap.put("Print2", new PrintCommand("Print 2"));
         eventMap.put("Print3", new PrintCommand("Print 3"));
-        eventMap.put("RotateArmDown", null); // TODO: finish these commands
-        eventMap.put("RotateArmUp", null);
-        eventMap.put("RotateArmIntake", null);
+
+        eventMap.put("RotateArmIntake", new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
+        eventMap.put("RotateArmTucked", new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
+        eventMap.put("RotateArmLow", new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
+        eventMap.put("RotateArmMid", new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
+        eventMap.put("RotateArmHigh", new InstantCommand(() -> rotatingArm.setArmState(RotateState.HIGH)));
+        
         eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
-        eventMap.put("CascadeIn", null); // TODO: tucked in cascade arm
+        eventMap.put("CascadeTucked", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
         eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
         eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
         eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING3)));
-        eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
-        eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
+        
+        // eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
+        // eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
         // eventMap.put("FullIntake", new SequentialCommandGroup(null));
         // eventMap.put("ScoreLow", new SequentialCommandGroup(null));
         // eventMap.put("ScoreMid", new SequentialCommandGroup(null));
         // eventMap.put("ScoreHigh", new SequentialCommandGroup(null));
         // eventMap.put("Autobalance", null);
-        // eventMap.put("LEDYellow", null);
-        // eventMap.put("LEDPurple", null);
+        eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
+        eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
         eventMap.put("Wait0.1", new WaitCommand(0.1));
         eventMap.put("Wait0.5", new WaitCommand(0.5));
         eventMap.put("Wait1", new WaitCommand(1));
@@ -235,9 +245,9 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return autoBuilder.fullAuto(/*autos.get(DriverStation.getAlliance())
-            .get((int)NetworkTableInstance.getDefault().getTable("FMSInfo").getValue("StationNumber").getInteger())
-            .get(dataBoard.getAutoMode())*/
-            loadPathGroup("Bsimple2"));
+        if(dataBoard.getAutoPos() == 0) return new Tweeter("cottoneyejoe.chrp");
+        return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
+            .get(dataBoard.getAutoPos() - 1)
+            .get(dataBoard.getAutoMode()));
     }
 }
