@@ -148,11 +148,6 @@ public class RobotContainer {
         
         // togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
 
-        intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
-              .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
-        outtake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)))
-               .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
-
         setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
         setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
         setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
@@ -163,6 +158,11 @@ public class RobotContainer {
         setCascadeIntakeOne.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING)));
         setCascadeLow.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
         setCascadeMid.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
+        
+        intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
+              .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+        outtake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)))
+               .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
     }
 
     public void teleopInit() {
