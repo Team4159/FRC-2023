@@ -24,23 +24,18 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.CascadingArmConstants.CascadeState;
 import frc.robot.Constants.RotatingArmConstants.RotateState;
+import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.TeleopSwerve;
-<<<<<<< HEAD
 import frc.robot.subsystems.CascadingArm;
-import frc.robot.subsystems.PincerArm;
 import frc.robot.subsystems.RotatingArm;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.WheeledIntake;
-import frc.robot.subsystems.CascadingArm.CascadeState;
-import frc.robot.subsystems.RotatingArm.RotateState;
-=======
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.LED.LEDState;
->>>>>>> 473ab90cdf651814f3154975c415924678ef50fd
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -153,8 +148,10 @@ public class RobotContainer {
         
         // togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
 
-        intake.onTrue(new InstantCommand(() -> wheeledIntake.intake()));
-        outtake.onTrue(new InstantCommand(() -> wheeledIntake.outtake()));
+        intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
+              .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+        outtake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)))
+               .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
 
         setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
         setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));

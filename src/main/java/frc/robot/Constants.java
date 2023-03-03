@@ -258,6 +258,7 @@ public final class Constants {
         public static enum WheeledIntakeState{
             INTAKE(1),
             OUTTAKE(-1),
+            NEUTRAL(0.2),
             OFF(0);
 
             public final double set;
