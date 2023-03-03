@@ -225,7 +225,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        if(dataBoard.getAutoPos() == 0) return new Tweeter("cottoneyejoe.chrp");
+        if(dataBoard.getAutoPos() == 0) return new PrintCommand("Auto Disabled");
         return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
             .get(dataBoard.getAutoPos() - 1)
             .get(dataBoard.getAutoMode()));
