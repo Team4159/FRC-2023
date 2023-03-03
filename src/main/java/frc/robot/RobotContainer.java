@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.RepeatCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.CascadingArmConstants.CascadeState;
@@ -67,6 +68,9 @@ public class RobotContainer {
     private final JoystickButton setCascadeIntakeOne = new JoystickButton(secondary, 14);
     private final JoystickButton setCascadeLow = new JoystickButton(secondary, 13);
     private final JoystickButton setCascadeMid = new JoystickButton(secondary, 12);
+
+    private final JoystickButton setLEDYellow = new JoystickButton(secondary, 9);
+    private final JoystickButton setLEDPurple = new JoystickButton(secondary, 11);
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -127,13 +131,26 @@ public class RobotContainer {
         ;
 
         aimbot
-            .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT)))
+            .onTrue(new InstantCommand(() -> {
+                led.setState(LEDState.RAINBOW);
+                s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT);
+            }))
             .whileTrue(new ProxyCommand(() -> s_Swerve.aimbot()))
-            .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
+            .onFalse(new InstantCommand(() -> {
+                s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL);
+                led.setState(LEDState.BLACK);
+            }))
         ;
 
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
+        setLEDYellow
+            .onTrue(new InstantCommand(() -> led.setState(LEDState.YELLOW)))
+            .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
+        setLEDPurple
+            .onTrue(new InstantCommand(() -> led.setState(LEDState.PURPLE)))
+            .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
+
         // togglePincerArm.onTrue(new InstantCommand(() -> pincerArm.togglePincerArm()));
 
         setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
@@ -181,6 +198,7 @@ public class RobotContainer {
         // eventMap.put("Autobalance", null);
         eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
         eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
+
         eventMap.put("Wait0.1", new WaitCommand(0.1));
         eventMap.put("Wait0.5", new WaitCommand(0.5));
         eventMap.put("Wait1", new WaitCommand(1));
@@ -226,8 +244,12 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         if(dataBoard.getAutoPos() == 0) return new PrintCommand("Auto Disabled");
-        return autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
-            .get(dataBoard.getAutoPos() - 1)
-            .get(dataBoard.getAutoMode()));
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> led.setState(LEDState.RAINBOW)),
+            autoBuilder.fullAuto(autos.get(DriverStation.getAlliance())
+                .get(dataBoard.getAutoPos() - 1)
+                .get(dataBoard.getAutoMode())),
+            new InstantCommand(() -> led.setState(LEDState.BLACK))
+        );
     }
 }

@@ -17,7 +17,8 @@ import frc.robot.Constants;
 public class LED extends SubsystemBase {
     public enum LEDState {
         WHITE, BLACK, PURPLE, YELLOW,
-        RAINBOW, NONBINARY, GENDERFLUID, GAY, LESBIAN, BI, TRANS
+        RAINBOW, RAINBOWCYCLE,
+        NONBINARY, GENDERFLUID, GAY, LESBIAN, BI, TRANS
     }
 
     private Map<LEDState, Command> commands = new HashMap<LEDState, Command>();
@@ -27,6 +28,9 @@ public class LED extends SubsystemBase {
         commands.put(LEDState.YELLOW, new InstantCommand(() -> setLED(150, 75, 0), this));
         commands.put(LEDState.BLACK, new InstantCommand(() -> setLED(0, 0, 0), this));
         commands.put(LEDState.RAINBOW, new ChromaLED(this, (double i) -> Color.fromHSV((int)Math.floor(i * 180), 255, 255)).repeatedly());
+        commands.put(LEDState.RAINBOWCYCLE, new CycleLinearFlag(this, new int[]{
+            0xE40303, 0xFF8C00, 0xFFED00, 0x008026, 0x004DFF, 0x750787
+        }));
         commands.put(LEDState.NONBINARY, new ChromaLinearFlag(this, new int[]{
             0xFCF434, 0xFCFCFC, 0x9C59D1, 0x2C2C2C
         }).repeatedly());
@@ -64,7 +68,7 @@ public class LED extends SubsystemBase {
         startLED();
     }
 
-    public Command getStateCommand() {
+    private Command getStateCommand() {
         return commands.get(state);
     }
 
@@ -79,7 +83,7 @@ public class LED extends SubsystemBase {
         strip.stop();
     }
 
-    public void setLED(int r, int g, int b) {
+    private void setLED(int r, int g, int b) {
         for (int i = 0; i < buffer.getLength(); i++) {
             buffer.setRGB(i, r, g, b);
         }
@@ -97,7 +101,6 @@ public class LED extends SubsystemBase {
         }
     }
 
-    @SuppressWarnings("unused")
     private static class CycleLED extends CommandBase {
         private LED led;
         private CycleColorSupplier supplier;
@@ -110,14 +113,28 @@ public class LED extends SubsystemBase {
 
         @Override
         public void execute() {
-            for (int i = 0; i < led.buffer.getLength(); i++)
-                led.buffer.setLED(i, supplier.get(System.currentTimeMillis()));
+            final var color = supplier.get(System.currentTimeMillis());
+            for (int i = 0; i < led.buffer.getLength(); i++) led.buffer.setLED(i, color);
             led.strip.setData(led.buffer);
         }
 
         @FunctionalInterface
         public static interface CycleColorSupplier {
             public Color get(long dt);
+        }
+    }
+
+    private static class CycleLinearFlag extends CycleLED {
+        private static double reductionFactor = 0.9;
+        private CycleLinearFlag(LED led, int[] colors) {
+            super(led, (long dt) -> {
+                int color = colors[(int)dt%colors.length];
+                return new Color(
+                    (int)Math.floor(((color >> 16)& 255) * reductionFactor),
+                    (int)Math.floor(((color >> 8) & 255) * reductionFactor), 
+                    (int)Math.floor(((color >> 0) & 255) * reductionFactor)
+                );
+            });
         }
     }
 
