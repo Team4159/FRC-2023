@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import java.util.List;
-
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
@@ -11,8 +9,7 @@ import frc.robot.Constants.RotatingArmConstants.RotateState;
 import frc.robot.Robot;
 
 public class RotatingArm extends SubsystemBase {
-    private TalonFX armTalon1;
-    private TalonFX armTalon2;
+    private TalonFX armTalon1, armTalon2;
     private RotateState rotateState;
 
     public RotatingArm() {
@@ -36,10 +33,6 @@ public class RotatingArm extends SubsystemBase {
         armTalon2.setNeutralMode(RotatingArmConstants.rotateNeutralMode);
         armTalon2.setSelectedSensorPosition(0); // resets the arm talon encoder to 0 
         armTalon2.follow(armTalon1);
-    }
-
-    public List<TalonFX> getMotors() {
-        return List.of(armTalon1, armTalon2);
     }
 
     @Override
