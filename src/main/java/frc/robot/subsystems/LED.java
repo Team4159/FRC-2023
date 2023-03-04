@@ -16,7 +16,7 @@ import frc.robot.Constants;
 
 public class LED extends SubsystemBase {
     public enum LEDState {
-        WHITE, BLACK, PURPLE, YELLOW,
+        WHITE, BLACK, PURPLE, YELLOW, RED, BLUE,
         RAINBOW, RAINBOWCYCLE,
         NONBINARY, GENDERFLUID, GAY, LESBIAN, BI, TRANS
     }
@@ -26,6 +26,8 @@ public class LED extends SubsystemBase {
         commands.put(LEDState.WHITE, new InstantCommand(() -> setLED(75, 75, 75), this));
         commands.put(LEDState.PURPLE, new InstantCommand(() -> setLED(70, 0, 100), this));
         commands.put(LEDState.YELLOW, new InstantCommand(() -> setLED(150, 75, 0), this));
+        commands.put(LEDState.RED, new InstantCommand(() -> setLED(75, 0, 0), this));
+        commands.put(LEDState.BLUE, new InstantCommand(() -> setLED(75, 0, 0)));
         commands.put(LEDState.BLACK, new InstantCommand(() -> setLED(0, 0, 0), this));
         commands.put(LEDState.RAINBOW, new ChromaLED(this, (double i) -> Color.fromHSV((int)Math.floor(i * 180), 255, 255)).repeatedly());
         commands.put(LEDState.RAINBOWCYCLE, new CycleLinearFlag(this, new int[]{
