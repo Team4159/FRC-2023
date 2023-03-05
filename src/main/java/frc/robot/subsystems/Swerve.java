@@ -8,6 +8,7 @@ import com.pathplanner.lib.commands.PPSwerveControllerCommand;
 import frc.robot.Constants;
 import frc.robot.FieldRegion;
 import frc.robot.SwerveModule;
+import frc.robot.Constants.AutoConstants;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -51,6 +52,23 @@ public class Swerve extends SubsystemBase {
         Constants.Swerve.visionMeasurementStdDevs
     );
 
+    public static enum LockRotateState {
+        RIGHT(0),
+        UP(90),
+        LEFT(180),
+        DOWN(270),
+        OFF(-1);
+
+        public final double direction;
+        LockRotateState(double direction) {
+            this.direction = direction;
+        }
+    }
+
+    private PIDController lockRotatePID; // TODO: test
+
+    private LockRotateState lockRotateState;
+
     public Swerve() {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.drivetrainCANbusName);
         gyro.configFactoryDefault();
@@ -61,7 +79,11 @@ public class Swerve extends SubsystemBase {
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
 
+        lockRotatePID = new PIDController(AutoConstants.kPThetaController, 0, 0);
+        lockRotatePID.enableContinuousInput(0, 360); //optimizes the rotation so it takes the shortest path :)
+
         teleopState = TeleopState.NORMAL;
+        lockRotateState = LockRotateState.OFF;
 
         forceAcceptNextVision = false;
     }
@@ -75,7 +97,9 @@ public class Swerve extends SubsystemBase {
                     fieldRelative ? ChassisSpeeds.fromFieldRelativeSpeeds(
                         translation.getX(), 
                         translation.getY(), 
-                        rotation, 
+                        lockRotateState == LockRotateState.OFF
+                            ? rotation
+                            : calculateLockRotate(), 
                         getYaw().plus(userGyroOffset)
                     ) : new ChassisSpeeds(
                         translation.getX(), 
@@ -100,7 +124,75 @@ public class Swerve extends SubsystemBase {
         for (SwerveModule mod : mSwerveMods)
             mod.setDesiredState(swerveModuleStates[mod.moduleNumber], isOpenLoop);
 
-    }    
+    }
+
+    private double calculateLockRotate() {
+        return lockRotatePID.calculate(getPose().getRotation().getDegrees(), lockRotateState.direction);
+    }
+
+    public void disableLockRotate() {
+        lockRotateState = LockRotateState.OFF;
+    }
+
+    public void lockRotateClosest() {
+        double rot = getPose().getRotation().getDegrees();
+
+        if (rot >= 315 || rot <= 45) {
+            lockRotateState = LockRotateState.RIGHT;
+        }
+        else if (rot >= 45 && rot <= 135) {
+            lockRotateState = LockRotateState.RIGHT;
+        }
+        else if (rot >= 135 && rot <= 225) {
+            lockRotateState = LockRotateState.RIGHT;
+        }
+        else if (rot >= 225 && rot <= 315) {
+            lockRotateState = LockRotateState.RIGHT;
+        }
+        else {
+            System.out.println("Can't find closest locked rotation");
+        }
+    }
+
+    public void lockRotateClockwise() {
+        switch (lockRotateState) {
+            case RIGHT:
+                lockRotateState = LockRotateState.DOWN;
+                break;
+            case DOWN:
+                lockRotateState = LockRotateState.LEFT;
+                break;
+            case LEFT:
+                lockRotateState = LockRotateState.UP;
+                break;
+            case UP:
+                lockRotateState = LockRotateState.RIGHT;
+                break;
+            case OFF:
+                System.out.println("Trying to rotate clockwise while auto lock off");
+                break;
+        }
+    }
+
+    public void lockRotateCounterclockwise() {
+        switch (lockRotateState) {
+            case RIGHT:
+                lockRotateState = LockRotateState.UP;
+                break;
+            case UP:
+                lockRotateState = LockRotateState.LEFT;
+                break;
+            case LEFT:
+                lockRotateState = LockRotateState.DOWN;
+                break;
+            case DOWN:
+                lockRotateState = LockRotateState.RIGHT;
+                break;
+            case OFF:
+                System.out.println("Trying to rotate counterclockwise while auto lock off");
+                break;
+        }
+    }
 
     /* Used by SwerveControllerCommand in Auto */
     public void setModuleStates(SwerveModuleState[] desiredStates) {

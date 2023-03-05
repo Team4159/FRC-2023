@@ -57,7 +57,10 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(primaryDrive, PrimaryDrive.zeroGyro); // zeroes the gyro based on the current robot rotation
-    private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
+    //private final JoystickButton lockedMode = new JoystickButton(primaryDrive, PrimaryDrive.lockedMode); // locks the wheels like an X so it's harder to be pushed around
+    private final JoystickButton toggleRotateLock = new JoystickButton(primaryDrive, PrimaryDrive.toggleRotateLock);
+    private final JoystickButton rotateLockClockwise = new JoystickButton(primaryDrive, PrimaryDrive.rotateLockClockwise);
+    private final JoystickButton rotateLockCounterclockwise = new JoystickButton(primaryDrive, PrimaryDrive.rotateLockCounterclockwise);
 
     private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
@@ -137,10 +140,18 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroGyroOffset()));
 
-        lockedMode
+        /*lockedMode
             .onTrue(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.LOCKED)))
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
+        ;*/
+
+        toggleRotateLock
+            .onTrue(new InstantCommand(() -> s_Swerve.lockRotateClosest()))
+            .onFalse(new InstantCommand(() -> s_Swerve.disableLockRotate()))
         ;
+
+        rotateLockClockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateClockwise()));
+        rotateLockCounterclockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateCounterclockwise()));
 
         aimbot
             .onTrue(new InstantCommand(() -> {

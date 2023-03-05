@@ -181,9 +181,6 @@ public final class Constants {
         
         public static final boolean rotateMotorInvert = false;
         public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
-
-        public static final double lowSpeed = -1; // maximum speed rotating down
-        public static final double highSpeed = 1; // maximum speed rotating up
     }
     
     public static final class CascadingArmConstants {
@@ -220,9 +217,40 @@ public final class Constants {
 
         public static final boolean cascadeMotorInvert = false;
         public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
+    }
 
-        public static final double lowSpeed = -1; // maximum speed retracting
-        public static final double highSpeed = 1; // maximum speed extending
+    public static final class WristConstants {
+        public static enum WristState {
+            INTAKING(0),
+            SCORING(0),
+            TUCKED(0),
+            OFF(-1);
+
+            public final double setpoint;
+            WristState(double setpoint) {
+                this.setpoint = setpoint;
+            }
+        }
+
+        public static final int wristId = 4; 
+
+        public static final double kP = 0.01;
+        public static final double kI = 0;
+        public static final double kD = 0;
+        public static final double kF = 0;
+
+        public static final double setpointTolerance = 200;
+
+        public static final int wristContinuousCurrentLimit = 30;
+        public static final int wristPeakCurrentLimit = 45;
+        public static final double wristPeakCurrentDuration = 0.1;
+        public static final boolean wristEnableCurrentLimit = true;
+        
+        public static final double openLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.0;
+
+        public static final boolean wristMotorInvert = false;
+        public static final NeutralMode wristNeutralMode = NeutralMode.Brake;
     }
     
     public static final class WheeledIntakeConstants {
@@ -238,8 +266,8 @@ public final class Constants {
             }
         }
         
-        public static int wheeledIntake1id = 0;
-        public static int wheeledIntake2id = 1;
+        public static int wheeledIntake1Id = 5;
+        public static int wheeledIntake2Id = 6;
     }
 
     public static final class JoystickConstants {
@@ -248,7 +276,10 @@ public final class Constants {
             public static final int drivePort = 0;
 
             public static final int zeroGyro = 1;
-            public static final int lockedMode = 2;
+            //public static final int lockedMode = 2;
+            public static final int toggleRotateLock = 2;
+            public static final int rotateLockClockwise = 3; // TODO: should be on left check and make sure
+            public static final int rotateLockCounterclockwise = 4; // TODO: should be on right check and make sure
         }
 
         public static final class PrimaryLeft {
