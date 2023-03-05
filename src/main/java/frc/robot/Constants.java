@@ -224,6 +224,23 @@ public final class Constants {
         public static final double lowSpeed = -1; // maximum speed retracting
         public static final double highSpeed = 1; // maximum speed extending
     }
+    
+    public static final class WheeledIntakeConstants {
+        public static enum WheeledIntakeState{
+            INTAKE(1),
+            OUTTAKE(-1),
+            NEUTRAL(0.2),
+            OFF(0);
+
+            public final double set;
+            WheeledIntakeState(double set) {
+                this.set = set;
+            }
+        }
+        
+        public static int wheeledIntake1id = 0;
+        public static int wheeledIntake2id = 1;
+    }
 
     public static final class JoystickConstants {
 

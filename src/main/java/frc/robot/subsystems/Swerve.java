@@ -55,9 +55,7 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.drivetrainCANbusName);
         gyro.configFactoryDefault();
         zeroGyro();
-        userGyroOffset = Rotation2d.fromDegrees(0);
-        
-        poseEstimator.resetPosition(getYaw(), getPositions(), new Pose2d());
+        userGyroOffset = Rotation2d.fromDegrees(0);        poseEstimator.resetPosition(getYaw(), getPositions(), new Pose2d());
 
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
@@ -178,8 +176,8 @@ public class Swerve extends SubsystemBase {
         }
         if (pose.getTranslation().getDistance(getPose().getTranslation()) < Constants.VisionConstants.maximumOffset) // throws out bad vision data
             poseEstimator.addVisionMeasurement(pose, latency);
-        //else
-            //System.out.println("Bad vision data recieved; distance: " + pose.getTranslation().getDistance(getPose().getTranslation()) + "; latency: " + latency);
+        else
+            System.out.println("Bad vision data recieved; distance: " + pose.getTranslation().getDistance(getPose().getTranslation()) + "; latency: " + latency);
     }
 
     public void setSwerveState(TeleopState newState) {

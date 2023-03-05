@@ -25,10 +25,16 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.CascadingArmConstants.CascadeState;
 import frc.robot.Constants.RotatingArmConstants.RotateState;
+import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.subsystems.CascadingArm;
+import frc.robot.subsystems.RotatingArm;
+import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.WheeledIntake;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.LED.LEDState;
 
@@ -57,6 +63,10 @@ public class RobotContainer {
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
     /* Secondary buttons */
+    private final JoystickButton intake = new JoystickButton(secondary, 2);
+    private final JoystickButton outtake = new JoystickButton(secondary, 2);
+
+    // private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
     private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
     private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
     private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
@@ -73,6 +83,7 @@ public class RobotContainer {
     private final JoystickButton setLEDPride = new JoystickButton(secondary, 15);
 
     /* Subsystems */
+    public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
@@ -177,6 +188,11 @@ public class RobotContainer {
         setCascadeIntakeOne.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING)));
         setCascadeLow.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
         setCascadeMid.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
+        
+        intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
+              .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+        outtake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)))
+               .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
     }
 
     public void teleopInit() {
