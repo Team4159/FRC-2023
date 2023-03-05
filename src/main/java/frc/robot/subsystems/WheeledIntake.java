@@ -13,6 +13,7 @@ public class WheeledIntake {
     public WheeledIntake() {
         m1 = new CANSparkMax(WheeledIntakeConstants.wheeledIntake1id, MotorType.kBrushless);
         m2 = new CANSparkMax(WheeledIntakeConstants.wheeledIntake2id, MotorType.kBrushless);
+        m1.setInverted(false);
         m2.setInverted(true);
         m2.follow(m1);
         wheeledIntakeState = WheeledIntakeState.NEUTRAL;

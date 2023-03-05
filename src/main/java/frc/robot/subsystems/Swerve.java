@@ -55,7 +55,8 @@ public class Swerve extends SubsystemBase {
         gyro = new Pigeon2(Constants.Swerve.pigeonID, Constants.drivetrainCANbusName);
         gyro.configFactoryDefault();
         zeroGyro();
-        userGyroOffset = Rotation2d.fromDegrees(0);        poseEstimator.resetPosition(getYaw(), getPositions(), new Pose2d());
+        userGyroOffset = Rotation2d.fromDegrees(0);
+        poseEstimator.resetPosition(getYaw(), getPositions(), new Pose2d());
 
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
