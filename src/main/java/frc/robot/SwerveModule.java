@@ -15,14 +15,12 @@ import frc.lib.util.SwerveModuleConstants;
 
 public class SwerveModule {
     public int moduleNumber;
-    private Rotation2d angleOffset;
-    private Rotation2d lastAngle;
+    private Rotation2d angleOffset, lastAngle;
 
-    private TalonFX mAngleMotor;
-    private TalonFX mDriveMotor;
+    private TalonFX mAngleMotor, mDriveMotor;
     private CANCoder angleEncoder;
 
-    SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
+    private SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(Constants.Swerve.driveKS, Constants.Swerve.driveKV, Constants.Swerve.driveKA);
 
     public SwerveModule(int moduleNumber, SwerveModuleConstants moduleConstants){
         this.moduleNumber = moduleNumber;

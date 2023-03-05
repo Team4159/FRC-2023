@@ -27,4 +27,22 @@ public class Vision extends SubsystemBase {
         RobotContainer.s_Swerve.updatePoseEstimator(pose,poseData[6]); // sends new data to swerve
         RobotContainer.dataBoard.setVisionPose(pose);
     }
+
+    // public static class SwapVisionPipeline extends CommandBase {
+    //     private int num;
+        
+    //     public SwapVisionPipeline(int num) {
+    //         this.num = num;
+    //     }
+    
+    //     @Override
+    //     public void execute() { // send the new pipeline # to NetworkTables
+    //         NetworkTableInstance.getDefault().getTable("limelight").getEntry("pipeline").setNumber(num);
+    //     }
+    
+    //     @Override
+    //     public boolean isFinished() { // check whether the pipeline has in fact been changed
+    //         return NetworkTableInstance.getDefault().getTable("limelight").getEntry("getpipe").getInteger(-1) == num;
+    //     }
+    // }
 }
