@@ -83,12 +83,13 @@ public class RobotContainer {
     private final JoystickButton setLEDPride = new JoystickButton(secondary, 15);
 
     /* Subsystems */
-    public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
     public static final RotatingArm rotatingArm = new RotatingArm();
+    public static final Wrist wrist = new Wrist();
+    public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final LED led = new LED();
 
     public static final Map<String, Command> eventMap = new HashMap<>();

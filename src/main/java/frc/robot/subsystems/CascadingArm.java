@@ -41,7 +41,6 @@ public class CascadingArm extends SubsystemBase {
     }
 
     public void setArmPosition(double position) {
-        //speed = MathUtil.clamp(speed, CascadingArmConstants.lowSpeed, CascadingArmConstants.highSpeed);
         armTalon.set(ControlMode.Position, position);
     }
 

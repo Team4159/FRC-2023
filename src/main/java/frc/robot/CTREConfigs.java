@@ -14,6 +14,7 @@ public final class CTREConfigs {
 
     public TalonFXConfiguration cascadeFXConfig;
     public TalonFXConfiguration rotateFXConfig;
+    public TalonFXConfiguration wristFXConfig;
 
     public CTREConfigs(){
         swerveAngleFXConfig = new TalonFXConfiguration();
@@ -22,6 +23,7 @@ public final class CTREConfigs {
 
         cascadeFXConfig = new TalonFXConfiguration();
         rotateFXConfig = new TalonFXConfiguration();
+        wristFXConfig = new TalonFXConfiguration();
 
         /* Swerve Angle Motor Configurations */
         SupplyCurrentLimitConfiguration angleSupplyLimit = new SupplyCurrentLimitConfiguration(
@@ -88,5 +90,21 @@ public final class CTREConfigs {
         rotateFXConfig.supplyCurrLimit = rotateSupplyLimit;
         rotateFXConfig.openloopRamp = Constants.RotatingArmConstants.openLoopRamp;
         rotateFXConfig.closedloopRamp = Constants.RotatingArmConstants.closedLoopRamp;
+        
+        /* Wrist Motor Configuration */
+        SupplyCurrentLimitConfiguration wristSupplyLimit = new SupplyCurrentLimitConfiguration(
+            Constants.WristConstants.wristEnableCurrentLimit,
+            Constants.WristConstants.wristContinuousCurrentLimit,
+            Constants.WristConstants.wristPeakCurrentLimit,
+            Constants.WristConstants.wristPeakCurrentDuration
+        );
+
+        wristFXConfig.slot0.kP = Constants.WristConstants.kP;
+        wristFXConfig.slot0.kI = Constants.WristConstants.kI;
+        wristFXConfig.slot0.kD = Constants.WristConstants.kD;
+        wristFXConfig.slot0.kF = Constants.WristConstants.kF;
+        wristFXConfig.supplyCurrLimit = wristSupplyLimit;
+        wristFXConfig.openloopRamp = Constants.WristConstants.openLoopRamp;
+        wristFXConfig.closedloopRamp = Constants.WristConstants.closedLoopRamp;
     }
 }
