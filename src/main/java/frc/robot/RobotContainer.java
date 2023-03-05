@@ -94,6 +94,9 @@ public class RobotContainer {
     public static final Wrist wrist = new Wrist();
     public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final LED led = new LED();
+    
+    public static final StateController stateController = new StateController();
+
 
     public static final Map<String, Command> eventMap = new HashMap<>();
 
