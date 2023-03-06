@@ -38,6 +38,8 @@ import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.WheeledIntake;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.LED.LEDState;
+import frc.robot.subsystems.StateController.GameElementState;
+import frc.robot.subsystems.StateController.PositionState;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -67,11 +69,24 @@ public class RobotContainer {
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
     /* Secondary buttons */
-    private final JoystickButton intake = new JoystickButton(secondary, 2);
-    private final JoystickButton outtake = new JoystickButton(secondary, 2);
+    private final JoystickButton outtake = new JoystickButton(secondary, Secondary.outtake);
+    private final JoystickButton intake = new JoystickButton(secondary, Secondary.intake);
+
+    private final JoystickButton cube = new JoystickButton(secondary, Secondary.cube);
+    private final JoystickButton cone = new JoystickButton(secondary, Secondary.cone);
+    
+    private final JoystickButton high = new JoystickButton(secondary, Secondary.high);
+    private final JoystickButton mid = new JoystickButton(secondary, Secondary.mid);
+    private final JoystickButton low = new JoystickButton(secondary, Secondary.low);
+    
+    private final JoystickButton groundIntake = new JoystickButton(secondary, Secondary.groundIntake);
+    private final JoystickButton singleIntake = new JoystickButton(secondary, Secondary.singleIntake);
+    private final JoystickButton doubleIntake = new JoystickButton(secondary, Secondary.doubleIntake);
+    
+    private final JoystickButton tucked = new JoystickButton(secondary, Secondary.tucked);
 
     // private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
-    private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
+    /*private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
     private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
     private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
     private final JoystickButton setRotateMid = new JoystickButton(secondary, 6);
@@ -84,7 +99,9 @@ public class RobotContainer {
 
     private final JoystickButton setLEDYellow = new JoystickButton(secondary, 9);
     private final JoystickButton setLEDPurple = new JoystickButton(secondary, 11);
-    private final JoystickButton setLEDPride = new JoystickButton(secondary, 15);
+    private final JoystickButton setLEDPride = new JoystickButton(secondary, 15);*/
+
+
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
@@ -171,14 +188,14 @@ public class RobotContainer {
 
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
-        setLEDYellow.and(setLEDPurple.negate())
-            .onTrue(new InstantCommand(() -> led.setState(LEDState.YELLOW)))
-            .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
-        setLEDPurple.and(setLEDYellow.negate())
-            .onTrue(new InstantCommand(() -> led.setState(LEDState.PURPLE)))
-            .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
-        setLEDPride
-            .onTrue(new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)));
+        // setLEDYellow.and(setLEDPurple.negate())
+        //     .onTrue(new InstantCommand(() -> led.setState(LEDState.YELLOW)))
+        //     .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
+        // setLEDPurple.and(setLEDYellow.negate())
+        //     .onTrue(new InstantCommand(() -> led.setState(LEDState.PURPLE)))
+        //     .onFalse(new InstantCommand(() ->led.setState(LEDState.RAINBOW)));
+        // setLEDPride
+        //     .onTrue(new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)));
             // .whileTrue(new SequentialCommandGroup(
             //     new InstantCommand(() -> led.setState(LEDState.GAY)),
             //     new WaitCommand(4),
@@ -194,7 +211,7 @@ public class RobotContainer {
             //     new WaitCommand(4)
             // ));
 
-        setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
+        /*setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
         setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
         setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
         setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
@@ -203,12 +220,29 @@ public class RobotContainer {
         setCascadeTucked.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
         setCascadeIntakeOne.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING)));
         setCascadeLow.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
-        setCascadeMid.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
+        setCascadeMid.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));*/
         
         intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
-              .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+            .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL))
+        );
         outtake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)))
-               .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+            .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL))
+        );
+
+        cube.onTrue(stateController.setGameElementState(GameElementState.CUBE));
+        cone.onTrue(stateController.setGameElementState(GameElementState.CONE));
+
+        high.onTrue(stateController.setPositionState(PositionState.HIG_SCORE));
+        mid.onTrue(stateController.setPositionState(PositionState.MID_SCORE));
+        low.onTrue(stateController.setPositionState(PositionState.LOW_SCORE));
+
+        groundIntake.onTrue(stateController.setPositionState(PositionState.GROUND_INTAKING));
+        singleIntake.onTrue(stateController.setPositionState(PositionState.SINGLE_SUBSTATION));
+        doubleIntake.onTrue(stateController.setPositionState(PositionState.DOUBLE_SUBSTATION));
+        
+        tucked.onTrue(stateController.setPositionState(PositionState.TUCKED));
+        
+            
     }
 
     public void teleopInit() {

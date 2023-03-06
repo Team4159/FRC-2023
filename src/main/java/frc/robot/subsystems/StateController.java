@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.CascadingArmConstants.CascadeState;
@@ -8,12 +12,10 @@ import frc.robot.Constants.WristConstants.WristState;
 import frc.robot.subsystems.LED.LEDState;
 
 public class StateController extends SubsystemBase {
-    private Swerve swerve;
     private LED led;
     private RotatingArm rotatingArm;
     private CascadingArm cascadingArm;
-    private Wrist writst;
-    private WheeledIntake wheeledIntake;
+    private Wrist wrist;
 
     private GameElementState gameElementState;
     private PositionState positionState;
@@ -34,96 +36,86 @@ public class StateController extends SubsystemBase {
     }
 
     public StateController() {
-        swerve = RobotContainer.s_Swerve;
         led = RobotContainer.led;
         rotatingArm = RobotContainer.rotatingArm;
         cascadingArm = RobotContainer.cascadingArm;
-        writst = RobotContainer.wrist;
-        wheeledIntake = RobotContainer.wheeledIntake;
+        wrist = RobotContainer.wrist;
 
 
         gameElementState = GameElementState.CUBE;
         positionState = PositionState.TUCKED;
     }
 
-    public void setGameElementState(GameElementState gameElementState) {
+    public Command setGameElementState(GameElementState gameElementState) {
         this.gameElementState = gameElementState;
-        updateLocalStates();
+        return updateLocalStates(true);
     }
 
-    public void setPositionState(PositionState positionState) {
+    public Command setPositionState(PositionState positionState) {
         this.positionState = positionState;
-        updateLocalStates();
+        return updateLocalStates(false);
     }
 
-    public void updateLocalStates() {
+    public Command updateLocalStates(boolean noRetract) {
         switch (gameElementState) {
             case CONE:
                 switch (positionState) {
                     case TUCKED:
                         led.setState(LEDState.YELLOW);
-                        rotatingArm.setArmState(RotateState.TUCKED);
-                        cascadingArm.setArmState(CascadeState.TUCKED);
-                        writst.setArmState(WristState.TUCKED);
-                        break;
+                        return RetractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED);
                     case GROUND_INTAKING:
                         led.setState(LEDState.YELLOW);
-                        
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case SINGLE_SUBSTATION:
                         led.setState(LEDState.YELLOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case DOUBLE_SUBSTATION:
                         led.setState(LEDState.YELLOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case LOW_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                 }
-                break;
             case CUBE:
                 switch (positionState) {
                     case TUCKED:
                         led.setState(LEDState.PURPLE);
-
-                        break;
+                        return RetractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED);
                     case GROUND_INTAKING:
                         led.setState(LEDState.PURPLE);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case SINGLE_SUBSTATION:
                         led.setState(LEDState.PURPLE);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case DOUBLE_SUBSTATION:
                         led.setState(LEDState.PURPLE);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case LOW_SCORE:
                         led.setState(LEDState.RAINBOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);
-
-                        break;
+                        return RetractRotateExtend(null, null, null);
                 }
-                break;
         }
+        return new PrintCommand("State Controller broken :(");
+    }
+
+    public Command RetractRotateExtend(CascadeState cascadeState, RotateState rotateState, WristState wristState) { // trust the process :(
+        return new SequentialCommandGroup(
+            ((new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
+            .andThen(((new InstantCommand(() -> rotatingArm.setArmState(rotateState)).repeatedly()).until(() -> rotatingArm.atDesiredSetPoint()))
+            .alongWith((new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint())))
+            .andThen((new InstantCommand(() -> cascadingArm.setArmState(cascadeState)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
+        );
     }
 }

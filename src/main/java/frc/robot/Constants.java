@@ -301,6 +301,22 @@ public final class Constants {
 
         public static final class Secondary {
             public static final int secondaryPort = 2;
+
+            public static final int outtake = 1;
+            public static final int intake = 2;
+
+            public static final int cube = 3;
+            public static final int cone = 4;
+
+            public static final int high = 5;
+            public static final int mid = 6;
+            public static final int low = 7;
+
+            public static final int groundIntake = 8;
+            public static final int singleIntake = 9;
+            public static final int doubleIntake = 10;
+            
+            public static final int tucked = 11;
         }
     }
 
