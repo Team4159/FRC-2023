@@ -88,6 +88,27 @@ public class Swerve extends SubsystemBase {
         forceAcceptNextVision = false;
     }
 
+    public double straightBalance(Translation2d translation, LockRotateState lockRotateState, double maxSpeed) {
+        SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
+
+        this.lockRotateState = lockRotateState;
+        swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                translation.getX(),
+                translation.getY(),
+                calculateLockRotate(),
+                getYaw()
+            )
+        );
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, maxSpeed);
+
+        for (SwerveModule mod : mSwerveMods)
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);
+
+        return gyro.getPitch();
+    }
+
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) { // teleop manual driving
         SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
@@ -238,6 +259,10 @@ public class Swerve extends SubsystemBase {
 
     public Rotation2d getYaw() {
         return (Constants.Swerve.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+    }
+
+    public double getPitch() {
+        return gyro.getPitch();
     }
 
     @Override

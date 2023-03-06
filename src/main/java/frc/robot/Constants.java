@@ -144,6 +144,16 @@ public final class Constants {
         public static final double kPXController = 15;
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
+
+        public static final double maxAutobalanceSpeed = 3; // TODO: test
+        public static final double maxAutobalanceUphillSpeed = 1.5; // TODO: test
+        public static final double maxAutobalanceReverseSpeed = 0.5; // TODO: test
+
+        public static final double kPautobalance = 0.1; // TODO: test
+        public static final double kIautobalance = 0;
+        public static final double kDautobalance = 0;
+
+        public static final double autoBalanceTolerence = 2; // in degrees      TODO: test
     }
 
     public static final class RotatingArmConstants { // TODO: tune
