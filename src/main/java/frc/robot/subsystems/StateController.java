@@ -113,15 +113,15 @@ public class StateController extends SubsystemBase {
     public Command RetractRotateExtend(CascadeState cascadeState, RotateState rotateState, WristState wristState, boolean noRetract) { // trust the process :(
         if (noRetract) return new SequentialCommandGroup(
             (((new InstantCommand(() -> rotatingArm.setArmState(rotateState)).repeatedly()).until(() -> rotatingArm.atDesiredSetPoint()))
-            .alongWith((new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint())))
-            .andThen((new InstantCommand(() -> cascadingArm.setArmState(cascadeState)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
+            .alongWith((new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint()))),
+            ((new InstantCommand(() -> cascadingArm.setArmState(cascadeState)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
         );
         
         return new SequentialCommandGroup(
-            ((new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
-            .andThen(((new InstantCommand(() -> rotatingArm.setArmState(rotateState)).repeatedly()).until(() -> rotatingArm.atDesiredSetPoint()))
-            .alongWith((new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint())))
-            .andThen((new InstantCommand(() -> cascadingArm.setArmState(cascadeState)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
+            ((new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint())),
+            (((new InstantCommand(() -> rotatingArm.setArmState(rotateState)).repeatedly()).until(() -> rotatingArm.atDesiredSetPoint()))
+            .alongWith((new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint()))),
+            ((new InstantCommand(() -> cascadingArm.setArmState(cascadeState)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
         );
     }
 }
