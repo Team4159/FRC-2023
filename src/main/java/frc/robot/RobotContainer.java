@@ -29,6 +29,7 @@ import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
+import frc.robot.commands.StraightAutobalance;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.RotatingArm;
@@ -288,7 +289,8 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        if(dataBoard.getAutoPos() == 0) return new PrintCommand("Auto Disabled");
+        if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
+        if(dataBoard.getAutoPos() == 0) return new StraightAutobalance(s_Swerve);
         final var traj = autos.get(DriverStation.getAlliance())
                 .get(dataBoard.getAutoPos() - 1)
                 .get(dataBoard.getAutoMode());

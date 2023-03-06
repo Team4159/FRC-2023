@@ -27,7 +27,8 @@ public class DataBoard {
     private Field2d visionField = new Field2d(); // initialize the field for pose estimation
 
     public void init() {
-        autoSelector.setDefaultOption("Disabled", 0);
+        autoSelector.setDefaultOption("Disabled", -1);
+        autoSelector.addOption("Autobalance",0);
         autoSelector.addOption("Position 1",1);
         autoSelector.addOption("Position 2", 2);
         autoSelector.addOption("Position 3", 3);
