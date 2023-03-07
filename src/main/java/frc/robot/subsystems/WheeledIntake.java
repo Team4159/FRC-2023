@@ -29,7 +29,7 @@ public class WheeledIntake {
 
         m2.restoreFactoryDefaults();
         m2.setSmartCurrentLimit(20, 10);
-        m1.setIdleMode(IdleMode.kCoast);
+        m2.setIdleMode(IdleMode.kCoast);
         m2.setInverted(true);
         m2.follow(m1);
         m2.burnFlash();
