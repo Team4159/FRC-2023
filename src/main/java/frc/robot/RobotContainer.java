@@ -21,13 +21,10 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.ProxyCommand;
-import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.VisionConstants;
-import frc.robot.Constants.CascadingArmConstants.CascadeState;
-import frc.robot.Constants.RotatingArmConstants.RotateState;
 import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
@@ -260,26 +257,19 @@ public class RobotContainer {
         eventMap.put("Print2", new PrintCommand("Print 2"));
         eventMap.put("Print3", new PrintCommand("Print 3"));
 
-        eventMap.put("RotateArmIntake", new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
-        eventMap.put("RotateArmTucked", new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
-        eventMap.put("RotateArmLow", new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
-        eventMap.put("RotateArmMid", new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
-        eventMap.put("RotateArmHigh", new InstantCommand(() -> rotatingArm.setArmState(RotateState.HIGH)));
-        
-        eventMap.put("CascadeIntake", new RepeatCommand(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING))).until(() -> cascadingArm.atDesiredSetPoint())); // TODO: this is an example :) use real numbers please
-        eventMap.put("CascadeTucked", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
-        eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
-        eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
-        eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING3)));
         eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
         eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CONE));
+
         eventMap.put("ScoreLowCube", stateController.autoScoreLow(GameElementState.CUBE));
         eventMap.put("ScoreMidCube", stateController.autoScoreMid(GameElementState.CUBE));
         eventMap.put("ScoreHighCube", stateController.autoScoreHigh(GameElementState.CUBE));
+
         eventMap.put("ScoreLowCone", stateController.autoScoreLow(GameElementState.CONE));
         eventMap.put("ScoreMidCone", stateController.autoScoreMid(GameElementState.CONE));
         eventMap.put("ScoreHighCone", stateController.autoScoreHigh(GameElementState.CONE));
+
         //eventMap.put("Autobalance", null);
+        
         eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
         eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
 
