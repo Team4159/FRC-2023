@@ -179,7 +179,7 @@ public class StateController extends SubsystemBase {
             setGameElementState(gameElementState),
             setPositionState(PositionState.GROUND_INTAKING),
             new WaitCommand(0.1),
-            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)),
             new WaitCommand(0.3),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
             setPositionState(PositionState.TUCKED)
