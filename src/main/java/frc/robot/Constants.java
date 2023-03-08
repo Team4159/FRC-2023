@@ -158,6 +158,7 @@ public final class Constants {
 
     public static final class RotatingArmConstants { // TODO: tune
         public static enum RotateState {
+            INITIAL(0),
             LOW(36000),
             MID(76000),
             HIGH(90000),
@@ -195,6 +196,7 @@ public final class Constants {
     
     public static final class CascadingArmConstants {
         public static enum CascadeState {
+            INITIAL(0),
             INTAKING(24000),
             SCORING1(20000),
             SCORING2(38000),
@@ -231,6 +233,7 @@ public final class Constants {
 
     public static final class WristConstants {
         public static enum WristState {
+            INITIAL(0),
             INTAKING(0),
             SCORING(0),
             TUCKED(0),

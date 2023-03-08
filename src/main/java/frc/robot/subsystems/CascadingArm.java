@@ -15,7 +15,7 @@ public class CascadingArm extends SubsystemBase {
         armTalon = new TalonFX(CascadingArmConstants.cascadingArmId);
         configMotor();
 
-        cascadeState = CascadeState.OFF;
+        cascadeState = CascadeState.INITIAL;
     }
 
     public void configMotor() {

@@ -17,7 +17,7 @@ public class Wrist extends SubsystemBase {
         wristTalon = new TalonFX(WristConstants.wristId);
         configMotor();
 
-        wristState = WristState.OFF;
+        wristState = WristState.INITIAL;
     }
 
     private void configMotor() {

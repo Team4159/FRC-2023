@@ -17,7 +17,7 @@ public class RotatingArm extends SubsystemBase {
         armTalon2 = new TalonFX(RotatingArmConstants.rotatingArmID2);
         configMotors();
 
-        rotateState = RotateState.OFF;
+        rotateState = RotateState.INITIAL;
     }
 
     public void configMotors() {
