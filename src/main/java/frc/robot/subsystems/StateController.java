@@ -6,9 +6,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.RobotContainer;
 import frc.robot.Constants.CascadingArmConstants.CascadeState;
 import frc.robot.Constants.RotatingArmConstants.RotateState;
+import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 import frc.robot.Constants.WristConstants.WristState;
 import frc.robot.subsystems.LED.LEDState;
 
@@ -17,6 +19,7 @@ public class StateController extends SubsystemBase {
     private RotatingArm rotatingArm;
     private CascadingArm cascadingArm;
     private Wrist wrist;
+    private WheeledIntake wheeledIntake;
 
     private GameElementState gameElementState;
     private PositionState positionState;
@@ -41,6 +44,7 @@ public class StateController extends SubsystemBase {
         rotatingArm = RobotContainer.rotatingArm;
         cascadingArm = RobotContainer.cascadingArm;
         wrist = RobotContainer.wrist;
+        wheeledIntake = RobotContainer.wheeledIntake;
 
 
         gameElementState = GameElementState.CUBE;
@@ -63,55 +67,55 @@ public class StateController extends SubsystemBase {
                 switch (positionState) {
                     case TUCKED:
                         led.setState(LEDState.YELLOW);
-                        return RetractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED, noRetract);
+                        return retractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED, noRetract);
                     case GROUND_INTAKING:
                         led.setState(LEDState.YELLOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case SINGLE_SUBSTATION:
                         led.setState(LEDState.YELLOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case DOUBLE_SUBSTATION:
                         led.setState(LEDState.YELLOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case LOW_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                 }
             case CUBE:
                 switch (positionState) {
                     case TUCKED:
                         led.setState(LEDState.PURPLE);
-                        return RetractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED, noRetract);
+                        return retractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED, noRetract);
                     case GROUND_INTAKING:
                         led.setState(LEDState.PURPLE);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case SINGLE_SUBSTATION:
                         led.setState(LEDState.PURPLE);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case DOUBLE_SUBSTATION:
                         led.setState(LEDState.PURPLE);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case LOW_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return RetractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(null, null, null, noRetract);
                 }
         }
         return new PrintCommand("State Controller broken :(");
     }
 
-    public Command RetractRotateExtend(CascadeState cascadeState, RotateState rotateState, WristState wristState, boolean noRetract) { // trust the process :(
+    public Command retractRotateExtend(CascadeState cascadeState, RotateState rotateState, WristState wristState, boolean noRetract) { // trust the process :(
         if (noRetract) return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 (new InstantCommand(() -> rotatingArm.setArmState(rotateState)).repeatedly()).until(() -> rotatingArm.atDesiredSetPoint()),
@@ -127,6 +131,58 @@ public class StateController extends SubsystemBase {
                 (new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint())
             ),
             ((new InstantCommand(() -> cascadingArm.setArmState(cascadeState)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()))
+        );
+    }
+
+    public Command autoScoreLow(GameElementState gameElementState) {
+        return new SequentialCommandGroup(
+            updateLocalStates(false),
+            setGameElementState(gameElementState),
+            setPositionState(PositionState.LOW_SCORE),
+            new WaitCommand(0.1),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
+            new WaitCommand(0.3),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
+            setPositionState(PositionState.TUCKED)
+        );
+    }
+
+    public Command autoScoreMid(GameElementState gameElementState) {
+        return new SequentialCommandGroup(
+            updateLocalStates(false),
+            setGameElementState(gameElementState),
+            setPositionState(PositionState.MID_SCORE),
+            new WaitCommand(0.1),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
+            new WaitCommand(0.3),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
+            setPositionState(PositionState.TUCKED)
+        );
+    }
+
+    public Command autoScoreHigh(GameElementState gameElementState) {
+        return new SequentialCommandGroup(
+            updateLocalStates(false),
+            setGameElementState(gameElementState),
+            setPositionState(PositionState.HIG_SCORE),
+            new WaitCommand(0.1),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
+            new WaitCommand(0.3),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
+            setPositionState(PositionState.TUCKED)
+        );
+    }
+
+    public Command autoGroundIntake(GameElementState gameElementState) {
+        return new SequentialCommandGroup(
+            updateLocalStates(false),
+            setGameElementState(gameElementState),
+            setPositionState(PositionState.GROUND_INTAKING),
+            new WaitCommand(0.1),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
+            new WaitCommand(0.3),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
+            setPositionState(PositionState.TUCKED)
         );
     }
 }

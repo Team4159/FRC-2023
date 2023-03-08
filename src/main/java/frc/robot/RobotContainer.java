@@ -9,7 +9,9 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -23,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
+import frc.robot.Constants.VisionConstants;
 import frc.robot.Constants.CascadingArmConstants.CascadeState;
 import frc.robot.Constants.RotatingArmConstants.RotateState;
 import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
@@ -268,14 +271,15 @@ public class RobotContainer {
         eventMap.put("CascadeOne", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
         eventMap.put("CascadeTwo", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));
         eventMap.put("CascadeThree", new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING3)));
-        
-        // eventMap.put("PincerIn", new InstantCommand(() -> pincerArm.setPincerArm(Value.kForward)));
-        // eventMap.put("PincerOut", new InstantCommand(() -> pincerArm.setPincerArm(Value.kReverse)));
-        // eventMap.put("FullIntake", new SequentialCommandGroup(null));
-        // eventMap.put("ScoreLow", new SequentialCommandGroup(null));
-        // eventMap.put("ScoreMid", new SequentialCommandGroup(null));
-        // eventMap.put("ScoreHigh", new SequentialCommandGroup(null));
-        // eventMap.put("Autobalance", null);
+        eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
+        eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CONE));
+        eventMap.put("ScoreLowCube", stateController.autoScoreLow(GameElementState.CUBE));
+        eventMap.put("ScoreMidCube", stateController.autoScoreMid(GameElementState.CUBE));
+        eventMap.put("ScoreHighCube", stateController.autoScoreHigh(GameElementState.CUBE));
+        eventMap.put("ScoreLowCone", stateController.autoScoreLow(GameElementState.CONE));
+        eventMap.put("ScoreMidCone", stateController.autoScoreMid(GameElementState.CONE));
+        eventMap.put("ScoreHighCone", stateController.autoScoreHigh(GameElementState.CONE));
+        //eventMap.put("Autobalance", null);
         eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
         eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
 
@@ -324,7 +328,13 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
-        if(dataBoard.getAutoPos() == 0) return new StraightAutobalance(s_Swerve);
+        if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
+            new InstantCommand(() -> s_Swerve.resetOdometry(
+                (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(0))
+                : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(180))
+            )),
+            new StraightAutobalance(s_Swerve)
+        );
         final var traj = autos.get(DriverStation.getAlliance())
                 .get(dataBoard.getAutoPos() - 1)
                 .get(dataBoard.getAutoMode());
