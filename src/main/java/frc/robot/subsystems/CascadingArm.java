@@ -45,6 +45,7 @@ public class CascadingArm extends SubsystemBase {
     }
 
     public boolean atDesiredSetPoint() {
+        System.out.println(isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance));
         if (cascadeState.equals(CascadeState.OFF)) return true;
         return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
     }

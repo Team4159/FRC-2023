@@ -159,11 +159,16 @@ public final class Constants {
     public static final class RotatingArmConstants { // TODO: tune
         public static enum RotateState {
             INITIAL(0),
-            LOW(36000),
-            MID(76000),
-            HIGH(90000),
-            INTAKING(22000),
-            TUCKED(0),
+            TUCKED_CUBE(2500),
+            GROUND_INTAKE_CUBE(3800),
+            LOW_CUBE(4000),
+            MID_CUBE(2800),
+            HIGH_CUBE(51000),
+            TUCKED_CONE(200),
+            GROUND_INTAKE_CONE(4000),
+            LOW_CONE(4000),
+            MID_CONE(45000),
+            HIGH_CONE(65000),
             OFF(-1);
 
             public final double setpoint;
@@ -197,11 +202,16 @@ public final class Constants {
     public static final class CascadingArmConstants {
         public static enum CascadeState {
             INITIAL(0),
-            INTAKING(24000),
-            SCORING1(20000),
-            SCORING2(38000),
-            SCORING3(0),
-            TUCKED(0),
+            TUCKED_CUBE(-6000),
+            GROUND_INTAKE_CUBE(19000),
+            LOW_CUBE(-5000),
+            MID_CUBE(-800),
+            HIGH_CUBE(23000),
+            TUCKED_CONE(-6000),
+            GROUND_INTAKE_CONE(18400),
+            LOW_CONE(18400),
+            MID_CONE(7400),
+            HIGH_CONE(37600),
             OFF(-1);
 
             public final double setpoint;
@@ -212,12 +222,12 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.03;
-        public static final double kI = 0;
+        public static final double kP = 0.02;
+        public static final double kI = 0.0001;
         public static final double kD = 0;
         public static final double kF = 0;
 
-        public static final double setpointTolerance = 400;
+        public static final double setpointTolerance = 800;
 
         public static final int cascadeContinuousCurrentLimit = 30;
         public static final int cascadePeakCurrentLimit = 45;
@@ -234,9 +244,16 @@ public final class Constants {
     public static final class WristConstants {
         public static enum WristState {
             INITIAL(0),
-            INTAKING(0),
-            SCORING(0),
-            TUCKED(0),
+            TUCKED_CUBE(2000),
+            GROUND_INTAKE_CUBE(16000),
+            LOW_CUBE(18000),
+            MID_CUBE(19000),
+            HIGH_CUBE(21800),
+            TUCKED_CONE(4300),
+            GROUND_INTAKE_CONE(19600),
+            LOW_CONE(19600),
+            MID_CONE(16600),
+            HIGH_CONE(18700),
             OFF(-1);
 
             public final double setpoint;
@@ -262,7 +279,7 @@ public final class Constants {
         public static final double openLoopRamp = 0.25;
         public static final double closedLoopRamp = 0.0;
 
-        public static final boolean wristMotorInvert = false;
+        public static final boolean wristMotorInvert = true;
         public static final NeutralMode wristNeutralMode = NeutralMode.Brake;
     }
     
@@ -291,8 +308,8 @@ public final class Constants {
             public static final int zeroGyro = 1;
             //public static final int lockedMode = 2;
             public static final int toggleRotateLock = 2;
-            public static final int rotateLockClockwise = 3; // TODO: should be on left check and make sure
-            public static final int rotateLockCounterclockwise = 4; // TODO: should be on right check and make sure
+            public static final int rotateLockClockwise = 4; // TODO: should be on left check and make sure
+            public static final int rotateLockCounterclockwise = 3; // TODO: should be on right check and make sure
         }
 
         public static final class PrimaryLeft {

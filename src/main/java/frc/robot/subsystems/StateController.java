@@ -39,6 +39,13 @@ public class StateController extends SubsystemBase {
         HIG_SCORE
     }
 
+    /*@Override
+    public void periodic() {
+        System.out.println("Rotate: " + rotatingArm.getEncoderPosition());
+        System.out.println("Cascade: " + cascadingArm.getEncoderPosition());
+        System.out.println("Wrist: " + wrist.getEncoderPosition());
+    }*/
+
     public StateController() {
         led = RobotContainer.led;
         rotatingArm = RobotContainer.rotatingArm;
@@ -67,10 +74,10 @@ public class StateController extends SubsystemBase {
                 switch (positionState) {
                     case TUCKED:
                         led.setState(LEDState.YELLOW);
-                        return retractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED, noRetract);
+                        return retractRotateExtend(CascadeState.TUCKED_CONE, RotateState.TUCKED_CONE, WristState.TUCKED_CONE, noRetract);
                     case GROUND_INTAKING:
                         led.setState(LEDState.YELLOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.GROUND_INTAKE_CONE, RotateState.GROUND_INTAKE_CONE, WristState.GROUND_INTAKE_CONE, noRetract);
                     case SINGLE_SUBSTATION:
                         led.setState(LEDState.YELLOW);
                         return retractRotateExtend(null, null, null, noRetract);
@@ -79,22 +86,22 @@ public class StateController extends SubsystemBase {
                         return retractRotateExtend(null, null, null, noRetract);
                     case LOW_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.LOW_CONE, RotateState.LOW_CONE, WristState.LOW_CONE, noRetract);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.MID_CONE, RotateState.MID_CONE, WristState.MID_CONE, noRetract);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.HIGH_CONE, RotateState.HIGH_CONE, WristState.HIGH_CONE, noRetract);
                 }
             case CUBE:
                 switch (positionState) {
                     case TUCKED:
                         led.setState(LEDState.PURPLE);
-                        return retractRotateExtend(CascadeState.TUCKED, RotateState.TUCKED, WristState.TUCKED, noRetract);
+                        return retractRotateExtend(CascadeState.TUCKED_CUBE, RotateState.TUCKED_CUBE, WristState.TUCKED_CUBE, noRetract);
                     case GROUND_INTAKING:
                         led.setState(LEDState.PURPLE);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.GROUND_INTAKE_CUBE, RotateState.GROUND_INTAKE_CUBE, WristState.GROUND_INTAKE_CUBE, noRetract);
                     case SINGLE_SUBSTATION:
                         led.setState(LEDState.PURPLE);
                         return retractRotateExtend(null, null, null, noRetract);
@@ -103,13 +110,13 @@ public class StateController extends SubsystemBase {
                         return retractRotateExtend(null, null, null, noRetract);
                     case LOW_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.LOW_CUBE, RotateState.LOW_CUBE, WristState.LOW_CUBE, noRetract);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.MID_CUBE, RotateState.MID_CUBE, WristState.MID_CUBE, noRetract);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);
-                        return retractRotateExtend(null, null, null, noRetract);
+                        return retractRotateExtend(CascadeState.HIGH_CUBE, RotateState.HIGH_CUBE, WristState.HIGH_CUBE, noRetract);
                 }
         }
         return new PrintCommand("State Controller broken :(");
@@ -125,7 +132,7 @@ public class StateController extends SubsystemBase {
         );
         
         return new SequentialCommandGroup(
-            (new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()),
+            (new InstantCommand(() -> cascadingArm.setArmState((gameElementState == GameElementState.CONE) ? CascadeState.TUCKED_CONE : CascadeState.TUCKED_CUBE)).repeatedly()).until(() -> cascadingArm.atDesiredSetPoint()),
             new ParallelCommandGroup(
                 (new InstantCommand(() -> rotatingArm.setArmState(rotateState)).repeatedly()).until(() -> rotatingArm.atDesiredSetPoint()),
                 (new InstantCommand(() -> wrist.setArmState(wristState)).repeatedly()).until(() -> wrist.atDesiredSetPoint())
