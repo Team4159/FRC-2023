@@ -29,8 +29,7 @@ public class WheeledIntake {
         m2.restoreFactoryDefaults();
         m2.setSmartCurrentLimit(20);
         m2.setIdleMode(IdleMode.kCoast);
-        m2.setInverted(true);
-        m2.follow(m1);
+        m2.follow(m1, true);
     }
 
     public void periodic(){
