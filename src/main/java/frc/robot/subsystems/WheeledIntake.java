@@ -22,17 +22,15 @@ public class WheeledIntake {
 
     public void configMotors() {
         m1.restoreFactoryDefaults();
-        m1.setSmartCurrentLimit(20, 10);
+        m1.setSmartCurrentLimit(20);
         m1.setIdleMode(IdleMode.kCoast);
         m1.setInverted(false);
-        m1.burnFlash();
 
         m2.restoreFactoryDefaults();
-        m2.setSmartCurrentLimit(20, 10);
+        m2.setSmartCurrentLimit(20);
         m2.setIdleMode(IdleMode.kCoast);
         m2.setInverted(true);
         m2.follow(m1);
-        m2.burnFlash();
     }
 
     public void periodic(){
@@ -46,5 +44,4 @@ public class WheeledIntake {
     public void setWheeledIntakeState(WheeledIntakeState wheeledIntakeState){
         this.wheeledIntakeState = wheeledIntakeState;
     }
-
 }

@@ -296,8 +296,8 @@ public final class Constants {
             }
         }
         
-        public static int wheeledIntake1Id = 5;
-        public static int wheeledIntake2Id = 6;
+        public static final int wheeledIntake1Id = 5;
+        public static final int wheeledIntake2Id = 6;
     }
 
     public static final class JoystickConstants {
@@ -347,6 +347,7 @@ public final class Constants {
     }
 
     public static final class Fun {
-        public static final int ledPort = 9;
+        public static final int[] ledPorts = {8, 9};
+        public static final int ledLength = 115;
     }
 }

@@ -241,8 +241,6 @@ public class RobotContainer {
         doubleIntake.onTrue(stateController.setPositionState(PositionState.DOUBLE_SUBSTATION));
         
         tucked.onTrue(stateController.setPositionState(PositionState.TUCKED));
-        
-            
     }
 
     public void teleopInit() {

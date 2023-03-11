@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import edu.wpi.first.wpilibj.AddressableLED;
@@ -50,14 +52,19 @@ public class LED extends SubsystemBase {
             0x5BCEFA, 0xF5A9B8, 0xFFFFFF, 0xF5A9B8, 0x5BCEFA
         }).repeatedly());
     };
-    private AddressableLED strip;
+    private List<AddressableLED> strips;
     private AddressableLEDBuffer buffer;
     private LEDState state = LEDState.BLACK;
 
-    public LED() { 
-        strip = new AddressableLED(Constants.Fun.ledPort);
-        buffer = new AddressableLEDBuffer(300);
-        strip.setLength(buffer.getLength());
+    public LED() {
+        buffer = new AddressableLEDBuffer(Constants.Fun.ledLength);
+        strips = new ArrayList<>(Constants.Fun.ledPorts.length);
+        strips.add(new AddressableLED(8));
+        //strips.add(new AddressableLED(9));
+        strips.get(0).setLength(buffer.getLength());
+        //strips.get(1).setLength(buffer.getLength());
+
+        state = LEDState.RAINBOW;
     }
 
     public void setState(LEDState state) {
@@ -72,20 +79,24 @@ public class LED extends SubsystemBase {
     }
 
     public void startLED() {
-        strip.start();
+        strips.forEach((strip) -> strip.start());
         getStateCommand().schedule();
     }
 
     public void stopLED() {
         getStateCommand().cancel();
         setLED(0, 0, 0);
-        strip.stop();
+        strips.forEach((strip) -> strip.stop());
+    }
+
+    public void set() {
+        strips.forEach((strip) -> strip.setData(buffer));
     }
 
     private void setLED(int r, int g, int b) {
         for (int i = 0; i < buffer.getLength(); i++) 
             buffer.setRGB(i, r, g, b);
-        strip.setData(buffer);
+        set();
     }
 
     public static class BlinkLED extends SequentialCommandGroup {
@@ -113,7 +124,7 @@ public class LED extends SubsystemBase {
         public void execute() {
             final var color = supplier.get(System.currentTimeMillis()/200);
             for (int i = 0; i < led.buffer.getLength(); i++) led.buffer.setLED(i, color);
-            led.strip.setData(led.buffer);
+            led.set();
         }
 
         @FunctionalInterface
@@ -154,7 +165,7 @@ public class LED extends SubsystemBase {
             int offset = (int)Math.floor((System.currentTimeMillis()/10) % len);
             for (int i = 0; i < len; i++)
                 led.buffer.setLED((i+offset) % len, supplier.get((double)i/len));
-            led.strip.setData(led.buffer);
+            led.set();
         }
 
         @FunctionalInterface
