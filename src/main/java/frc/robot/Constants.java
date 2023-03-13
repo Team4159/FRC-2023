@@ -328,15 +328,15 @@ public final class Constants {
             public static final int cube = 3;
             public static final int cone = 4;
 
-            public static final int high = 5;
-            public static final int mid = 6;
-            public static final int low = 7;
+            public static final int high = 11;
+            public static final int mid = 12;
+            public static final int low = 13;
 
-            public static final int groundIntake = 8;
-            public static final int singleIntake = 9;
-            public static final int doubleIntake = 10;
+            public static final int groundIntake = 7;
+            public static final int singleIntake = 6;
+            public static final int doubleIntake = 5;
             
-            public static final int tucked = 11;
+            public static final int tucked = 8;
         }
     }
 
