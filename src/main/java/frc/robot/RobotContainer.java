@@ -167,8 +167,7 @@ public class RobotContainer {
         ;*/
 
         toggleRotateLock
-            .onTrue(new InstantCommand(() -> s_Swerve.lockRotateClosest()))
-            .onFalse(new InstantCommand(() -> s_Swerve.disableLockRotate()))
+            .onTrue(new InstantCommand(() -> s_Swerve.toggleLockRotate()))
         ;
 
         rotateLockClockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateClockwise()));

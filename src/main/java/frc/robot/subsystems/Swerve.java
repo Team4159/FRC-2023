@@ -151,6 +151,13 @@ public class Swerve extends SubsystemBase {
         return lockRotatePID.calculate(getPose().getRotation().getDegrees(), lockRotateState.direction);
     }
 
+    public void toggleLockRotate() {
+        if (lockRotateState == LockRotateState.OFF) {
+            lockRotateClosest();
+        }
+        disableLockRotate();
+    }
+
     public void disableLockRotate() {
         lockRotateState = LockRotateState.OFF;
     }
