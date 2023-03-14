@@ -180,8 +180,8 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.018;
-        public static final double kI = 0;
+        public static final double kP = 0.012;
+        public static final double kI = 0.00002;
         public static final double kD = 0;
         public static final double kF = 0;
         
@@ -202,16 +202,16 @@ public final class Constants {
     public static final class CascadingArmConstants {
         public static enum CascadeState {
             INITIAL(0),
-            TUCKED_CUBE(-6000),
+            TUCKED_CUBE(-2000),
             GROUND_INTAKE_CUBE(19000),
-            LOW_CUBE(-5000),
+            LOW_CUBE(-2000),
             MID_CUBE(-800),
             HIGH_CUBE(23000),
-            TUCKED_CONE(-6000),
+            TUCKED_CONE(-2000),
             GROUND_INTAKE_CONE(18400),
             LOW_CONE(18400),
             MID_CONE(7400),
-            HIGH_CONE(37600),
+            HIGH_CONE(32000),
             OFF(-1);
 
             public final double setpoint;
@@ -222,9 +222,9 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.02;
+        public static final double kP = 0.011;
         public static final double kI = 0.0001;
-        public static final double kD = 0;
+        public static final double kD = 0.001;
         public static final double kF = 0;
 
         public static final double setpointTolerance = 800;
@@ -234,8 +234,8 @@ public final class Constants {
         public static final double cascadePeakCurrentDuration = 0.1;
         public static final boolean cascadeEnableCurrentLimit = true;
         
-        public static final double openLoopRamp = 0.25;
-        public static final double closedLoopRamp = 0.0;
+        public static final double openLoopRamp = 0.1;
+        public static final double closedLoopRamp = 0.25;
 
         public static final boolean cascadeMotorInvert = false;
         public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
@@ -244,12 +244,12 @@ public final class Constants {
     public static final class WristConstants {
         public static enum WristState {
             INITIAL(0),
-            TUCKED_CUBE(2000),
+            TUCKED_CUBE(500),
             GROUND_INTAKE_CUBE(16000),
             LOW_CUBE(18000),
             MID_CUBE(19000),
             HIGH_CUBE(21800),
-            TUCKED_CONE(4300),
+            TUCKED_CONE(500),
             GROUND_INTAKE_CONE(19600),
             LOW_CONE(19600),
             MID_CONE(16600),
@@ -264,7 +264,7 @@ public final class Constants {
 
         public static final int wristId = 4; 
 
-        public static final double kP = 0.01;
+        public static final double kP = 0.012;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
@@ -347,7 +347,8 @@ public final class Constants {
     }
 
     public static final class Fun {
-        public static final int[] ledPorts = {8, 9};
-        public static final int ledLength = 115;
+        public static final int ledPort = 9;
+        public static final int ledLength = 100;
+        public static final double ledBrightness = 0.25;
     }
 }

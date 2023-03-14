@@ -3,10 +3,12 @@ package frc.robot.subsystems;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WheeledIntakeConstants;
 import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 
-public class WheeledIntake {
+public class WheeledIntake extends SubsystemBase{
     private CANSparkMax m1;
     private CANSparkMax m2;
     private WheeledIntakeState wheeledIntakeState;
@@ -32,6 +34,7 @@ public class WheeledIntake {
         m2.follow(m1, true);
     }
 
+    @Override
     public void periodic(){
         setWheeledIntake(wheeledIntakeState.set);
     }

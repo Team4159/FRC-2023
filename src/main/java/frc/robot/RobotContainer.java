@@ -236,6 +236,7 @@ public class RobotContainer {
         low.onTrue(stateController.setPositionState(PositionState.LOW_SCORE));
 
         groundIntake.onTrue(stateController.setPositionState(PositionState.GROUND_INTAKING));
+        singleIntake.onTrue(new InstantCommand(() -> led.setState(LEDState.RAINBOW)));
         //singleIntake.onTrue(stateController.setPositionState(PositionState.SINGLE_SUBSTATION)); TODO: disabled until constants gathered
         //doubleIntake.onTrue(stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)); TODO: disabled until constants gathered
         
