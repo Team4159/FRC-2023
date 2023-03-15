@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreMid"
+          "ScoreLowCube"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -44,7 +44,7 @@
       "isStopPoint": true,
       "stopEvent": {
         "names": [
-          "CascadeIntake"
+          "GroundIntakeCone"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",

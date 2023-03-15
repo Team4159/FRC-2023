@@ -256,7 +256,7 @@ public class RobotContainer {
         eventMap.put("Print3", new PrintCommand("Print 3"));
 
         eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
-        eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CONE));
+        eventMap.put("GroundIntakeCone", stateController.autoGroundIntake(GameElementState.CONE));
 
         eventMap.put("ScoreLowCube", stateController.autoScoreLow(GameElementState.CUBE));
         eventMap.put("ScoreMidCube", stateController.autoScoreMid(GameElementState.CUBE));
@@ -278,34 +278,40 @@ public class RobotContainer {
         eventMap.put("Wait5", new WaitCommand(5));
     }
 
-    public static enum AutoMode {Dock, Normal}
+    public static enum AutoMode {Dock, Normal, Taxi}
     private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>> autos = Map.of(
         DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>of( // Red Alliance
             0, Map.<AutoMode, List<PathPlannerTrajectory>>of( // Station 1
-                // AutoMode.Dock, null, // Dock
-                AutoMode.Normal, loadPathGroup("Bsimple1") // Don't Dock
+                // AutoMode.Taxi, loadPathGroup("B1"), 
+                AutoMode.Normal, loadPathGroup("B4") 
+                // AutoMode.Dock, loadPathGroup("B7")
             )//,
             // 1, Map.<AutoMode, Command>of( // Station 2
-            //     AutoMode.Dock, null,
-            //     AutoMode.Normal, null
+            //     AutoMode.Taxi, loadPathGroup("B2"),
+            //     AutoMode.Normal, loadPathGroup("B5"),
+            //     AutoMode.Dock, loadPathGroup("B8")
             // ),
             // 2, Map.<AutoMode, Command>of( // Station 3
-            //     AutoMode.Dock, null,
-            //     AutoMode.Normal, null
+            //     AutoMode.Taxi, loadPathGroup("B3"),
+            //     AutoMode.Normal, loadPathGroup("B6"),
+            //     AutoMode.Dock, loadPathGroup("B9")
             // )
         )//,
         // DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
         //     0, Map.<AutoMode, Command>of( // Station 1
-        //         AutoMode.Dock, null, // Dock
-        //         AutoMode.Normal, null // Don't Dock
+        //          AutoMode.Taxi, loadPathGroup("B1"), 
+        //          AutoMode.Normal, loadPathGroup("B4") 
+        //          AutoMode.Dock, loadPathGroup("B7")
         //     ),
         //     1, Map.<AutoMode, Command>of( // Station 2
-        //         AutoMode.Dock, null,
-        //         AutoMode.Normal, null
+        //          AutoMode.Taxi, loadPathGroup("B2"),
+        //          AutoMode.Normal, loadPathGroup("B5"),
+        //          AutoMode.Dock, loadPathGroup("B8")
         //     ),
         //     2, Map.<AutoMode, Command>of( // Station 3
-        //         AutoMode.Dock, null,
-        //         AutoMode.Normal, null
+        //          AutoMode.Taxi, loadPathGroup("B3"),
+        //          AutoMode.Normal, loadPathGroup("B6"),
+        //          AutoMode.Dock, loadPathGroup("B9")
         //     )
         // )
     );
@@ -315,6 +321,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
+        // return autoBuilder.fullAuto(loadPathGroup("B1"));
         if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
         if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(
