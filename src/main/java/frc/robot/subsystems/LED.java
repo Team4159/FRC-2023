@@ -16,7 +16,7 @@ import frc.robot.Constants;
 
 public class LED extends SubsystemBase {
     public enum LEDState {
-        WHITE, BLACK, PURPLE, YELLOW,
+        WHITE, BLACK, PURPLE, YELLOW, RED, BLUE,
         RAINBOW, RAINBOWCYCLE,
         NONBINARY, GENDERFLUID, GAY, LESBIAN, BI, TRANS
     }
@@ -27,6 +27,8 @@ public class LED extends SubsystemBase {
         commands.put(LEDState.PURPLE, new InstantCommand(() -> setLED(70, 0, 100), this));
         commands.put(LEDState.YELLOW, new InstantCommand(() -> setLED(150, 75, 0), this));
         commands.put(LEDState.BLACK, new InstantCommand(() -> setLED(0, 0, 0), this));
+        commands.put(LEDState.RED, new InstantCommand(() -> setLED(75, 0, 0), this));
+        commands.put(LEDState.BLUE, new InstantCommand(() -> setLED(0, 0, 75), this));
         commands.put(LEDState.RAINBOW, new ChromaLED(this, (double i) -> Color.fromHSV((int)Math.floor(i * 180), 255, 255)).repeatedly());
         commands.put(LEDState.RAINBOWCYCLE, new CycleLinearFlag(this, new int[]{
             0xE40303, 0xFF8C00, 0xFFED00, 0x008026, 0x004DFF, 0x750787
@@ -84,7 +86,7 @@ public class LED extends SubsystemBase {
 
     private void setLED(int r, int g, int b) {
         for (int i = 0; i < buffer.getLength(); i++) 
-            buffer.setRGB(i, (int)Math.floor((r * Constants.Fun.ledBrightness)), (int)Math.floor((g * Constants.Fun.ledBrightness)), (int)Math.floor((b * Constants.Fun.ledBrightness)));
+            buffer.setRGB(i, r, g, b);
         strip.setData(buffer);
     }
 
@@ -123,16 +125,15 @@ public class LED extends SubsystemBase {
     }
 
     private static class CycleLinearFlag extends CycleLED {
-        private static double reductionFactor = 0.9;
         private CycleLinearFlag(LED led, int[] colors) {
             super(led, (long dt) -> {
                 dt %= colors.length;
                 if (dt < 0) dt = -dt;
                 int color = colors[(int)dt];
                 return new Color(
-                    (int)Math.floor(((color >> 16)& 255) * reductionFactor),
-                    (int)Math.floor(((color >> 8) & 255) * reductionFactor), 
-                    (int)Math.floor(((color >> 0) & 255) * reductionFactor)
+                    (int)Math.floor(((color >> 16)& 255) * Constants.Fun.ledReductionFactor),
+                    (int)Math.floor(((color >> 8) & 255) * Constants.Fun.ledReductionFactor), 
+                    (int)Math.floor(((color >> 0) & 255) * Constants.Fun.ledReductionFactor)
                 );
             });
         }

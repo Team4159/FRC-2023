@@ -348,7 +348,7 @@ public final class Constants {
 
     public static final class Fun {
         public static final int ledPort = 9;
-        public static final int ledLength = 100;
-        public static final double ledBrightness = 0.25;
+        public static final int ledLength = 229;
+        public static final double ledReductionFactor = 0.9;
     }
 }
