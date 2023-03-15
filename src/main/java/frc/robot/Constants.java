@@ -160,9 +160,9 @@ public final class Constants {
         public static enum RotateState {
             INITIAL(0),
             TUCKED_CUBE(2500),
-            GROUND_INTAKE_CUBE(3800),
+            GROUND_INTAKE_CUBE(50000),
             LOW_CUBE(4000),
-            MID_CUBE(2800),
+            MID_CUBE(40000),
             HIGH_CUBE(51000),
             TUCKED_CONE(200),
             GROUND_INTAKE_CONE(4000),
@@ -180,12 +180,12 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.012;
-        public static final double kI = 0.00002;
+        public static final double kP = 0.1;
+        public static final double kI = 0.00000;
         public static final double kD = 0;
         public static final double kF = 0;
         
-        public static final double setpointTolerance = 400;
+        public static final double setpointTolerance = 8000;
 
         public static final int rotateContinuousCurrentLimit = 35;
         public static final int rotatePeakCurrentLimit = 45;
@@ -193,7 +193,7 @@ public final class Constants {
         public static final boolean rotateEnableCurrentLimit = true;
         
         public static final double openLoopRamp = 0.25;
-        public static final double closedLoopRamp = 0.0;
+        public static final double closedLoopRamp = 0.25;
         
         public static final boolean rotateMotorInvert = false;
         public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
@@ -202,12 +202,12 @@ public final class Constants {
     public static final class CascadingArmConstants {
         public static enum CascadeState {
             INITIAL(0),
-            TUCKED_CUBE(-2000),
-            GROUND_INTAKE_CUBE(19000),
-            LOW_CUBE(-2000),
+            TUCKED_CUBE(-200),
+            GROUND_INTAKE_CUBE(2000),
+            LOW_CUBE(-200),
             MID_CUBE(-800),
             HIGH_CUBE(23000),
-            TUCKED_CONE(-2000),
+            TUCKED_CONE(-200),
             GROUND_INTAKE_CONE(18400),
             LOW_CONE(18400),
             MID_CONE(7400),
@@ -222,9 +222,9 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.011;
-        public static final double kI = 0.0001;
-        public static final double kD = 0.001;
+        public static final double kP = 0.00; //0.004
+        public static final double kI = 0.000; //0.0001
+        public static final double kD = 0;
         public static final double kF = 0;
 
         public static final double setpointTolerance = 800;
@@ -245,7 +245,7 @@ public final class Constants {
         public static enum WristState {
             INITIAL(0),
             TUCKED_CUBE(500),
-            GROUND_INTAKE_CUBE(16000),
+            GROUND_INTAKE_CUBE(4000),
             LOW_CUBE(18000),
             MID_CUBE(19000),
             HIGH_CUBE(21800),

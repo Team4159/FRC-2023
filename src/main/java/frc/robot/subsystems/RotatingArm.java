@@ -49,6 +49,11 @@ public class RotatingArm extends SubsystemBase {
         this.rotateState = rotateState;
     }
 
+    public void resetIntegrator() {
+        System.out.println(armTalon1.getIntegralAccumulator());
+        armTalon1.setIntegralAccumulator(0);
+    }
+
     public void setArmPosition(double position) {
         armTalon1.set(ControlMode.Position, position);
     }

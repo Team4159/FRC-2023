@@ -60,11 +60,15 @@ public class StateController extends SubsystemBase {
 
     public Command setGameElementState(GameElementState gameElementState) {
         this.gameElementState = gameElementState;
+        cascadingArm.resetIntegrator();
+        rotatingArm.resetIntegrator();
         return updateLocalStates(true);
     }
 
     public Command setPositionState(PositionState positionState) {
         this.positionState = positionState;
+        cascadingArm.resetIntegrator();
+        rotatingArm.resetIntegrator();
         return updateLocalStates(false);
     }
 
@@ -113,6 +117,7 @@ public class StateController extends SubsystemBase {
                         return retractRotateExtend(CascadeState.LOW_CUBE, RotateState.LOW_CUBE, WristState.LOW_CUBE, noRetract);
                     case MID_SCORE:
                         led.setState(LEDState.RAINBOW);
+                        System.out.println("MID!");
                         return retractRotateExtend(CascadeState.MID_CUBE, RotateState.MID_CUBE, WristState.MID_CUBE, noRetract);
                     case HIG_SCORE:
                         led.setState(LEDState.RAINBOW);

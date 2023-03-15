@@ -40,12 +40,16 @@ public class CascadingArm extends SubsystemBase {
         this.cascadeState = cascadeState;
     }
 
+    public void resetIntegrator() {
+        armTalon.setIntegralAccumulator(0);
+    }
+
     public void setArmPosition(double position) {
         armTalon.set(ControlMode.Position, position);
     }
 
     public boolean atDesiredSetPoint() {
-        System.out.println(isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance));
+        System.out.println("Rotate:" + isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance));
         if (cascadeState.equals(CascadeState.OFF)) return true;
         return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
     }
