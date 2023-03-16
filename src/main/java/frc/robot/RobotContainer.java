@@ -210,7 +210,7 @@ public class RobotContainer {
 
         groundIntake.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)));
         //singleIntake.onTrue(stateController.setPositionState(PositionState.SINGLE_SUBSTATION)); TODO: disabled until constants gathered
-        //doubleIntake.onTrue(stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)); TODO: disabled until constants gathered
+        doubleIntake.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)));
         
         tucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
 

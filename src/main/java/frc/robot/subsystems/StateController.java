@@ -106,7 +106,7 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.DOUBLE_SUBSTATION) {
                 led.setState(LEDState.YELLOW);
                 System.out.println("cone double");
-                setLocalStates(null, null, null);
+                setLocalStates(CascadeState.DOUBLE_INTAKE_CONE, RotateState.DOUBLE_INTAKE_CONE, WristState.DOUBLE_INTAKE_CONE);
             } else if (positionState == PositionState.LOW_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone low");
@@ -136,7 +136,7 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.DOUBLE_SUBSTATION) {
                 led.setState(LEDState.PURPLE);
                 System.out.println("cube double");
-                setLocalStates(null, null, null);
+                setLocalStates(CascadeState.DOUBLE_INTAKE_CUBE, RotateState.DOUBLE_INTAKE_CUBE, WristState.DOUBLE_INTAKE_CUBE);
             } else if (positionState == PositionState.LOW_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cube low");
