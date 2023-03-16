@@ -5,6 +5,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.AutoConstants;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.Swerve.LockRotateState;
@@ -16,10 +17,14 @@ public class StraightAutobalance extends CommandBase {
 
     private AutobalancePhase phase;
 
+    private AutobalanceDirection direction;
+
+    private int directionVal;
+
     private Alliance alliance;
 
-    public StraightAutobalance(Swerve s_Swerve) {
-        this.s_Swerve = s_Swerve;
+    public StraightAutobalance(AutobalanceDirection direction) {
+        s_Swerve = RobotContainer.s_Swerve;
 
         pidController = new PIDController(AutoConstants.kPautobalance, AutoConstants.kIautobalance, AutoConstants.kDautobalance);
         pidController.setTolerance(AutoConstants.autoBalanceTolerence);
@@ -27,6 +32,20 @@ public class StraightAutobalance extends CommandBase {
         phase = AutobalancePhase.RAM;
 
         alliance = DriverStation.getAlliance();
+        this.direction = direction;
+
+        switch (alliance) {
+            case Blue:
+                directionVal = (this.direction.equals(AutobalanceDirection.IN)) ? 1 : -1;
+                break;
+            case Red:
+                directionVal = (this.direction.equals(AutobalanceDirection.IN)) ? -1 : 1;
+                break;
+            case Invalid:
+                directionVal = 0;
+                System.out.println("Invalid allaince");
+                break;
+        }
 
         addRequirements(s_Swerve);
     }
@@ -59,8 +78,8 @@ public class StraightAutobalance extends CommandBase {
         
 
         s_Swerve.straightBalance(
-            new Translation2d(translationVal, 0).times(maxSpeed), 
-            alliance.equals(Alliance.Blue) ? LockRotateState.LEFT : LockRotateState.RIGHT,
+            new Translation2d(translationVal, 0).times(maxSpeed).times(directionVal), 
+            LockRotateState.UP,
             maxSpeed
         );
     }
@@ -88,5 +107,10 @@ public class StraightAutobalance extends CommandBase {
         UPHILL,
         REVERSE,
         FINISH
+    }
+
+    public static enum AutobalanceDirection {
+        IN, //autobalance from the grid toward the center of the field
+        OUT //autobalance from the center of the field toward the grid
     }
 }

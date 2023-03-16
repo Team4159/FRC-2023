@@ -83,6 +83,11 @@ public class StateController extends SubsystemBase {
         updateLocalStates();
     }
 
+    public void setForceScore(boolean forceScore) {
+        this.forceScore = forceScore;
+        updateLocalStates();
+    }
+
     public void setLocalStates(CascadeState cs, RotateState rs, WristState ws) {
         cascadingArm.setArmState(cs);
         rotatingArm.setArmState(rs);

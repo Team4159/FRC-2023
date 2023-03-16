@@ -79,7 +79,7 @@ public class Swerve extends SubsystemBase {
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
 
-        lockRotatePID = new PIDController(AutoConstants.kPThetaController/180, 0, 0);
+        lockRotatePID = new PIDController(AutoConstants.kPThetaController/150, 0, 0);
         lockRotatePID.enableContinuousInput(0, 360); //optimizes the rotation so it takes the shortest path :)
 
         teleopState = TeleopState.NORMAL;

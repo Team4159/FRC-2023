@@ -29,6 +29,7 @@ import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
+import frc.robot.commands.AutoCommands;
 import frc.robot.commands.StraightAutobalance;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
@@ -97,6 +98,8 @@ public class RobotContainer {
     public static final LED led = new LED();
     
     public static final StateController stateController = new StateController();
+
+    public static final AutoCommands autoCommands = new AutoCommands();
 
 
     public static final Map<String, Command> eventMap = new HashMap<>();
@@ -232,15 +235,16 @@ public class RobotContainer {
         // eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
         // eventMap.put("GroundIntakeCone", stateController.autoGroundIntake(GameElementState.CONE));
 
-        // eventMap.put("ScoreLowCube", stateController.autoScoreLow(GameElementState.CUBE));
-        // eventMap.put("ScoreMidCube", stateController.autoScoreMid(GameElementState.CUBE));
-        // eventMap.put("ScoreHighCube", stateController.autoScoreHigh(GameElementState.CUBE));
+        eventMap.put("ScoreLowCube", autoCommands.autoCubeLow());
+        eventMap.put("ScoreMidCube", autoCommands.autoCubeMid());
+        eventMap.put("ScoreHighCube", autoCommands.autoCubeHigh());
 
-        // eventMap.put("ScoreLowCone", stateController.autoScoreLow(GameElementState.CONE));
-        // eventMap.put("ScoreMidCone", stateController.autoScoreMid(GameElementState.CONE));
-        // eventMap.put("ScoreHighCone", stateController.autoScoreHigh(GameElementState.CONE));
+        eventMap.put("ScoreLowCone", autoCommands.autoConeLow());
+        eventMap.put("ScoreMidCone", autoCommands.autoConeMid());
+        eventMap.put("ScoreHighCone", autoCommands.autoConeHigh());
 
-        //eventMap.put("Autobalance", null);
+        eventMap.put("AutobalanceIn", null); //autobalance from the grid toward the center of the field
+        eventMap.put("AutobalanceOut", null); //autobalance from the center of the field toward the grid
         
         eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
         eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
@@ -296,13 +300,13 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return autoBuilder.fullAuto(loadPathGroup("B1"));
-        /*if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
+        if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
         if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(
                 (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
                 : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
             )),
-            new StraightAutobalance(s_Swerve)
+            autoCommands.autobalanceIn()
         );
         final var traj = autos.get(DriverStation.getAlliance())
                 .get(dataBoard.getAutoPos() - 1)
@@ -312,24 +316,6 @@ public class RobotContainer {
             new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)),
             autoBuilder.fullAuto(traj),
             new InstantCommand(() -> led.setState(LEDState.BLACK))
-        );*/
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> s_Swerve.resetOdometry(
-                (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
-                : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
-            )),
-            new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
-            new WaitCommand(2),
-            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
-            new WaitCommand(0.5),
-            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)),
-            new WaitCommand(1),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.LOW_SCORE)),
-            new WaitCommand(1),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED))
-            
         );
     }
 }
