@@ -72,13 +72,17 @@ public class StateController extends SubsystemBase {
     }
 
     public void setPositionState(PositionState positionState) {
-        if (this.positionState == PositionState.MID_SCORE && (positionState == positionState.GROUND_INTAKING || positionState == positionState.TUCKED)) {
+        if (this.positionState == PositionState.MID_SCORE && (positionState == PositionState.GROUND_INTAKING || positionState == PositionState.TUCKED)) {
             this.positionState = PositionState.LOW_SCORE;
         }
-        else if ((this.positionState == PositionState.HIG_SCORE || this.positionState == PositionState.DOUBLE_SUBSTATION) && (positionState == positionState.GROUND_INTAKING || positionState == positionState.LOW_SCORE || positionState == positionState.TUCKED)) {
+        else if ((this.positionState == PositionState.HIG_SCORE || this.positionState == PositionState.DOUBLE_SUBSTATION) && (positionState == PositionState.GROUND_INTAKING || positionState == PositionState.LOW_SCORE || positionState == PositionState.TUCKED)) {
             this.positionState = PositionState.MID_SCORE;
         } else {
             this.positionState = positionState;
+        }
+
+        if (this.positionState == PositionState.TUCKED || this.positionState == PositionState.LOW_SCORE || this.positionState == PositionState.GROUND_INTAKING) {
+            setForceScore(false);
         }
         cascadingArm.resetIntegrator();
         rotatingArm.resetIntegrator();
