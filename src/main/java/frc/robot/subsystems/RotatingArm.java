@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.DemandType;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -37,6 +38,7 @@ public class RotatingArm extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println("rotate: " + rotateState + ", " + (rotateState.setpoint-getEncoderPosition()));
         if (rotateState.equals(RotateState.OFF)) armTalon1.set(ControlMode.PercentOutput, 0);
         setArmPosition(rotateState.setpoint);
     }

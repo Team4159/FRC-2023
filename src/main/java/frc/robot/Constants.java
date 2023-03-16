@@ -159,16 +159,16 @@ public final class Constants {
     public static final class RotatingArmConstants { // TODO: tune
         public static enum RotateState {
             INITIAL(0),
-            TUCKED_CUBE(2500),
-            GROUND_INTAKE_CUBE(50000),
-            LOW_CUBE(4000),
-            MID_CUBE(40000),
-            HIGH_CUBE(51000),
-            TUCKED_CONE(200),
-            GROUND_INTAKE_CONE(4000),
-            LOW_CONE(4000),
-            MID_CONE(45000),
-            HIGH_CONE(65000),
+            TUCKED_CUBE(5000),
+            GROUND_INTAKE_CUBE(10000),
+            LOW_CUBE(20000),
+            MID_CUBE(55000),
+            HIGH_CUBE(75000),
+            TUCKED_CONE(5000),
+            GROUND_INTAKE_CONE(8000),
+            LOW_CONE(20000),
+            MID_CONE(32000),
+            HIGH_CONE(42000),
             OFF(-1);
 
             public final double setpoint;
@@ -180,12 +180,12 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.1;
-        public static final double kI = 0.00000;
+        public static final double kP = 0.03;
+        public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
         
-        public static final double setpointTolerance = 8000;
+        public static final double setpointTolerance = 3000;
 
         public static final int rotateContinuousCurrentLimit = 35;
         public static final int rotatePeakCurrentLimit = 45;
@@ -245,12 +245,12 @@ public final class Constants {
         public static enum WristState {
             INITIAL(0),
             TUCKED_CUBE(500),
-            GROUND_INTAKE_CUBE(4000),
-            LOW_CUBE(18000),
-            MID_CUBE(19000),
-            HIGH_CUBE(21800),
+            GROUND_INTAKE_CUBE(14000),
+            LOW_CUBE(14000),
+            MID_CUBE(14000),
+            HIGH_CUBE(14000),
             TUCKED_CONE(500),
-            GROUND_INTAKE_CONE(19600),
+            GROUND_INTAKE_CONE(12000),
             LOW_CONE(19600),
             MID_CONE(16600),
             HIGH_CONE(18700),
@@ -264,7 +264,7 @@ public final class Constants {
 
         public static final int wristId = 4; 
 
-        public static final double kP = 0.012;
+        public static final double kP = 0.018;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
@@ -285,8 +285,8 @@ public final class Constants {
     
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
-            INTAKE(0.5),
-            OUTTAKE(-0.5),
+            INTAKE(0.3),
+            OUTTAKE(-0.25),
             NEUTRAL(0.05),
             OFF(0);
 

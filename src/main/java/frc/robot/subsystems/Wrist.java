@@ -47,8 +47,9 @@ public class Wrist extends SubsystemBase {
     }
 
     public boolean atDesiredSetPoint() {
-        if (wristState.equals(WristState.OFF)) return true;
-        return isAtSetpoint(wristState.setpoint, WristConstants.setpointTolerance);
+        return true;
+        // if (wristState.equals(WristState.OFF)) return true;
+        // return isAtSetpoint(wristState.setpoint, WristConstants.setpointTolerance);
     }
 
     public boolean isAtSetpoint(double setpoint) {

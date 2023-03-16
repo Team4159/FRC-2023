@@ -85,25 +85,6 @@ public class RobotContainer {
     
     private final JoystickButton tucked = new JoystickButton(secondary, Secondary.tucked);
 
-    // private final JoystickButton togglePincerArm = new JoystickButton(secondary, Secondary.togglePincerArm);
-    /*private final JoystickButton setRotateTucked = new JoystickButton(secondary, 10);
-    private final JoystickButton setRotateIntakeOne = new JoystickButton(secondary, 8);
-    private final JoystickButton setRotateLow = new JoystickButton(secondary, 7);
-    private final JoystickButton setRotateMid = new JoystickButton(secondary, 6);
-    private final JoystickButton setRotateHigh = new JoystickButton(secondary, 5);
-
-    private final JoystickButton setCascadeTucked = new JoystickButton(secondary, 16);
-    private final JoystickButton setCascadeIntakeOne = new JoystickButton(secondary, 14);
-    private final JoystickButton setCascadeLow = new JoystickButton(secondary, 13);
-    private final JoystickButton setCascadeMid = new JoystickButton(secondary, 12);
-
-    private final JoystickButton setLEDYellow = new JoystickButton(secondary, 9);
-    private final JoystickButton setLEDPurple = new JoystickButton(secondary, 11);
-    private final JoystickButton setLEDPride = new JoystickButton(secondary, 15);*/
-
-
-
-    /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
@@ -173,7 +154,7 @@ public class RobotContainer {
         rotateLockClockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateClockwise()));
         rotateLockCounterclockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateCounterclockwise()));
 
-        aimbot
+        /*aimbot
             .onTrue(new InstantCommand(() -> {
                 led.setState(LEDState.RAINBOWCYCLE);
                 s_Swerve.setSwerveState(Swerve.TeleopState.AIMBOT);
@@ -183,7 +164,7 @@ public class RobotContainer {
                 s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL);
                 led.setState(LEDState.BLACK);
             }))
-        ;
+        ;*/
 
         forceAcceptVision.onTrue(new InstantCommand(() -> s_Swerve.forceAcceptNextVision()));
         
@@ -210,16 +191,6 @@ public class RobotContainer {
             //     new WaitCommand(4)
             // ));
 
-        /*setRotateTucked.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED)));
-        setRotateIntakeOne.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.INTAKING)));
-        setRotateLow.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.LOW)));
-        setRotateMid.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.MID)));
-        setRotateHigh.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.HIGH)));
-        
-        setCascadeTucked.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED)));
-        setCascadeIntakeOne.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.INTAKING)));
-        setCascadeLow.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING1)));
-        setCascadeMid.onTrue(new InstantCommand(() -> cascadingArm.setArmState(CascadeState.SCORING2)));*/
         
         intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
             .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL))
@@ -228,19 +199,18 @@ public class RobotContainer {
             .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL))
         );
 
-        cube.onTrue(stateController.setGameElementState(GameElementState.CUBE));
-        cone.onTrue(stateController.setGameElementState(GameElementState.CONE));
+        cube.onTrue(new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)));
+        cone.onTrue(new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)));
 
-        high.onTrue(stateController.setPositionState(PositionState.HIG_SCORE));
-        mid.onTrue(stateController.setPositionState(PositionState.MID_SCORE));
-        low.onTrue(stateController.setPositionState(PositionState.LOW_SCORE));
+        high.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)));
+        mid.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)));
+        low.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.LOW_SCORE)));
 
-        groundIntake.onTrue(stateController.setPositionState(PositionState.GROUND_INTAKING));
-        singleIntake.onTrue(new InstantCommand(() -> led.setState(LEDState.RAINBOW)));
+        groundIntake.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)));
         //singleIntake.onTrue(stateController.setPositionState(PositionState.SINGLE_SUBSTATION)); TODO: disabled until constants gathered
         //doubleIntake.onTrue(stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)); TODO: disabled until constants gathered
         
-        tucked.onTrue(stateController.setPositionState(PositionState.TUCKED));
+        tucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
     }
 
     public void teleopInit() {
@@ -255,16 +225,16 @@ public class RobotContainer {
         eventMap.put("Print2", new PrintCommand("Print 2"));
         eventMap.put("Print3", new PrintCommand("Print 3"));
 
-        eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
-        eventMap.put("GroundIntakeCone", stateController.autoGroundIntake(GameElementState.CONE));
+        // eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
+        // eventMap.put("GroundIntakeCone", stateController.autoGroundIntake(GameElementState.CONE));
 
-        eventMap.put("ScoreLowCube", stateController.autoScoreLow(GameElementState.CUBE));
-        eventMap.put("ScoreMidCube", stateController.autoScoreMid(GameElementState.CUBE));
-        eventMap.put("ScoreHighCube", stateController.autoScoreHigh(GameElementState.CUBE));
+        // eventMap.put("ScoreLowCube", stateController.autoScoreLow(GameElementState.CUBE));
+        // eventMap.put("ScoreMidCube", stateController.autoScoreMid(GameElementState.CUBE));
+        // eventMap.put("ScoreHighCube", stateController.autoScoreHigh(GameElementState.CUBE));
 
-        eventMap.put("ScoreLowCone", stateController.autoScoreLow(GameElementState.CONE));
-        eventMap.put("ScoreMidCone", stateController.autoScoreMid(GameElementState.CONE));
-        eventMap.put("ScoreHighCone", stateController.autoScoreHigh(GameElementState.CONE));
+        // eventMap.put("ScoreLowCone", stateController.autoScoreLow(GameElementState.CONE));
+        // eventMap.put("ScoreMidCone", stateController.autoScoreMid(GameElementState.CONE));
+        // eventMap.put("ScoreHighCone", stateController.autoScoreHigh(GameElementState.CONE));
 
         //eventMap.put("Autobalance", null);
         
@@ -325,8 +295,8 @@ public class RobotContainer {
         if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
         if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(
-                (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(0))
-                : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(180))
+                (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
+                : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
             )),
             new StraightAutobalance(s_Swerve)
         );

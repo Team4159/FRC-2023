@@ -49,9 +49,10 @@ public class CascadingArm extends SubsystemBase {
     }
 
     public boolean atDesiredSetPoint() {
-        System.out.println("Rotate:" + isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance));
-        if (cascadeState.equals(CascadeState.OFF)) return true;
-        return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
+        return true;
+        // System.out.println("cascade:" + isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance));
+        // if (cascadeState.equals(CascadeState.OFF)) return true;
+        // return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
     }
 
     public boolean isAtSetpoint(double setpoint) {
