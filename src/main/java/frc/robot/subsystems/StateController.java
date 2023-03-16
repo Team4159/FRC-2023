@@ -23,6 +23,7 @@ public class StateController extends SubsystemBase {
 
     private GameElementState gameElementState;
     private PositionState positionState;
+    private boolean forceScore;
 
     public static enum GameElementState {
         CUBE,
@@ -56,11 +57,11 @@ public class StateController extends SubsystemBase {
 
         gameElementState = GameElementState.CUBE;
         positionState = PositionState.TUCKED;
+        forceScore = false;
     }
 
     @Override
     public void periodic() {
-        System.out.println("State controller: " + gameElementState + ", " + positionState);
     }
 
     public void setGameElementState(GameElementState gameElementState) {
@@ -77,10 +78,15 @@ public class StateController extends SubsystemBase {
         updateLocalStates();
     }
 
+    public void toggleForceScore() {
+        forceScore = !forceScore;
+        updateLocalStates();
+    }
+
     public void setLocalStates(CascadeState cs, RotateState rs, WristState ws) {
         cascadingArm.setArmState(cs);
         rotatingArm.setArmState(rs);
-        wrist.setArmState(ws);
+        wrist.setArmState((forceScore) ? WristState.FORCE_SCORE : ws);
     }
 
     public void updateLocalStates() {

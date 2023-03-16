@@ -159,16 +159,16 @@ public final class Constants {
     public static final class RotatingArmConstants { // TODO: tune
         public static enum RotateState {
             INITIAL(0),
-            TUCKED_CUBE(5000),
-            GROUND_INTAKE_CUBE(10000),
+            TUCKED_CUBE(8000),
+            GROUND_INTAKE_CUBE(15000),
             LOW_CUBE(20000),
             MID_CUBE(55000),
             HIGH_CUBE(75000),
-            TUCKED_CONE(5000),
-            GROUND_INTAKE_CONE(8000),
-            LOW_CONE(20000),
-            MID_CONE(32000),
-            HIGH_CONE(42000),
+            TUCKED_CONE(8000),
+            GROUND_INTAKE_CONE(15000),
+            LOW_CONE(30000),
+            MID_CONE(70000),
+            HIGH_CONE(90000),
             OFF(-1);
 
             public final double setpoint;
@@ -203,15 +203,15 @@ public final class Constants {
         public static enum CascadeState {
             INITIAL(0),
             TUCKED_CUBE(-200),
-            GROUND_INTAKE_CUBE(2000),
+            GROUND_INTAKE_CUBE(5000),
             LOW_CUBE(-200),
-            MID_CUBE(-800),
-            HIGH_CUBE(23000),
+            MID_CUBE(-100),
+            HIGH_CUBE(5000),
             TUCKED_CONE(-200),
-            GROUND_INTAKE_CONE(18400),
+            GROUND_INTAKE_CONE(5000),
             LOW_CONE(18400),
-            MID_CONE(7400),
-            HIGH_CONE(32000),
+            MID_CONE(8000),
+            HIGH_CONE(45000),
             OFF(-1);
 
             public final double setpoint;
@@ -222,12 +222,12 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.00; //0.004
-        public static final double kI = 0.000; //0.0001
+        public static final double kP = 0.017; //0.004
+        public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
 
-        public static final double setpointTolerance = 800;
+        public static final double setpointTolerance = 1500;
 
         public static final int cascadeContinuousCurrentLimit = 30;
         public static final int cascadePeakCurrentLimit = 45;
@@ -245,15 +245,16 @@ public final class Constants {
         public static enum WristState {
             INITIAL(0),
             TUCKED_CUBE(500),
-            GROUND_INTAKE_CUBE(14000),
+            GROUND_INTAKE_CUBE(12000),
             LOW_CUBE(14000),
             MID_CUBE(14000),
             HIGH_CUBE(14000),
             TUCKED_CONE(500),
-            GROUND_INTAKE_CONE(12000),
-            LOW_CONE(19600),
-            MID_CONE(16600),
-            HIGH_CONE(18700),
+            GROUND_INTAKE_CONE(13000),
+            LOW_CONE(12000),
+            MID_CONE(10000),
+            HIGH_CONE(10000),
+            FORCE_SCORE(16000),
             OFF(-1);
 
             public final double setpoint;
@@ -264,7 +265,7 @@ public final class Constants {
 
         public static final int wristId = 4; 
 
-        public static final double kP = 0.018;
+        public static final double kP = 0.024;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
@@ -285,7 +286,7 @@ public final class Constants {
     
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
-            INTAKE(0.3),
+            INTAKE(0.5),
             OUTTAKE(-0.25),
             NEUTRAL(0.05),
             OFF(0);
@@ -335,6 +336,8 @@ public final class Constants {
             public static final int groundIntake = 7;
             public static final int singleIntake = 6;
             public static final int doubleIntake = 5;
+
+            public static final int forceScore = 15;
             
             public static final int tucked = 8;
         }

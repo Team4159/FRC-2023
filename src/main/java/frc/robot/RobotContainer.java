@@ -85,6 +85,8 @@ public class RobotContainer {
     
     private final JoystickButton tucked = new JoystickButton(secondary, Secondary.tucked);
 
+    private final JoystickButton forceScore = new JoystickButton(secondary, Secondary.forceScore);
+
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
@@ -211,6 +213,8 @@ public class RobotContainer {
         //doubleIntake.onTrue(stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)); TODO: disabled until constants gathered
         
         tucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
+
+        forceScore.onTrue(new InstantCommand(() -> stateController.toggleForceScore()));
     }
 
     public void teleopInit() {
