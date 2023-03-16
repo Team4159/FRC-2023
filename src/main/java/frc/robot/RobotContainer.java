@@ -254,43 +254,24 @@ public class RobotContainer {
         eventMap.put("Wait5", new WaitCommand(5));
     }
 
-    public static enum AutoMode {Dock, Normal, Taxi}
-    private Map<DriverStation.Alliance, Map<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>> autos = Map.of(
-        DriverStation.Alliance.Red, Map.<Integer, Map<AutoMode, List<PathPlannerTrajectory>>>of( // Red Alliance
-            0, Map.<AutoMode, List<PathPlannerTrajectory>>of( // Station 1
-                // AutoMode.Taxi, loadPathGroup("B1"), 
-                AutoMode.Normal, loadPathGroup("B4") 
-                // AutoMode.Dock, loadPathGroup("B7")
-            )//,
-            // 1, Map.<AutoMode, Command>of( // Station 2
-            //     AutoMode.Taxi, loadPathGroup("B2"),
-            //     AutoMode.Normal, loadPathGroup("B5"),
-            //     AutoMode.Dock, loadPathGroup("B8")
-            // ),
-            // 2, Map.<AutoMode, Command>of( // Station 3
-            //     AutoMode.Taxi, loadPathGroup("B3"),
-            //     AutoMode.Normal, loadPathGroup("B6"),
-            //     AutoMode.Dock, loadPathGroup("B9")
-            // )
-        )//,
-        // DriverStation.Alliance.Blue, Map.<Integer, Map<AutoMode, Command>>of( // Blue Alliance
-        //     0, Map.<AutoMode, Command>of( // Station 1
-        //          AutoMode.Taxi, loadPathGroup("B1"), 
-        //          AutoMode.Normal, loadPathGroup("B4") 
-        //          AutoMode.Dock, loadPathGroup("B7")
-        //     ),
-        //     1, Map.<AutoMode, Command>of( // Station 2
-        //          AutoMode.Taxi, loadPathGroup("B2"),
-        //          AutoMode.Normal, loadPathGroup("B5"),
-        //          AutoMode.Dock, loadPathGroup("B8")
-        //     ),
-        //     2, Map.<AutoMode, Command>of( // Station 3
-        //          AutoMode.Taxi, loadPathGroup("B3"),
-        //          AutoMode.Normal, loadPathGroup("B6"),
-        //          AutoMode.Dock, loadPathGroup("B9")
-        //     )
-        // )
+    private Map<Integer, List<PathPlannerTrajectory>> autos = Map.ofEntries(
+        Map.entry(2, loadPathGroup("B1")),
+        Map.entry(3, loadPathGroup("B1S2")),
+        Map.entry(4, loadPathGroup("B2")),
+        Map.entry(5, loadPathGroup("B2S1D")),
+        Map.entry(6, loadPathGroup("B3")),
+        Map.entry(7, loadPathGroup("B3S2")),
+        Map.entry(8, loadPathGroup("B4")),
+        Map.entry(9, loadPathGroup("B5")),
+        Map.entry(10, loadPathGroup("B6")),
+        Map.entry(11, loadPathGroup("B7")),
+        Map.entry(12, loadPathGroup("B8")),
+        Map.entry(13, loadPathGroup("B9")),
+        Map.entry(14, loadPathGroup("BSimple1")),
+        Map.entry(15, loadPathGroup("BSimple2")),
+        Map.entry(16, loadPathGroup("BSimpleCharge"))
     );
+    
 
     private List<PathPlannerTrajectory> loadPathGroup(String s) {
         return PathPlanner.loadPathGroup(s, Constants.AutoConstants.kPathConstraints);
@@ -306,9 +287,15 @@ public class RobotContainer {
             )),
             autoCommands.autobalanceIn()
         );
-        final var traj = autos.get(DriverStation.getAlliance())
-                .get(dataBoard.getAutoPos() - 1)
-                .get(dataBoard.getAutoMode());
+        if(dataBoard.getAutoPos() == 1) return new SequentialCommandGroup(
+            new InstantCommand(() -> s_Swerve.resetOdometry(
+                (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
+                : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
+            )),
+            autoCommands.autoConeMid(),
+            autoCommands.autobalanceIn()
+        );
+        final var traj = autos.get(dataBoard.getAutoPos());
         if (traj == null) return null;
         return new SequentialCommandGroup(
             new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)),

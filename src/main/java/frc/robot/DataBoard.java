@@ -12,7 +12,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
-import frc.robot.RobotContainer.AutoMode;
 
 
 /*
@@ -29,9 +28,22 @@ public class DataBoard {
     public void init() {
         autoSelector.setDefaultOption("Disabled", -1);
         autoSelector.addOption("Autobalance",0);
-        autoSelector.addOption("Position 1",1);
-        autoSelector.addOption("Position 2", 2);
-        autoSelector.addOption("Position 3", 3);
+        autoSelector.addOption("ScoreAutobalance",1);
+        autoSelector.addOption("B1",2);
+        autoSelector.addOption("B1S2", 3);
+        autoSelector.addOption("B2", 4);
+        autoSelector.addOption("B2S1D", 5);
+        autoSelector.addOption("B3", 6);
+        autoSelector.addOption("B3S2", 7);
+        autoSelector.addOption("B4", 8);
+        autoSelector.addOption("B5", 9);
+        autoSelector.addOption("B6", 10);
+        autoSelector.addOption("B7", 11);
+        autoSelector.addOption("B8", 12);
+        autoSelector.addOption("B9", 13);
+        autoSelector.addOption("BSimple1", 14);
+        autoSelector.addOption("BSimple2", 15);
+        autoSelector.addOption("BSimpleCharge", 16);
 
         SmartDashboard.putData("Auto Selector", autoSelector);
         SmartDashboard.putData("field", field); // send the field object to the shuffleboard
@@ -40,9 +52,9 @@ public class DataBoard {
     }
 
 
-    public AutoMode getAutoMode() { // fetches whether to dock or not during auto, according to a button
+    /*public AutoMode getAutoMode() { // fetches whether to dock or not during auto, according to a button
         return SmartDashboard.setDefaultBoolean("autoDock", false) ? AutoMode.Dock : AutoMode.Normal;
-    }
+    }*/
 
 
     public int getAutoPos() {
