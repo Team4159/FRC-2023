@@ -296,7 +296,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         // return autoBuilder.fullAuto(loadPathGroup("B1"));
-        if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
+        /*if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
         if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(
                 (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
@@ -312,6 +312,24 @@ public class RobotContainer {
             new InstantCommand(() -> led.setState(LEDState.RAINBOWCYCLE)),
             autoBuilder.fullAuto(traj),
             new InstantCommand(() -> led.setState(LEDState.BLACK))
+        );*/
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> s_Swerve.resetOdometry(
+                (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
+                : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
+            )),
+            new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
+            new WaitCommand(2),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
+            new WaitCommand(0.5),
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)),
+            new WaitCommand(1),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.LOW_SCORE)),
+            new WaitCommand(1),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED))
+            
         );
     }
 }
