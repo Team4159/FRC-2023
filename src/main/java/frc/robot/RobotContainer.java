@@ -20,7 +20,6 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -30,7 +29,6 @@ import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AutoCommands;
-import frc.robot.commands.StraightAutobalance;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.RotatingArm;
@@ -66,7 +64,7 @@ public class RobotContainer {
     private final JoystickButton rotateLockClockwise = new JoystickButton(primaryDrive, PrimaryDrive.rotateLockClockwise);
     private final JoystickButton rotateLockCounterclockwise = new JoystickButton(primaryDrive, PrimaryDrive.rotateLockCounterclockwise);
 
-    private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
+    //private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
 
     /* Secondary buttons */
@@ -81,7 +79,7 @@ public class RobotContainer {
     private final JoystickButton low = new JoystickButton(secondary, Secondary.low);
     
     private final JoystickButton groundIntake = new JoystickButton(secondary, Secondary.groundIntake);
-    private final JoystickButton singleIntake = new JoystickButton(secondary, Secondary.singleIntake);
+    //private final JoystickButton singleIntake = new JoystickButton(secondary, Secondary.singleIntake);
     private final JoystickButton doubleIntake = new JoystickButton(secondary, Secondary.doubleIntake);
     
     private final JoystickButton tucked = new JoystickButton(secondary, Secondary.tucked);
