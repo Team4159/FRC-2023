@@ -2,22 +2,22 @@
   "waypoints": [
     {
       "anchorPoint": {
-        "x": 1.98,
+        "x": 1.84,
         "y": 1.07
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.054733422623115,
-        "y": 0.9891523427271681
+        "x": 2.148550427365379,
+        "y": 0.9873241621631691
       },
-      "holonomicAngle": 0,
+      "holonomicAngle": 180.0,
       "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreLowCube"
+          "ScoreMidCube"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -26,19 +26,44 @@
     },
     {
       "anchorPoint": {
-        "x": 6.364879338776591,
-        "y": 0.9176368445386685
+        "x": 4.323938327591959,
+        "y": 0.6751532364274702
       },
       "prevControl": {
-        "x": 5.098033370866001,
-        "y": 0.6213583520434492
+        "x": 2.450529288899269,
+        "y": 0.6751532364274702
       },
       "nextControl": {
-        "x": 5.098033370866001,
-        "y": 0.6213583520434492
+        "x": 4.944930375338246,
+        "y": 0.6751532364274702
       },
-      "holonomicAngle": 0,
-      "isReversal": true,
+      "holonomicAngle": 180.0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [],
+        "executionBehavior": "parallel",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 6.0,
+        "y": 0.93190165028017
+      },
+      "prevControl": {
+        "x": 4.963104636721766,
+        "y": 0.93190165028017
+      },
+      "nextControl": {
+        "x": 6.369578578227603,
+        "y": 0.93190165028017
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": false,
       "velOverride": null,
       "isLocked": false,
       "isStopPoint": true,
@@ -53,12 +78,12 @@
     },
     {
       "anchorPoint": {
-        "x": 2.0024339492780285,
-        "y": 1.0708843406568849
+        "x": 7.0,
+        "y": 0.93
       },
       "prevControl": {
-        "x": 3.59620790890748,
-        "y": 0.7030903499731649
+        "x": 6.940044685768501,
+        "y": 0.93
       },
       "nextControl": null,
       "holonomicAngle": 0,
@@ -68,7 +93,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreMid"
+          "TuckCone"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",

@@ -3,6 +3,7 @@ package frc.robot;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.Constants.VisionConstants;
 
 public class FieldRegion {
     private Alliance alliance;
@@ -48,7 +49,7 @@ public class FieldRegion {
     public Pose2d getTargetPose() { // returns the closest pose for scoring at the grid
         if (this.alliance.equals(Alliance.Invalid) || this.gridIndex <= 0) return null;
         return new Pose2d(
-            this.alliance.equals(Alliance.Blue) ? 2.00 : 14.54,
+            this.alliance.equals(Alliance.Blue) ? 1.84 : VisionConstants.fieldWidth-1.84,
             gridIndexY[this.gridIndex],
             Rotation2d.fromDegrees(this.alliance.equals(Alliance.Blue) ? 180 : 0)
         );

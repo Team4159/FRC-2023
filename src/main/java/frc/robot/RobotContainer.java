@@ -230,8 +230,11 @@ public class RobotContainer {
         eventMap.put("Print2", new PrintCommand("Print 2"));
         eventMap.put("Print3", new PrintCommand("Print 3"));
 
-        // eventMap.put("GroundIntakeCube", stateController.autoGroundIntake(GameElementState.CUBE));
-        // eventMap.put("GroundIntakeCone", stateController.autoGroundIntake(GameElementState.CONE));
+        eventMap.put("GroundIntakeCube", autoCommands.groundIntakeCube());
+        eventMap.put("GroundIntakeCone", autoCommands.groundIntakeCone());
+
+        eventMap.put("TuckCube", autoCommands.tuckCube());
+        eventMap.put("TuckCone", autoCommands.tuckCone());
 
         eventMap.put("ScoreLowCube", autoCommands.autoCubeLow());
         eventMap.put("ScoreMidCube", autoCommands.autoCubeMid());
@@ -241,8 +244,8 @@ public class RobotContainer {
         eventMap.put("ScoreMidCone", autoCommands.autoConeMid());
         eventMap.put("ScoreHighCone", autoCommands.autoConeHigh());
 
-        eventMap.put("AutobalanceIn", null); //autobalance from the grid toward the center of the field
-        eventMap.put("AutobalanceOut", null); //autobalance from the center of the field toward the grid
+        eventMap.put("AutobalanceIn", autoCommands.autobalanceIn()); //autobalance from the grid toward the center of the field
+        eventMap.put("AutobalanceOut", autoCommands.autobalanceOut()); //autobalance from the center of the field toward the grid
         
         eventMap.put("LEDYellow", new InstantCommand(() -> led.setState(LEDState.YELLOW)));
         eventMap.put("LEDPurple", new InstantCommand(() -> led.setState(LEDState.PURPLE)));
@@ -255,21 +258,14 @@ public class RobotContainer {
     }
 
     private Map<Integer, List<PathPlannerTrajectory>> autos = Map.ofEntries(
-        Map.entry(2, loadPathGroup("B1")),
-        Map.entry(3, loadPathGroup("B1S2")),
-        Map.entry(4, loadPathGroup("B2")),
-        Map.entry(5, loadPathGroup("B2S1D")),
-        Map.entry(6, loadPathGroup("B3")),
-        Map.entry(7, loadPathGroup("B3S2")),
-        Map.entry(8, loadPathGroup("B4")),
-        Map.entry(9, loadPathGroup("B5")),
-        Map.entry(10, loadPathGroup("B6")),
-        Map.entry(11, loadPathGroup("B7")),
-        Map.entry(12, loadPathGroup("B8")),
-        Map.entry(13, loadPathGroup("B9")),
-        Map.entry(14, loadPathGroup("BSimple1")),
-        Map.entry(15, loadPathGroup("BSimple2")),
-        Map.entry(16, loadPathGroup("BSimpleCharge"))
+        Map.entry(2, loadPathGroup("1ScoreM")),
+        Map.entry(3, loadPathGroup("1ScoreM2Score")),
+        Map.entry(4, loadPathGroup("1ScoreMDock")),
+        Map.entry(5, loadPathGroup("2ScoreM")),
+        Map.entry(6, loadPathGroup("5ScoreM")),
+        Map.entry(7, loadPathGroup("8ScoreM")),
+        Map.entry(8, loadPathGroup("9ScoreM8Score")),
+        Map.entry(9, loadPathGroup("9ScoreMDock"))
     );
     
 

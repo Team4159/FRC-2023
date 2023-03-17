@@ -29,21 +29,14 @@ public class DataBoard {
         autoSelector.setDefaultOption("Disabled", -1);
         autoSelector.addOption("Autobalance",0);
         autoSelector.addOption("ScoreAutobalance",1);
-        autoSelector.addOption("B1",2);
-        autoSelector.addOption("B1S2", 3);
-        autoSelector.addOption("B2", 4);
-        autoSelector.addOption("B2S1D", 5);
-        autoSelector.addOption("B3", 6);
-        autoSelector.addOption("B3S2", 7);
-        autoSelector.addOption("B4", 8);
-        autoSelector.addOption("B5", 9);
-        autoSelector.addOption("B6", 10);
-        autoSelector.addOption("B7", 11);
-        autoSelector.addOption("B8", 12);
-        autoSelector.addOption("B9", 13);
-        autoSelector.addOption("BSimple1", 14);
-        autoSelector.addOption("BSimple2", 15);
-        autoSelector.addOption("BSimpleCharge", 16);
+        autoSelector.addOption("1ScoreM",2);
+        autoSelector.addOption("1ScoreM2Score", 3);
+        autoSelector.addOption("1ScoreMDock", 4);
+        autoSelector.addOption("2ScoreM", 5);
+        autoSelector.addOption("5ScoreM", 6);
+        autoSelector.addOption("8ScoreM", 7);
+        autoSelector.addOption("9ScoreM8Score", 8);
+        autoSelector.addOption("9ScoreMDock", 9);
 
         SmartDashboard.putData("Auto Selector", autoSelector);
         SmartDashboard.putData("field", field); // send the field object to the shuffleboard
