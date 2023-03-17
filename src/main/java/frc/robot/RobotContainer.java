@@ -288,7 +288,7 @@ public class RobotContainer {
                 (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
                 : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
             )),
-            autoCommands.autoConeMid(),
+            autoCommands.autoCubeMid(),
             autoCommands.autobalanceIn()
         );
         final var traj = autos.get(dataBoard.getAutoPos());
