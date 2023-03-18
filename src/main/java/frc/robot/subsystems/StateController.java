@@ -17,6 +17,8 @@ public class StateController extends SubsystemBase {
     private PositionState positionState;
     private boolean forceScore;
 
+    private int phase;
+
     public static enum GameElementState {
         CUBE,
         CONE
@@ -49,6 +51,7 @@ public class StateController extends SubsystemBase {
         gameElementState = GameElementState.CUBE;
         positionState = PositionState.TUCKED;
         forceScore = false;
+        phase = 0;
     }
 
     @Override
@@ -63,6 +66,11 @@ public class StateController extends SubsystemBase {
     }
 
     public void setPositionState(PositionState positionState) {
+        if (this.positionState == positionState) {
+            phase++;
+        } else {
+            phase = 0;
+        }
         if (this.positionState == PositionState.MID_SCORE && (positionState == PositionState.GROUND_INTAKING || positionState == PositionState.TUCKED)) {
             this.positionState = PositionState.LOW_SCORE;
         }
@@ -113,7 +121,7 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.DOUBLE_SUBSTATION) {
                 led.setState(LEDState.YELLOW);
                 System.out.println("cone double");
-                setLocalStates(CascadeState.DOUBLE_INTAKE_CONE, RotateState.DOUBLE_INTAKE_CONE, WristState.DOUBLE_INTAKE_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.DOUBLE_INTAKE_CONE, RotateState.DOUBLE_INTAKE_CONE, WristState.DOUBLE_INTAKE_CONE);
             } else if (positionState == PositionState.LOW_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone low");
@@ -121,11 +129,11 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.MID_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone mid");
-                setLocalStates(CascadeState.MID_CONE, RotateState.MID_CONE, WristState.MID_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.MID_CONE, RotateState.MID_CONE, WristState.MID_CONE);
             } else if (positionState == PositionState.HIG_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone high");
-                setLocalStates(CascadeState.HIGH_CONE, RotateState.HIGH_CONE, WristState.HIGH_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.HIGH_CONE, RotateState.HIGH_CONE, WristState.HIGH_CONE);
             }
         } else if (gameElementState == GameElementState.CUBE) {
             if (positionState == PositionState.TUCKED) {
@@ -143,7 +151,7 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.DOUBLE_SUBSTATION) {
                 led.setState(LEDState.PURPLE);
                 System.out.println("cube double");
-                setLocalStates(CascadeState.DOUBLE_INTAKE_CUBE, RotateState.DOUBLE_INTAKE_CUBE, WristState.DOUBLE_INTAKE_CUBE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CUBE : CascadeState.DOUBLE_INTAKE_CUBE, RotateState.DOUBLE_INTAKE_CUBE, WristState.DOUBLE_INTAKE_CUBE);
             } else if (positionState == PositionState.LOW_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cube low");
@@ -151,11 +159,11 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.MID_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cube mid");
-                setLocalStates(CascadeState.MID_CUBE, RotateState.MID_CUBE, WristState.MID_CUBE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CUBE : CascadeState.MID_CUBE, RotateState.MID_CUBE, WristState.MID_CUBE);
             } else if (positionState == PositionState.HIG_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cube high");
-                setLocalStates(CascadeState.HIGH_CUBE, RotateState.HIGH_CUBE, WristState.HIGH_CUBE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CUBE : CascadeState.HIGH_CUBE, RotateState.HIGH_CUBE, WristState.HIGH_CUBE);
             }
         }
     }

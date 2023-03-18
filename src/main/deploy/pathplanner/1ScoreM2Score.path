@@ -153,5 +153,8 @@
       }
     }
   ],
+  "maxVelocity": 3.0,
+  "maxAcceleration": 3.0,
+  "isReversed": null,
   "markers": []
 }
