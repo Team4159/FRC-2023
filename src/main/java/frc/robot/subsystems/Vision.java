@@ -21,11 +21,11 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double[] poseData = limelight.getEntry("botpose").getValue().getDoubleArray(); // gets the pose portion as an array of doubles [x, y, z, rotX, rotY, rotZ, total latency]
-        if (poseData.length != 7) return;
-        var pose = new Pose2d(poseData[0] + Constants.VisionConstants.fieldWidth/2, poseData[1] + Constants.VisionConstants.fieldHeight/2, Rotation2d.fromDegrees(poseData[5]));
-        RobotContainer.s_Swerve.updatePoseEstimator(pose,poseData[6]); // sends new data to swerve
-        RobotContainer.dataBoard.setVisionPose(pose);
+        // double[] poseData = limelight.getEntry("botpose").getValue().getDoubleArray(); // gets the pose portion as an array of doubles [x, y, z, rotX, rotY, rotZ, total latency]
+        // if (poseData.length != 7) return;
+        // var pose = new Pose2d(poseData[0] + Constants.VisionConstants.fieldWidth/2, poseData[1] + Constants.VisionConstants.fieldHeight/2, Rotation2d.fromDegrees(poseData[5]));
+        // RobotContainer.s_Swerve.updatePoseEstimator(pose,poseData[6]); // sends new data to swerve
+        // RobotContainer.dataBoard.setVisionPose(pose);
     }
 
     // public static class SwapVisionPipeline extends CommandBase {

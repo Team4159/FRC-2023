@@ -145,9 +145,9 @@ public final class Constants {
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
 
-        public static final double maxAutobalanceSpeed = 3; // TODO: test
-        public static final double maxAutobalanceUphillSpeed = 1.5; // TODO: test
-        public static final double maxAutobalanceReverseSpeed = 0.5; // TODO: test/
+        public static final double maxAutobalanceSpeed = 1.5; // TODO: test
+        public static final double maxAutobalanceUphillSpeed = 0.5; // TODO: test
+        public static final double maxAutobalanceReverseSpeed = 0.2; // TODO: test/
 
         public static final double kPautobalance = 0.1; // TODO: test
         public static final double kIautobalance = 0;
@@ -170,7 +170,7 @@ public final class Constants {
             DOUBLE_INTAKE_CONE(80000),
             LOW_CONE(30000),
             MID_CONE(77000),
-            HIGH_CONE(95000),
+            HIGH_CONE(92000),
             OFF(-1);
 
             public final double setpoint;
@@ -184,7 +184,7 @@ public final class Constants {
 
         public static final double kP = 0.03;
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.0015;
         public static final double kF = 0;
         
         public static final double setpointTolerance = 3000;
@@ -195,7 +195,7 @@ public final class Constants {
         public static final boolean rotateEnableCurrentLimit = true;
         
         public static final double openLoopRamp = 0.25;
-        public static final double closedLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.2;
         
         public static final boolean rotateMotorInvert = false;
         public static final NeutralMode rotateNeutralMode = NeutralMode.Brake;
@@ -204,15 +204,15 @@ public final class Constants {
     public static final class CascadingArmConstants {
         public static enum CascadeState {
             INITIAL(0),
-            TUCKED_CUBE(-200),
+            TUCKED_CUBE(0),
             GROUND_INTAKE_CUBE(5000),
-            DOUBLE_INTAKE_CUBE(-200),
-            LOW_CUBE(-200),
-            MID_CUBE(-100),
+            DOUBLE_INTAKE_CUBE(0),
+            LOW_CUBE(0),
+            MID_CUBE(0),
             HIGH_CUBE(5000),
-            TUCKED_CONE(-200),
+            TUCKED_CONE(0),
             GROUND_INTAKE_CONE(4500),
-            DOUBLE_INTAKE_CONE(-200),
+            DOUBLE_INTAKE_CONE(0),
             LOW_CONE(18400),
             MID_CONE(12000),
             HIGH_CONE(41000),
@@ -228,10 +228,10 @@ public final class Constants {
 
         public static final double kP = 0.013  ; //0.004
         public static final double kI = 0;
-        public static final double kD = 0.002;
+        public static final double kD = 0.004;
         public static final double kF = 0;
 
-        public static final double setpointTolerance = 1500;
+        public static final double setpointTolerance = 2500;
 
         public static final int cascadeContinuousCurrentLimit = 30;
         public static final int cascadePeakCurrentLimit = 45;
@@ -239,7 +239,7 @@ public final class Constants {
         public static final boolean cascadeEnableCurrentLimit = true;
         
         public static final double openLoopRamp = 0.1;
-        public static final double closedLoopRamp = 0.25;
+        public static final double closedLoopRamp = 0.1;
 
         public static final boolean cascadeMotorInvert = false;
         public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
@@ -292,7 +292,7 @@ public final class Constants {
     
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
-            INTAKE(0.3),
+            INTAKE(0.4),
             OUTTAKE(-0.25),
             NEUTRAL(0.05),
             OFF(0);

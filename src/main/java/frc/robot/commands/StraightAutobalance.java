@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.Debouncer;
 import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -23,6 +24,8 @@ public class StraightAutobalance extends CommandBase {
 
     private Alliance alliance;
 
+    private Debouncer debouncer;
+
     public StraightAutobalance(AutobalanceDirection direction) {
         s_Swerve = RobotContainer.s_Swerve;
 
@@ -36,7 +39,7 @@ public class StraightAutobalance extends CommandBase {
 
         switch (alliance) {
             case Blue:
-                directionVal = (this.direction.equals(AutobalanceDirection.IN)) ? 1 : -1;
+                directionVal = (this.direction.equals(AutobalanceDirection.IN)) ? -1 : 1;
                 break;
             case Red:
                 directionVal = (this.direction.equals(AutobalanceDirection.IN)) ? -1 : 1;
@@ -47,39 +50,47 @@ public class StraightAutobalance extends CommandBase {
                 break;
         }
 
+        debouncer = new Debouncer(0.1);
+
         addRequirements(s_Swerve);
     }
 
     @Override
     public void execute() {
         double maxSpeed = 0;
-        double pitch = s_Swerve.getPitch();
+        double pitch = s_Swerve.getRoll();
         double translationVal = 0;
 
         switch (phase) {
             case RAM:
                 maxSpeed = AutoConstants.maxAutobalanceSpeed;
                 translationVal = 1;
-                if (pitch >= 8) phase = AutobalancePhase.UPHILL;
+                if (debouncer.calculate(pitch <= -10)) phase = AutobalancePhase.UPHILL;
                 break;
             case UPHILL:
                 maxSpeed = AutoConstants.maxAutobalanceUphillSpeed;
                 translationVal = 1;
-                if (pitch <= -3) phase = AutobalancePhase.REVERSE;
+                if (debouncer.calculate(pitch >= -6)) phase = AutobalancePhase.WAIT;
+                break;
+            case WAIT:
+                maxSpeed = 0;
+                if (debouncer.calculate(pitch >=9 )) phase = AutobalancePhase.REVERSE;
                 break;
             case REVERSE:
                 maxSpeed = AutoConstants.maxAutobalanceReverseSpeed;
-                translationVal = calculatePID(pitch);
-                if (pidController.atSetpoint()) phase = AutobalancePhase.UPHILL;
+                translationVal = -1;
+                if (debouncer.calculate(pitch <= 8)) phase = AutobalancePhase.FINISH;
                 break;
             case FINISH:
                 return;
         }
-        
 
+        System.out.println("phase: " + phase +", speed: " + maxSpeed);
+        
+ 
+        s_Swerve.lockRotateClosest();
         s_Swerve.straightBalance(
-            new Translation2d(translationVal, 0).times(maxSpeed).times(directionVal), 
-            LockRotateState.UP,
+            new Translation2d(translationVal, 0).times(maxSpeed).times(directionVal),
             maxSpeed
         );
     }
@@ -92,8 +103,7 @@ public class StraightAutobalance extends CommandBase {
     @Override
     public void end(boolean i) {
         s_Swerve.straightBalance(
-            new Translation2d(0, 0), 
-            alliance.equals(Alliance.Blue) ? LockRotateState.LEFT : LockRotateState.RIGHT,
+            new Translation2d(0, 0),
             0
         );
     }
@@ -106,6 +116,7 @@ public class StraightAutobalance extends CommandBase {
         RAM,
         UPHILL,
         REVERSE,
+        WAIT,
         FINISH
     }
 
