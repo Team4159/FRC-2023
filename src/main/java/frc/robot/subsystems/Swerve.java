@@ -79,8 +79,8 @@ public class Swerve extends SubsystemBase {
         Timer.delay(0.1); // wow ok
         resetModulesToAbsolute(); // works but should preferably be threaded
 
-        lockRotatePID = new PIDController(AutoConstants.kPThetaController/150, 0, 0);
-        lockRotatePID.enableContinuousInput(0, 360); //optimizes the rotation so it takes the shortest path :)
+        lockRotatePID = new PIDController(AutoConstants.kPThetaController/120, 0, 0);
+        lockRotatePID.enableContinuousInput(-180, 180); //optimizes the rotation so it takes the shortest path :)
 
         teleopState = TeleopState.NORMAL;
         lockRotateState = LockRotateState.OFF;
@@ -166,20 +166,17 @@ public class Swerve extends SubsystemBase {
     public void lockRotateClosest() {
         double rot = getPose().getRotation().getDegrees();
 
-        if (rot >= 315 || rot <= 45) {
+        if (rot >= -45 && rot <= 45) {
             lockRotateState = LockRotateState.RIGHT;
         }
         else if (rot >= 45 && rot <= 135) {
-            lockRotateState = LockRotateState.RIGHT;
+            lockRotateState = LockRotateState.UP;
         }
-        else if (rot >= 135 && rot <= 225) {
-            lockRotateState = LockRotateState.RIGHT;
-        }
-        else if (rot >= 225 && rot <= 315) {
-            lockRotateState = LockRotateState.RIGHT;
+        else if (rot >= -135 && rot <= -45) {
+            lockRotateState = LockRotateState.DOWN;
         }
         else {
-            System.out.println("Can't find closest locked rotation");
+            lockRotateState = LockRotateState.LEFT;
         }
     }
 

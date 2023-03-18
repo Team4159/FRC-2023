@@ -89,7 +89,7 @@ public final class Constants {
         /** Meters per Second */
         public static final double maxSpeed = 4.5;
         /** Radians per Second */
-        public static final double maxAngularVelocity = 4.0;
+        public static final double maxAngularVelocity = 3.0;
 
         /* Neutral Modes */
         public static final NeutralMode angleNeutralMode = NeutralMode.Coast;
@@ -139,7 +139,7 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final PathConstraints kPathConstraints = new PathConstraints(4, 3);
+        public static final PathConstraints kPathConstraints = new PathConstraints(3, 2);
     
         public static final double kPXController = 15;
         public static final double kPYController = 15;
@@ -147,7 +147,7 @@ public final class Constants {
 
         public static final double maxAutobalanceSpeed = 3; // TODO: test
         public static final double maxAutobalanceUphillSpeed = 1.5; // TODO: test
-        public static final double maxAutobalanceReverseSpeed = 0.5; // TODO: test
+        public static final double maxAutobalanceReverseSpeed = 0.5; // TODO: test/
 
         public static final double kPautobalance = 0.1; // TODO: test
         public static final double kIautobalance = 0;
@@ -160,17 +160,17 @@ public final class Constants {
         public static enum RotateState {
             INITIAL(0),
             TUCKED_CUBE(8000),
-            GROUND_INTAKE_CUBE(15000),
+            GROUND_INTAKE_CUBE(16000),
             DOUBLE_INTAKE_CUBE(80000),
             LOW_CUBE(20000),
-            MID_CUBE(55000),
+            MID_CUBE(60000),
             HIGH_CUBE(75000),
             TUCKED_CONE(8000),
-            GROUND_INTAKE_CONE(15000),
+            GROUND_INTAKE_CONE(17000),
             DOUBLE_INTAKE_CONE(80000),
             LOW_CONE(30000),
-            MID_CONE(70000),
-            HIGH_CONE(90000),
+            MID_CONE(77000),
+            HIGH_CONE(95000),
             OFF(-1);
 
             public final double setpoint;
@@ -211,11 +211,11 @@ public final class Constants {
             MID_CUBE(-100),
             HIGH_CUBE(5000),
             TUCKED_CONE(-200),
-            GROUND_INTAKE_CONE(5000),
+            GROUND_INTAKE_CONE(4500),
             DOUBLE_INTAKE_CONE(-200),
             LOW_CONE(18400),
             MID_CONE(12000),
-            HIGH_CONE(45000),
+            HIGH_CONE(41000),
             OFF(-1);
 
             public final double setpoint;
@@ -226,9 +226,9 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.017; //0.004
+        public static final double kP = 0.013  ; //0.004
         public static final double kI = 0;
-        public static final double kD = 0;
+        public static final double kD = 0.002;
         public static final double kF = 0;
 
         public static final double setpointTolerance = 1500;
@@ -249,13 +249,13 @@ public final class Constants {
         public static enum WristState {
             INITIAL(0),
             TUCKED_CUBE(500),
-            GROUND_INTAKE_CUBE(12000),
+            GROUND_INTAKE_CUBE(14000),
             DOUBLE_INTAKE_CUBE(18000),
             LOW_CUBE(14000),
             MID_CUBE(14000),
             HIGH_CUBE(14000),
             TUCKED_CONE(500),
-            GROUND_INTAKE_CONE(13000),
+            GROUND_INTAKE_CONE(15000),
             DOUBLE_INTAKE_CONE(18000),
             LOW_CONE(12000),
             MID_CONE(10000),
