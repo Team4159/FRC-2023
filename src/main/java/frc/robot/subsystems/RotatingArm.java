@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.RotatingArmConstants;
 import frc.robot.Constants.RotatingArmConstants.RotateState;
@@ -12,10 +14,14 @@ public class RotatingArm extends SubsystemBase {
     private TalonFX armTalon1, armTalon2;
     private RotateState rotateState;
 
+    private Debouncer setpointDebouncer;
+
     public RotatingArm() {
         armTalon1 = new TalonFX(RotatingArmConstants.rotatingArmID1);
         armTalon2 = new TalonFX(RotatingArmConstants.rotatingArmID2);
         configMotors();
+
+        setpointDebouncer = new Debouncer(0.2, DebounceType.kRising);
 
         rotateState = RotateState.INITIAL;
     }
@@ -61,6 +67,10 @@ public class RotatingArm extends SubsystemBase {
     public boolean atDesiredSetPoint() {
         if (rotateState.equals(RotateState.OFF)) return true;
         return isAtSetpoint(rotateState.setpoint, RotatingArmConstants.setpointTolerance);
+    }
+
+    public boolean atDebouncedSetPoint() {
+        return setpointDebouncer.calculate(atDesiredSetPoint());
     }
 
     public boolean isAtSetpoint(double setpoint) {

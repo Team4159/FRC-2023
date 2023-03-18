@@ -2,6 +2,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Robot;
 import frc.robot.Constants.CascadingArmConstants;
@@ -11,9 +13,13 @@ public class CascadingArm extends SubsystemBase {
     private TalonFX armTalon;
     private CascadeState cascadeState;
 
+    private Debouncer setpointDebouncer;
+
     public CascadingArm() {
         armTalon = new TalonFX(CascadingArmConstants.cascadingArmId);
         configMotor();
+
+        setpointDebouncer = new Debouncer(0.2, DebounceType.kRising);
 
         cascadeState = CascadeState.INITIAL;
     }
@@ -49,10 +55,12 @@ public class CascadingArm extends SubsystemBase {
     }
 
     public boolean atDesiredSetPoint() {
-        return true;
-        // System.out.println("cascade:" + isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance));
-        // if (cascadeState.equals(CascadeState.OFF)) return true;
-        // return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
+        if (cascadeState.equals(CascadeState.OFF)) return true;
+        return isAtSetpoint(cascadeState.setpoint, CascadingArmConstants.setpointTolerance);
+    }
+
+    public boolean atDebouncedSetPoint() {
+        return setpointDebouncer.calculate(atDesiredSetPoint());
     }
 
     public boolean isAtSetpoint(double setpoint) {
