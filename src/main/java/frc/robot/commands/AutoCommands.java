@@ -34,6 +34,8 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)),
             new WaitCommand(1),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)),
+            new WaitCommand(0.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
             new WaitCommand(0.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
@@ -50,6 +52,8 @@ public class AutoCommands {
             new WaitCommand(1),
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
             new WaitCommand(1.5),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
+            new WaitCommand(0.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
             new WaitCommand(0.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
@@ -80,6 +84,8 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)),
             new WaitCommand(1),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.MID_SCORE)),
+            new WaitCommand(0.5),
             new InstantCommand(() -> stateController.setForceScore(true)),
             new WaitCommand(1),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
@@ -99,6 +105,8 @@ public class AutoCommands {
             new WaitCommand(1),
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
             new WaitCommand(1.5),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
+            new WaitCommand(0.5),
             new InstantCommand(() -> stateController.setForceScore(true)),
             new WaitCommand(1),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE)),
@@ -119,7 +127,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)),
-            new WaitCommand(0.5),
+            new WaitCommand(1),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE))
         );
     }
@@ -128,7 +136,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)),
-            new WaitCommand(0.5),
+            new WaitCommand(1),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE))
         );
     }
@@ -137,7 +145,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)),
-            new WaitCommand(0.5)
+            new WaitCommand(1)
         );
     }
 
@@ -145,7 +153,7 @@ public class AutoCommands {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)),
-            new WaitCommand(0.5)
+            new WaitCommand(1)
         );
     }
 
