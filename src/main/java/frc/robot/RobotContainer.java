@@ -29,6 +29,7 @@ import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
 import frc.robot.commands.AutoCommands;
+import frc.robot.commands.AutoRotateInPlace;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.RotatingArm;
@@ -63,6 +64,7 @@ public class RobotContainer {
     private final JoystickButton toggleRotateLock = new JoystickButton(primaryDrive, PrimaryDrive.toggleRotateLock);
     private final JoystickButton rotateLockClockwise = new JoystickButton(primaryDrive, PrimaryDrive.rotateLockClockwise);
     private final JoystickButton rotateLockCounterclockwise = new JoystickButton(primaryDrive, PrimaryDrive.rotateLockCounterclockwise);
+    private final JoystickButton lockRotateCone = new JoystickButton(primaryDrive, PrimaryDrive.lockRotateCone);
 
     //private final JoystickButton aimbot = new JoystickButton(primaryLeft, PrimaryLeft.aimbot); // lines up for scoring automatically
     private final JoystickButton forceAcceptVision = new JoystickButton(primaryLeft, PrimaryLeft.forceAcceptVision); // lines up for scoring automatically
@@ -150,9 +152,9 @@ public class RobotContainer {
             .onFalse(new InstantCommand(() -> s_Swerve.setSwerveState(Swerve.TeleopState.NORMAL)))
         ;*/
 
-        toggleRotateLock
-            .onTrue(new InstantCommand(() -> s_Swerve.toggleLockRotate()))
-        ;
+        toggleRotateLock.onTrue(new InstantCommand(() -> s_Swerve.toggleLockRotate()));
+
+        lockRotateCone.debounce(0.5).onTrue(new InstantCommand(() -> s_Swerve.lockRotateCone()));
 
         rotateLockClockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateClockwise()));
         rotateLockCounterclockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateCounterclockwise()));
@@ -243,6 +245,10 @@ public class RobotContainer {
         eventMap.put("ScoreLowCone", autoCommands.autoConeLow());
         eventMap.put("ScoreMidCone", autoCommands.autoConeMid());
         eventMap.put("ScoreHighCone", autoCommands.autoConeHigh());
+
+        eventMap.put("Rotate90ccw", new AutoRotateInPlace(90).asProxy());
+        eventMap.put("Rotate90cw", new AutoRotateInPlace(-90).asProxy());
+        eventMap.put("Rotate180", new AutoRotateInPlace(180).asProxy());
 
         eventMap.put("AutobalanceIn", autoCommands.autobalanceIn()); //autobalance from the grid toward the center of the field
         eventMap.put("AutobalanceOut", autoCommands.autobalanceOut()); //autobalance from the center of the field toward the grid

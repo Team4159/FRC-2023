@@ -43,6 +43,8 @@ public class Swerve extends SubsystemBase {
 
     private boolean forceAcceptNextVision;
 
+    private double coneTx;
+
     private final SwerveDrivePoseEstimator poseEstimator = new SwerveDrivePoseEstimator(
         Constants.Swerve.swerveKinematics, 
         new Rotation2d(), 
@@ -57,6 +59,7 @@ public class Swerve extends SubsystemBase {
         UP(90),
         LEFT(180),
         DOWN(270),
+        CONE(-1),
         OFF(-1);
 
         public final double direction;
@@ -108,6 +111,23 @@ public class Swerve extends SubsystemBase {
         return getRoll();
     }
 
+    public void autoSpinInPlace(double rotation) {
+        SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
+        swerveModuleStates = Constants.Swerve.swerveKinematics.toSwerveModuleStates(
+            ChassisSpeeds.fromFieldRelativeSpeeds(
+                0,
+                0,
+                rotation,
+                getYaw()
+            )
+        );
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, Constants.Swerve.maxSpeed);
+
+        for (SwerveModule mod : mSwerveMods)
+            mod.setDesiredState(swerveModuleStates[mod.moduleNumber], false);
+    }
+
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) { // teleop manual driving
         SwerveModuleState[] swerveModuleStates = new SwerveModuleState[4];
 
@@ -147,7 +167,16 @@ public class Swerve extends SubsystemBase {
     }
 
     private double calculateLockRotate() {
+        if (lockRotateState == LockRotateState.CONE) return calculateLockToCone();
         return lockRotatePID.calculate(getPose().getRotation().getDegrees(), lockRotateState.direction);
+    }
+
+    private double calculateLockToCone() {
+        return lockRotatePID.calculate(coneTx, 0);
+    }
+
+    public void setConeTx(double tx) {
+        coneTx = tx;
     }
 
     public void toggleLockRotate() {
@@ -181,6 +210,8 @@ public class Swerve extends SubsystemBase {
 
     public void lockRotateClockwise() {
         switch (lockRotateState) {
+            case CONE:
+                lockRotateClosest();
             case RIGHT:
                 lockRotateState = LockRotateState.DOWN;
                 break;
@@ -201,6 +232,8 @@ public class Swerve extends SubsystemBase {
 
     public void lockRotateCounterclockwise() {
         switch (lockRotateState) {
+            case CONE:
+                lockRotateClosest();
             case RIGHT:
                 lockRotateState = LockRotateState.UP;
                 break;
@@ -217,6 +250,10 @@ public class Swerve extends SubsystemBase {
                 System.out.println("Trying to rotate counterclockwise while auto lock off");
                 break;
         }
+    }
+
+    public void lockRotateCone() {
+        lockRotateState = LockRotateState.CONE;
     }
 
     /* Used by SwerveControllerCommand in Auto */

@@ -317,6 +317,8 @@ public final class Constants {
             public static final int toggleRotateLock = 2;
             public static final int rotateLockClockwise = 4; // TODO: should be on left check and make sure
             public static final int rotateLockCounterclockwise = 3; // TODO: should be on right check and make sure
+
+            public static final int lockRotateCone = toggleRotateLock; // intentionally the same number as toggle rotate lock
         }
 
         public static final class PrimaryLeft {
