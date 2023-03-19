@@ -145,7 +145,7 @@ public final class Constants {
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
 
-        public static final double maxAutobalanceSpeed = 1.5; // TODO: test
+        public static final double maxAutobalanceSpeed = 1; // TODO: test
         public static final double maxAutobalanceUphillSpeed = 0.5; // TODO: test
         public static final double maxAutobalanceReverseSpeed = 0.2; // TODO: test/
 
@@ -167,10 +167,10 @@ public final class Constants {
             HIGH_CUBE(75000),
             TUCKED_CONE(8000),
             GROUND_INTAKE_CONE(17000),
-            DOUBLE_INTAKE_CONE(80000),
+            DOUBLE_INTAKE_CONE(81000),
             LOW_CONE(30000),
             MID_CONE(77000),
-            HIGH_CONE(92000),
+            HIGH_CONE(93000),
             OFF(-1);
 
             public final double setpoint;
@@ -292,9 +292,9 @@ public final class Constants {
     
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
-            INTAKE(0.4),
+            INTAKE(0.5),
             OUTTAKE(-0.25),
-            NEUTRAL(0.05),
+            NEUTRAL(0.07),
             OFF(0);
 
             public final double set;

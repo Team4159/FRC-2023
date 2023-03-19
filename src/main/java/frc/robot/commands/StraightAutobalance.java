@@ -85,7 +85,6 @@ public class StraightAutobalance extends CommandBase {
                 return;
         }
 
-        System.out.println("phase: " + phase +", speed: " + maxSpeed);
         
  
         s_Swerve.lockRotateClosest();
