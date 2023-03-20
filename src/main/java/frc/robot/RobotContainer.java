@@ -88,7 +88,7 @@ public class RobotContainer {
 
     private final JoystickButton forceScore = new JoystickButton(secondary, Secondary.forceScore);
 
-    private final JoystickButton blinkLED = new JoystickButton(secondary, Constants.Fun.blinkLEDButton);
+    private final JoystickButton blinkLED = new JoystickButton(secondary, Secondary.blinkLEDButton);
 
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
@@ -229,6 +229,7 @@ public class RobotContainer {
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0)
         );
+        s_Swerve.disableLockRotate();
     }
 
     private void configureEventMap() {
