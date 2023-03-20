@@ -361,5 +361,10 @@ public final class Constants {
         public static final int ledPort = 9;
         public static final int ledLength = 229;
         public static final double ledReductionFactor = 0.9;
+
+        public static final double ledBlinkDelay = 0.5d;
+        public static final int blinkLEDButton = 16; // PLACEHOLDER
+        public static final double blinkLEDDelayDecrease = 1.5;
+        public static final int blinkLEDDelayThreshold = 5;
     }
 }

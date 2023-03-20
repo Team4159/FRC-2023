@@ -88,6 +88,8 @@ public class RobotContainer {
 
     private final JoystickButton forceScore = new JoystickButton(secondary, Secondary.forceScore);
 
+    private final JoystickButton blinkLED = new JoystickButton(secondary, Constants.Fun.blinkLEDButton);
+
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
@@ -218,6 +220,8 @@ public class RobotContainer {
         tucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
 
         forceScore.onTrue(new InstantCommand(() -> stateController.toggleForceScore()));
+        
+        blinkLED.toggleOnTrue(new LED.BlinkLED(led).repeatedly());
     }
 
     public void teleopInit() {

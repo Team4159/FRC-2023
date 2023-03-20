@@ -94,10 +94,32 @@ public class LED extends SubsystemBase {
         public BlinkLED(LED led) {
             super(
                 new InstantCommand(() -> led.stopLED()),
-                new WaitCommand(0.5d),
+                new WaitCommand(Constants.Fun.ledBlinkDelay),
                 new InstantCommand(() -> led.startLED()),
-                new WaitCommand(0.5d)
+                new WaitCommand(Constants.Fun.ledBlinkDelay)
             );
+        }
+    }
+
+    public static class BlinkLEDFast extends SequentialCommandGroup {
+        public static double delay = Constants.Fun.ledBlinkDelay;
+        public static boolean isBlinking = true;
+        public BlinkLEDFast(LED led) {
+            super(
+                new InstantCommand(() -> led.stopLED()),
+                new WaitCommand(calculateBlinkDelay()),
+                new InstantCommand(() -> led.startLED()),
+                new WaitCommand(calculateBlinkDelay())
+            );
+        }
+        private static double calculateBlinkDelay() {
+            if (delay * Constants.Fun.blinkLEDDelayThreshold <= Constants.Fun.ledBlinkDelay) {
+                delay = Constants.Fun.ledBlinkDelay;
+                isBlinking = false;
+                return 0.0;
+            }
+            delay /= Constants.Fun.blinkLEDDelayDecrease;
+            return delay;
         }
     }
 
