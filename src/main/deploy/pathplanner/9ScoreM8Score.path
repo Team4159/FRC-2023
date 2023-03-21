@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreMidCone"
+          "ScoreSelectedCone"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -145,7 +145,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "ScoreMidCube"
+          "ScoreSelectedCube"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",

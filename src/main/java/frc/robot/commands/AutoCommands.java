@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -70,6 +71,19 @@ public class AutoCommands {
         );
     }
     
+    public Command autoCubeSelect() {
+        if (RobotContainer.dataBoard.getAutoHeight() == 1) {
+            return autoCubeLow();
+        }
+        else if (RobotContainer.dataBoard.getAutoHeight() == 2) {
+            return autoCubeMid();
+        }
+        else if (RobotContainer.dataBoard.getAutoHeight() == 3) {
+            return autoCubeHigh();
+        }
+
+        return new PrintCommand("no auto height selected");
+    }
 
     
     public Command autoConeLow() {
@@ -124,6 +138,20 @@ public class AutoCommands {
             new WaitCommand(1),
             new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED))
         );
+    }
+
+    public Command autoConeSelect() {
+        if (RobotContainer.dataBoard.getAutoHeight() == 1) {
+            return autoConeLow();
+        }
+        else if (RobotContainer.dataBoard.getAutoHeight() == 2) {
+            return autoConeMid();
+        }
+        else if (RobotContainer.dataBoard.getAutoHeight() == 3) {
+            return autoConeHigh();
+        } 
+        
+        return new PrintCommand("no auto height selected");
     }
 
 

@@ -248,10 +248,14 @@ public class RobotContainer {
         eventMap.put("ScoreLowCube", autoCommands.autoCubeLow());
         eventMap.put("ScoreMidCube", autoCommands.autoCubeMid());
         eventMap.put("ScoreHighCube", autoCommands.autoCubeHigh());
+        
+        eventMap.put("ScoreSelectedCube", autoCommands.autoCubeSelect());
 
         eventMap.put("ScoreLowCone", autoCommands.autoConeLow());
         eventMap.put("ScoreMidCone", autoCommands.autoConeMid());
         eventMap.put("ScoreHighCone", autoCommands.autoConeHigh());
+        
+        eventMap.put("ScoreSelectedCone", autoCommands.autoConeSelect());
 
         eventMap.put("Rotate90ccw", new AutoRotateInPlace(90).asProxy());
         eventMap.put("Rotate90cw", new AutoRotateInPlace(-90).asProxy());

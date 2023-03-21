@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
  */
 public class DataBoard {
     private final SendableChooser<Integer> autoSelector = new SendableChooser<>();
+    private final SendableChooser<Integer> autoHeightSelector = new SendableChooser<>();
+
     private Field2d field = new Field2d(); // initialize the field for pose estimation
     private Field2d visionField = new Field2d(); // initialize the field for pose estimation
 
@@ -38,7 +40,14 @@ public class DataBoard {
         autoSelector.addOption("9ScoreM8Score", 8);
         autoSelector.addOption("9ScoreMDock", 9);
 
+        autoHeightSelector.setDefaultOption("Disabled", -1);
+        autoHeightSelector.addOption("Low", 1);
+        autoHeightSelector.addOption("Mid", 2);
+        autoHeightSelector.addOption("High", 3);
+        
+
         SmartDashboard.putData("Auto Selector", autoSelector);
+        SmartDashboard.putData("Auto Height Selector", autoHeightSelector);
         SmartDashboard.putData("field", field); // send the field object to the shuffleboard
         SmartDashboard.putData("visionField", visionField);
         Shuffleboard.getTab("Testing").addDouble("Pigeon2Gyro", () -> RobotContainer.s_Swerve.gyro.getYaw()).withWidget(BuiltInWidgets.kGyro).close();
@@ -54,6 +63,9 @@ public class DataBoard {
         return autoSelector.getSelected();
     }
 
+    public int getAutoHeight() {
+        return autoHeightSelector.getSelected();
+    }
 
     public void setVisionPose(Pose2d pose) {
         visionField.setRobotPose(pose);
