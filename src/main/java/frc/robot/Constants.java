@@ -10,6 +10,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.DriverStation;
 import frc.lib.util.COTSFalconSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 
@@ -175,6 +176,11 @@ public final class Constants {
 
             public final double setpoint;
             RotateState(double setpoint) {
+                if (setpoint > absoluteMaxSetpoint) {
+                    this.setpoint = absoluteMaxSetpoint;
+                    DriverStation.reportError("Trying to set rotation above absolute fields", false);
+                    return;
+                }
                 this.setpoint = setpoint;
             }
         }
@@ -186,6 +192,8 @@ public final class Constants {
         public static final double kI = 0;
         public static final double kD = 0.0015;
         public static final double kF = 0;
+
+        public static final double absoluteMaxSetpoint = 120000;
         
         public static final double setpointTolerance = 3000;
 
