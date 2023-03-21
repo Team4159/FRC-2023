@@ -89,6 +89,8 @@ public class RobotContainer {
 
     private final JoystickButton forceScore = new JoystickButton(secondary, Secondary.forceScore);
 
+    private final JoystickButton blinkLED = new JoystickButton(secondary, Secondary.blinkLEDButton);
+
     public static final Swerve s_Swerve = new Swerve();
     public static final Vision vision = new Vision();
     public static final DataBoard dataBoard = new DataBoard();
@@ -220,6 +222,8 @@ public class RobotContainer {
         leftTucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
 
         forceScore.onTrue(new InstantCommand(() -> stateController.toggleForceScore()));
+        
+        blinkLED.toggleOnTrue(new LED.BlinkLED(led).repeatedly());
     }
 
     public void teleopInit() {
@@ -227,6 +231,7 @@ public class RobotContainer {
             ? Rotation2d.fromDegrees(180)
             : Rotation2d.fromDegrees(0)
         );
+        s_Swerve.disableLockRotate();
     }
 
     private void configureEventMap() {
