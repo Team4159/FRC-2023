@@ -85,6 +85,7 @@ public class RobotContainer {
     private final JoystickButton doubleIntake = new JoystickButton(secondary, Secondary.doubleIntake);
     
     private final JoystickButton tucked = new JoystickButton(secondary, Secondary.tucked);
+    private final JoystickButton leftTucked = new JoystickButton(secondary, Secondary.leftTucked);
 
     private final JoystickButton forceScore = new JoystickButton(secondary, Secondary.forceScore);
 
@@ -154,7 +155,7 @@ public class RobotContainer {
 
         toggleRotateLock.onTrue(new InstantCommand(() -> s_Swerve.toggleLockRotate()));
 
-        lockRotateCone.debounce(0.5).onTrue(new InstantCommand(() -> s_Swerve.lockRotateCone()));
+        //lockRotateCone.debounce(0.5).onTrue(new InstantCommand(() -> s_Swerve.lockRotateCone()));
 
         rotateLockClockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateClockwise()));
         rotateLockCounterclockwise.onTrue(new InstantCommand(() -> s_Swerve.lockRotateCounterclockwise()));
@@ -216,6 +217,7 @@ public class RobotContainer {
         doubleIntake.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)));
         
         tucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
+        leftTucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
 
         forceScore.onTrue(new InstantCommand(() -> stateController.toggleForceScore()));
     }

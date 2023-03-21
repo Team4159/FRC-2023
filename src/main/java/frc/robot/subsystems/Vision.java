@@ -21,8 +21,8 @@ public class Vision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        double tX = limelight.getEntry("tx").getDouble(0); // gets the horizontal offset in degrees between the crosshair and the target
-        RobotContainer.s_Swerve.setConeTx(tX);
+        // double tX = limelight.getEntry("tx").getDouble(0); // gets the horizontal offset in degrees between the crosshair and the target
+        // RobotContainer.s_Swerve.setConeTx(tX);
 
 
 

@@ -19,6 +19,7 @@ public class AutoRotateInPlace extends CommandBase {
     public AutoRotateInPlace(double rotation) { // rotation ccw +   cw -
         s_Swerve = RobotContainer.s_Swerve;
         pidController = new PIDController(AutoConstants.kPThetaController/80, 0, 0); // TODO: test
+        pidController.enableContinuousInput(-180, 180);
 
         debouncer = new Debouncer(0.2);
 

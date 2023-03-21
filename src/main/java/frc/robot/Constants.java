@@ -145,7 +145,7 @@ public final class Constants {
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
 
-        public static final double maxAutobalanceSpeed = 1; // TODO: test
+        public static final double maxAutobalanceSpeed = 0.9; // TODO: test
         public static final double maxAutobalanceUphillSpeed = 0.5; // TODO: test
         public static final double maxAutobalanceReverseSpeed = 0.2; // TODO: test/
 
@@ -271,7 +271,7 @@ public final class Constants {
 
         public static final int wristId = 4; 
 
-        public static final double kP = 0.024;
+        public static final double kP = 0.032;
         public static final double kI = 0;
         public static final double kD = 0;
         public static final double kF = 0;
@@ -348,6 +348,7 @@ public final class Constants {
             public static final int forceScore = 15;
             
             public static final int tucked = 8;
+            public static final int leftTucked = 14;
         }
     }
 
