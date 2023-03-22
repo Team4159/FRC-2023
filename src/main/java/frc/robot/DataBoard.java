@@ -64,6 +64,7 @@ public class DataBoard {
     }
 
     public int getAutoHeight() {
+        if (autoHeightSelector.getSelected() == null) return -1;
         return autoHeightSelector.getSelected();
     }
 

@@ -72,6 +72,7 @@ public class AutoCommands {
     }
     
     public Command autoCubeSelect() {
+
         if (RobotContainer.dataBoard.getAutoHeight() == 1) {
             return autoCubeLow();
         }
