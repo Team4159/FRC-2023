@@ -249,13 +249,13 @@ public class RobotContainer {
         eventMap.put("ScoreMidCube", autoCommands.autoCubeMid());
         eventMap.put("ScoreHighCube", autoCommands.autoCubeHigh());
         
-        eventMap.put("ScoreSelectedCube", autoCommands.autoCubeSelect());
+        eventMap.put("ScoreSelectedCube", autoCommands.autoCubeSelect(dataBoard::getAutoHeight).asProxy());
 
         eventMap.put("ScoreLowCone", autoCommands.autoConeLow());
         eventMap.put("ScoreMidCone", autoCommands.autoConeMid());
         eventMap.put("ScoreHighCone", autoCommands.autoConeHigh());
         
-        eventMap.put("ScoreSelectedCone", autoCommands.autoConeSelect());
+        eventMap.put("ScoreSelectedCone", autoCommands.autoConeSelect(dataBoard::getAutoHeight).asProxy());
 
         eventMap.put("Rotate90ccw", new AutoRotateInPlace(90).asProxy());
         eventMap.put("Rotate90cw", new AutoRotateInPlace(-90).asProxy());
@@ -305,7 +305,7 @@ public class RobotContainer {
                 (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
                 : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
             )),
-            autoCommands.autoCubeMid(),
+            autoCommands.autoCubeSelect(dataBoard::getAutoHeight),
             autoCommands.autobalanceIn()
         );
         final var traj = autos.get(dataBoard.getAutoPos());

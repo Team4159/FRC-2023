@@ -1,8 +1,11 @@
 package frc.robot.commands;
 
+import java.util.function.IntSupplier;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -71,19 +74,19 @@ public class AutoCommands {
         );
     }
     
-    public Command autoCubeSelect() {
+    public ProxyCommand autoCubeSelect(IntSupplier sup) {
 
-        if (RobotContainer.dataBoard.getAutoHeight() == 1) {
-            return autoCubeLow();
+        if (sup.getAsInt() == 1) {
+            return autoCubeLow().asProxy();
         }
-        else if (RobotContainer.dataBoard.getAutoHeight() == 2) {
-            return autoCubeMid();
+        else if (sup.getAsInt() == 2) {
+            return autoCubeMid().asProxy();
         }
-        else if (RobotContainer.dataBoard.getAutoHeight() == 3) {
-            return autoCubeHigh();
+        else if (sup.getAsInt() == 3) {
+            return autoCubeHigh().asProxy();
         }
 
-        return new PrintCommand("no auto height selected");
+        return new PrintCommand("no auto height selected").asProxy();
     }
 
     
@@ -141,18 +144,18 @@ public class AutoCommands {
         );
     }
 
-    public Command autoConeSelect() {
-        if (RobotContainer.dataBoard.getAutoHeight() == 1) {
-            return autoConeLow();
+    public ProxyCommand autoConeSelect(IntSupplier sup) {
+        if (sup.getAsInt() == 1) {
+            return autoConeLow().asProxy();
         }
-        else if (RobotContainer.dataBoard.getAutoHeight() == 2) {
-            return autoConeMid();
+        else if (sup.getAsInt() == 2) {
+            return autoConeMid().asProxy();
         }
-        else if (RobotContainer.dataBoard.getAutoHeight() == 3) {
-            return autoConeHigh();
+        else if (sup.getAsInt() == 3) {
+            return autoConeHigh().asProxy();
         } 
         
-        return new PrintCommand("no auto height selected");
+        return new PrintCommand("no auto height selected").asProxy();
     }
 
 

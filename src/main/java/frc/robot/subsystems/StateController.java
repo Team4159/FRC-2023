@@ -129,11 +129,11 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.MID_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone mid");
-                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.MID_CONE, RotateState.MID_CONE, WristState.MID_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.MID_CONE, (forceScore) ? RotateState.MID_CONE_FORCE : RotateState.MID_CONE, WristState.MID_CONE);
             } else if (positionState == PositionState.HIG_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone high");
-                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.HIGH_CONE, RotateState.HIGH_CONE, WristState.HIGH_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.HIGH_CONE, (forceScore) ? RotateState.HIGH_CONE_FORCE : RotateState.HIGH_CONE, WristState.HIGH_CONE);
             }
         } else if (gameElementState == GameElementState.CUBE) {
             if (positionState == PositionState.TUCKED) {

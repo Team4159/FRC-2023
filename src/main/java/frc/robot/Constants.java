@@ -170,8 +170,10 @@ public final class Constants {
             GROUND_INTAKE_CONE(17000),
             DOUBLE_INTAKE_CONE(81000),
             LOW_CONE(30000),
-            MID_CONE(77000),
+            MID_CONE(76000),
+            MID_CONE_FORCE(73000),
             HIGH_CONE(93000),
+            HIGH_CONE_FORCE(90000),
             OFF(-1);
 
             public final double setpoint;
@@ -190,7 +192,7 @@ public final class Constants {
 
         public static final double kP = 0.03;
         public static final double kI = 0;
-        public static final double kD = 0.0015;
+        public static final double kD = 0.005;
         public static final double kF = 0;
 
         public static final double absoluteMaxSetpoint = 120000;
@@ -213,7 +215,7 @@ public final class Constants {
         public static enum CascadeState {
             INITIAL(0),
             TUCKED_CUBE(0),
-            GROUND_INTAKE_CUBE(5000),
+            GROUND_INTAKE_CUBE(8000),
             DOUBLE_INTAKE_CUBE(0),
             LOW_CUBE(0),
             MID_CUBE(0),
@@ -222,8 +224,8 @@ public final class Constants {
             GROUND_INTAKE_CONE(4500),
             DOUBLE_INTAKE_CONE(0),
             LOW_CONE(18400),
-            MID_CONE(12000),
-            HIGH_CONE(41000),
+            MID_CONE(13500),
+            HIGH_CONE(41500),
             OFF(-1);
 
             public final double setpoint;
@@ -234,9 +236,9 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.013  ; //0.004
+        public static final double kP = 0.01; //0.004
         public static final double kI = 0;
-        public static final double kD = 0.004;
+        public static final double kD = 0.005;
         public static final double kF = 0;
 
         public static final double setpointTolerance = 2500;
@@ -246,8 +248,8 @@ public final class Constants {
         public static final double cascadePeakCurrentDuration = 0.1;
         public static final boolean cascadeEnableCurrentLimit = true;
         
-        public static final double openLoopRamp = 0.1;
-        public static final double closedLoopRamp = 0.1;
+        public static final double openLoopRamp = 0.05;
+        public static final double closedLoopRamp = 0.5;
 
         public static final boolean cascadeMotorInvert = false;
         public static final NeutralMode cascadeNeutralMode = NeutralMode.Brake;
