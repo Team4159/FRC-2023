@@ -5,7 +5,6 @@ import java.util.function.IntSupplier;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
-import edu.wpi.first.wpilibj2.command.ProxyCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -74,22 +73,6 @@ public class AutoCommands {
         );
     }
     
-    public ProxyCommand autoCubeSelect(IntSupplier sup) {
-
-        if (sup.getAsInt() == 1) {
-            return autoCubeLow().asProxy();
-        }
-        else if (sup.getAsInt() == 2) {
-            return autoCubeMid().asProxy();
-        }
-        else if (sup.getAsInt() == 3) {
-            return autoCubeHigh().asProxy();
-        }
-
-        return new PrintCommand("no auto height selected").asProxy();
-    }
-
-    
     public Command autoConeLow() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
@@ -143,23 +126,7 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED))
         );
     }
-
-    public ProxyCommand autoConeSelect(IntSupplier sup) {
-        if (sup.getAsInt() == 1) {
-            return autoConeLow().asProxy();
-        }
-        else if (sup.getAsInt() == 2) {
-            return autoConeMid().asProxy();
-        }
-        else if (sup.getAsInt() == 3) {
-            return autoConeHigh().asProxy();
-        } 
-        
-        return new PrintCommand("no auto height selected").asProxy();
-    }
-
-
-
+    
     public Command groundIntakeCube() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),

@@ -20,6 +20,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
+import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -249,17 +250,31 @@ public class RobotContainer {
         eventMap.put("ScoreMidCube", autoCommands.autoCubeMid());
         eventMap.put("ScoreHighCube", autoCommands.autoCubeHigh());
         
-        eventMap.put("ScoreSelectedCube", autoCommands.autoCubeSelect(dataBoard::getAutoHeight).asProxy());
+        eventMap.put("ScoreSelectedCube", new SelectCommand(
+            Map.ofEntries(
+                Map.entry(-1, new PrintCommand("Auto height selector is broken :(")),
+                Map.entry(1, autoCommands.autoCubeLow()),
+                Map.entry(2, autoCommands.autoCubeMid()),
+                Map.entry(3, autoCommands.autoCubeHigh())
+            ), dataBoard::getAutoHeight)
+        );
 
         eventMap.put("ScoreLowCone", autoCommands.autoConeLow());
         eventMap.put("ScoreMidCone", autoCommands.autoConeMid());
         eventMap.put("ScoreHighCone", autoCommands.autoConeHigh());
         
-        eventMap.put("ScoreSelectedCone", autoCommands.autoConeSelect(dataBoard::getAutoHeight).asProxy());
+        eventMap.put("ScoreSelectedCone", new SelectCommand(
+            Map.ofEntries(
+                Map.entry(-1, new PrintCommand("Auto height selector is broken :(")),
+                Map.entry(1, autoCommands.autoConeLow()),
+                Map.entry(2, autoCommands.autoConeMid()),
+                Map.entry(3, autoCommands.autoConeHigh())
+            ), dataBoard::getAutoHeight)
+        );
 
-        eventMap.put("Rotate90ccw", new AutoRotateInPlace(90).asProxy());
-        eventMap.put("Rotate90cw", new AutoRotateInPlace(-90).asProxy());
-        eventMap.put("Rotate180", new AutoRotateInPlace(180).asProxy());
+        eventMap.put("Rotate90ccw", new AutoRotateInPlace(90));
+        eventMap.put("Rotate90cw", new AutoRotateInPlace(-90));
+        eventMap.put("Rotate180", new AutoRotateInPlace(180));
 
         eventMap.put("AutobalanceIn", autoCommands.autobalanceIn()); //autobalance from the grid toward the center of the field
         eventMap.put("AutobalanceOut", autoCommands.autobalanceOut()); //autobalance from the center of the field toward the grid
@@ -305,7 +320,14 @@ public class RobotContainer {
                 (DriverStation.getAlliance().equals(Alliance.Blue)) ? new Pose2d(new Translation2d(1.84, 2.75), Rotation2d.fromDegrees(180))
                 : new Pose2d(new Translation2d(VisionConstants.fieldWidth-1.84, 2.75), Rotation2d.fromDegrees(0))
             )),
-            autoCommands.autoCubeSelect(dataBoard::getAutoHeight),
+            new SelectCommand(
+                Map.ofEntries(
+                    Map.entry(-1, new PrintCommand("Auto height selector is broken :(")),
+                    Map.entry(1, autoCommands.autoCubeLow()),
+                    Map.entry(2, autoCommands.autoCubeMid()),
+                    Map.entry(3, autoCommands.autoCubeHigh())
+                ), dataBoard::getAutoHeight
+            ),
             autoCommands.autobalanceIn()
         );
         final var traj = autos.get(dataBoard.getAutoPos());

@@ -65,7 +65,7 @@ public class DataBoard {
 
     public int getAutoHeight() {
         if (autoHeightSelector.getSelected() == null) {
-            DriverStation.reportError("fuck", false);
+            DriverStation.reportError("Auto height null :(", false);
             return -1;
         }
         return autoHeightSelector.getSelected();
