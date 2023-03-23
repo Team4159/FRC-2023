@@ -297,7 +297,8 @@ public final class Constants {
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
             INTAKE(0.5),
-            OUTTAKE(-0.25),
+            OUTTAKE_CUBE(-0.25),
+            OUTTAKE_CONE(-0.1),
             NEUTRAL(0.07),
             OFF(0);
 

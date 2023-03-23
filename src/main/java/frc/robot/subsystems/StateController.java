@@ -65,6 +65,10 @@ public class StateController extends SubsystemBase {
         updateLocalStates();
     }
 
+    public boolean isGameElementCone() {
+        return gameElementState == GameElementState.CONE;
+    }
+
     public void setPositionState(PositionState positionState) {
         if (this.positionState == positionState) {
             phase++;
