@@ -355,7 +355,7 @@ public final class Constants {
             public static final int tucked = 8;
             public static final int leftTucked = 14;
             
-            public static final int blinkLEDButton = 16; // PLACEHOLDER
+            public static final int blinkLEDButton = 16; // TODO: PLACEHOLDER
         }
     }
 

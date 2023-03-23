@@ -68,7 +68,7 @@ public class Swerve extends SubsystemBase {
         }
     }
 
-    private PIDController lockRotatePID; // TODO: test
+    private PIDController lockRotatePID;
 
     private LockRotateState lockRotateState;
 
