@@ -1,10 +1,7 @@
 package frc.robot.commands;
 
-import java.util.function.IntSupplier;
-
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
@@ -126,7 +123,7 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED))
         );
     }
-    
+
     public Command groundIntakeCube() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
