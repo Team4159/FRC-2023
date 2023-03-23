@@ -146,18 +146,12 @@ public final class Constants {
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
 
-        public static final double maxAutobalanceSpeed = 0.9; // TODO: test
-        public static final double maxAutobalanceUphillSpeed = 0.5; // TODO: test
-        public static final double maxAutobalanceReverseSpeed = 0.2; // TODO: test/
-
-        public static final double kPautobalance = 0.1; // TODO: test
-        public static final double kIautobalance = 0;
-        public static final double kDautobalance = 0;
-
-        public static final double autoBalanceTolerence = 2; // in degrees      TODO: test
+        public static final double maxAutobalanceSpeed = 3.0; // TODO: test
+        public static final double maxAutobalanceUphillSpeed = 0.5;
+        public static final double maxAutobalanceReverseSpeed = 0.2;
     }
 
-    public static final class RotatingArmConstants { // TODO: tune
+    public static final class RotatingArmConstants {
         public static enum RotateState {
             INITIAL(0),
             TUCKED_CUBE(8000),
@@ -325,8 +319,8 @@ public final class Constants {
             public static final int zeroGyro = 1;
             //public static final int lockedMode = 2;
             public static final int toggleRotateLock = 2;
-            public static final int rotateLockClockwise = 4; // TODO: should be on left check and make sure
-            public static final int rotateLockCounterclockwise = 3; // TODO: should be on right check and make sure
+            public static final int rotateLockClockwise = 4;
+            public static final int rotateLockCounterclockwise = 3;
 
             public static final int lockRotateCone = toggleRotateLock; // intentionally the same number as toggle rotate lock
         }

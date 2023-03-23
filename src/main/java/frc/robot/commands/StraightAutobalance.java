@@ -28,9 +28,6 @@ public class StraightAutobalance extends CommandBase {
     public StraightAutobalance(AutobalanceDirection direction) {
         s_Swerve = RobotContainer.s_Swerve;
 
-        pidController = new PIDController(AutoConstants.kPautobalance, AutoConstants.kIautobalance, AutoConstants.kDautobalance);
-        pidController.setTolerance(AutoConstants.autoBalanceTolerence);
-
         phase = AutobalancePhase.RAM;
 
         alliance = DriverStation.getAlliance();
