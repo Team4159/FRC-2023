@@ -146,9 +146,9 @@ public final class Constants {
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
 
-        public static final double maxAutobalanceSpeed = 3.0; // TODO: test
-        public static final double maxAutobalanceUphillSpeed = 0.5;
-        public static final double maxAutobalanceReverseSpeed = 0.2;
+        public static final double maxAutobalanceSpeed = 3; // TODO: test
+        public static final double maxAutobalanceUphillSpeed = 0.7;
+        public static final double maxAutobalanceReverseSpeed = 0.25;
     }
 
     public static final class RotatingArmConstants {
@@ -184,7 +184,7 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.03;
+        public static final double kP = 0.031;
         public static final double kI = 0;
         public static final double kD = 0.005;
         public static final double kF = 0;
@@ -219,7 +219,7 @@ public final class Constants {
             DOUBLE_INTAKE_CONE(0),
             LOW_CONE(18400),
             MID_CONE(13500),
-            HIGH_CONE(41500),
+            HIGH_CONE(41000),
             OFF(-1);
 
             public final double setpoint;
@@ -230,7 +230,7 @@ public final class Constants {
 
         public static final int cascadingArmId = 3; 
 
-        public static final double kP = 0.01; //0.004
+        public static final double kP = 0.012; //0.004
         public static final double kI = 0;
         public static final double kD = 0.005;
         public static final double kF = 0;
@@ -296,7 +296,7 @@ public final class Constants {
     
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
-            INTAKE(0.5),
+            INTAKE(0.6),
             OUTTAKE_CUBE(-0.25),
             OUTTAKE_CONE(-0.1),
             NEUTRAL(0.07),
@@ -355,7 +355,7 @@ public final class Constants {
             public static final int tucked = 8;
             public static final int leftTucked = 14;
             
-            public static final int blinkLEDButton = 16; // TODO: PLACEHOLDER
+            public static final int blinkLEDButton = 10; // TODO: PLACEHOLDER
         }
     }
 

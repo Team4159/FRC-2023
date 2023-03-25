@@ -70,7 +70,7 @@ public class StraightAutobalance extends CommandBase {
                 break;
             case WAIT:
                 maxSpeed = 0;
-                if (debouncer.calculate(pitch >=9 )) phase = AutobalancePhase.REVERSE;
+                if (debouncer.calculate(pitch >=9)) phase = AutobalancePhase.REVERSE;
                 break;
             case REVERSE:
                 maxSpeed = AutoConstants.maxAutobalanceReverseSpeed;

@@ -161,10 +161,10 @@ public class AutoCommands {
 
 
     public Command autobalanceIn() {
-        return (new AutoRotateInPlace(180).asProxy()).andThen(new StraightAutobalance(AutobalanceDirection.IN));
+        return /*(new AutoRotateInPlace(180).asProxy()).andThen*/(new StraightAutobalance(AutobalanceDirection.IN));
     }
 
     public Command autobalanceOut() {
-        return (new AutoRotateInPlace(180).asProxy()).andThen(new StraightAutobalance(AutobalanceDirection.IN));
+        return /*(new AutoRotateInPlace(180).asProxy()).andThen*/(new StraightAutobalance(AutobalanceDirection.OUT));
     }
 }

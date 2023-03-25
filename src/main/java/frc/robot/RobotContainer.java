@@ -229,7 +229,7 @@ public class RobotContainer {
 
         forceScore.onTrue(new InstantCommand(() -> stateController.toggleForceScore()));
         
-        blinkLED.toggleOnTrue(new LED.BlinkLED(led).repeatedly());
+        //blinkLED.toggleOnTrue(new LED.BlinkLED(led).repeatedly());
     }
 
     public void teleopInit() {

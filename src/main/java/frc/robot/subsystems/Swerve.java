@@ -303,6 +303,7 @@ public class Swerve extends SubsystemBase {
     }
 
     public double getRoll() {
+        System.out.println(gyro.getRoll());
         return gyro.getRoll();
     }
 
