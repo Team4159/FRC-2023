@@ -202,9 +202,14 @@ public class RobotContainer {
             // ));
 
         
-        intake.onTrue(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE)))
-            .onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL))
-        );
+        intake.onTrue(
+            new ConditionalCommand(
+                new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE_CONE)),
+                new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE_CUBE)),
+                stateController::isGameElementCone
+            )
+        ).onFalse(new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+        
         outtake.onTrue(
             new ConditionalCommand(
                 new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE_CONE)),

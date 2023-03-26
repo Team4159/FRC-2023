@@ -58,7 +58,7 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
             new WaitUntilCommand(rotatingArm::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
-            new WaitUntilCommand(cascadingArm::atDebouncedSetPoint).withTimeout(1),
+            new WaitUntilCommand(cascadingArm::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE_CUBE)),
             new WaitCommand(0.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),
@@ -109,7 +109,7 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
             new WaitUntilCommand(rotatingArm::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
-            new WaitUntilCommand(cascadingArm::atDebouncedSetPoint).withTimeout(1),
+            new WaitUntilCommand(cascadingArm::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> stateController.setForceScore(true)),
             new WaitCommand(1),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE_CONE)),
@@ -129,7 +129,7 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)),
             new WaitCommand(1),
-            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE))
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE_CUBE))
         );
     }
 
@@ -138,7 +138,7 @@ public class AutoCommands {
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
             new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)),
             new WaitCommand(1),
-            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE))
+            new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE_CONE))
         );
     }
 
