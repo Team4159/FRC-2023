@@ -316,7 +316,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // return autoBuilder.fullAuto(loadPathGroup("B1"));
+        
         if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
         if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(

@@ -113,4 +113,12 @@ public class SwerveModule {
             getAngle()
         );
     }
+
+    public double getCurrent() {
+        return mDriveMotor.getSupplyCurrent();
+    }
+
+    public double getVoltage() {
+        return mDriveMotor.getMotorOutputVoltage();
+    }
 }
