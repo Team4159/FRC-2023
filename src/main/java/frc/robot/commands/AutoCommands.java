@@ -15,13 +15,16 @@ import frc.robot.subsystems.WheeledIntake;
 import frc.robot.subsystems.StateController.GameElementState;
 import frc.robot.subsystems.StateController.PositionState;
 
+// Container class to hold lots of commands for auto
 public class AutoCommands {
 
+    // variables to hold subsystem pointers
     private StateController stateController = RobotContainer.stateController;
     private RotatingArm rotatingArm = RobotContainer.rotatingArm;
     private CascadingArm cascadingArm = RobotContainer.cascadingArm;
     private WheeledIntake wheeledIntake = RobotContainer.wheeledIntake;
 
+    // sequential command to score cubes in low
     public Command autoCubeLow() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
@@ -34,6 +37,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to score cubes in mid
     public Command autoCubeMid() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
@@ -50,6 +54,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to score cubes in high
     public Command autoCubeHigh() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
@@ -70,6 +75,7 @@ public class AutoCommands {
         );
     }
     
+    // sequential command to score cones in low UNTESTED
     public Command autoConeLow() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
@@ -82,6 +88,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to score cones in mid UNTESTED
     public Command autoConeMid() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
@@ -101,6 +108,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to score cones in high UNTESTED
     public Command autoConeHigh() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
@@ -124,6 +132,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to intake cubes from ground
     public Command groundIntakeCube() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
@@ -133,6 +142,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to intake cones from ground
     public Command groundIntakeCone() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
@@ -142,6 +152,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to tuck cubes -- for use in auto after intaking
     public Command tuckCube() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CUBE)),
@@ -150,6 +161,7 @@ public class AutoCommands {
         );
     }
 
+    // sequential command to tuck cones -- for use in auto after intaking
     public Command tuckCone() {
         return new SequentialCommandGroup(
             new InstantCommand(() -> stateController.setGameElementState(GameElementState.CONE)),
@@ -159,12 +171,13 @@ public class AutoCommands {
     }
 
 
-
+    // autobalances toward center of field
     public Command autobalanceIn() {
-        return /*(new AutoRotateInPlace(180).asProxy()).andThen*/(new StraightAutobalance(AutobalanceDirection.IN));
+        return new StraightAutobalance(AutobalanceDirection.IN);
     }
 
+    // autobalances away from center of field UNTESTED
     public Command autobalanceOut() {
-        return /*(new AutoRotateInPlace(180).asProxy()).andThen*/(new StraightAutobalance(AutobalanceDirection.OUT));
+        return new StraightAutobalance(AutobalanceDirection.OUT);
     }
 }

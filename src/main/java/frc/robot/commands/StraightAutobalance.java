@@ -23,7 +23,7 @@ public class StraightAutobalance extends CommandBase {
 
     private Alliance alliance;
 
-    private Debouncer debouncer;
+    private Debouncer debouncer; // debouncer to make sure robot is nactually at set point when next phase triggered https://docs.wpilib.org/en/stable/docs/software/advanced-controls/filters/debouncer.html
 
     public StraightAutobalance(AutobalanceDirection direction) {
         s_Swerve = RobotContainer.s_Swerve;
@@ -46,7 +46,7 @@ public class StraightAutobalance extends CommandBase {
                 break;
         }
 
-        debouncer = new Debouncer(0.1);
+        debouncer = new Debouncer(AutoConstants.autobalanceDebounceTime);
 
         addRequirements(s_Swerve);
     }
@@ -83,7 +83,7 @@ public class StraightAutobalance extends CommandBase {
 
         
  
-        s_Swerve.lockRotateClosest();
+        s_Swerve.lockRotateClosest(); // keeps rotation orientation steady
         s_Swerve.straightBalance(
             new Translation2d(translationVal, 0).times(maxSpeed).times(directionVal),
             maxSpeed
@@ -92,7 +92,7 @@ public class StraightAutobalance extends CommandBase {
 
     @Override
     public boolean isFinished() {
-        return phase == AutobalancePhase.FINISH;
+        return phase == AutobalancePhase.FINISH; // returns true FINISH -> ends the command
     }
 
     @Override
@@ -100,7 +100,7 @@ public class StraightAutobalance extends CommandBase {
         s_Swerve.straightBalance(
             new Translation2d(0, 0),
             0
-        );
+        ); //sets speed on drivetrain to stop when done
     }
 
     public double calculatePID(double pitch) {

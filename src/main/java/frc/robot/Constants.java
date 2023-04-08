@@ -146,9 +146,13 @@ public final class Constants {
         public static final double kPYController = 15;
         public static final double kPThetaController = 10;
 
-        public static final double maxAutobalanceSpeed = 4; // TODO: test
-        public static final double maxAutobalanceUphillSpeed = 0.8;
-        public static final double maxAutobalanceReverseSpeed = 0.25;
+        public static final double maxAutobalanceSpeed = 4; // m/s for the fast ram phase
+        public static final double maxAutobalanceUphillSpeed = 0.8; // m/s for the slowly going up phase
+        public static final double maxAutobalanceReverseSpeed = 0.25; // m/s for the slow reverse phase
+        public static final double autobalanceDebounceTime = 0.1; // seconds
+
+        public static final double autoRotateTolerance = 10; // degrees
+        public static final double autoRotateDebounceTime = 0.2; // seconds
     }
 
     public static final class RotatingArmConstants {
