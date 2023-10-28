@@ -56,6 +56,8 @@ public class StateController extends SubsystemBase {
 
     @Override
     public void periodic() {
+        System.out.println("Position: " + positionState);
+        System.out.println("Element: " + gameElementState);
     }
 
     public void setGameElementState(GameElementState gameElementState) {
@@ -113,11 +115,11 @@ public class StateController extends SubsystemBase {
             if (positionState == PositionState.TUCKED) {
                 led.setState(LEDState.YELLOW);
                 System.out.println("cone tuck");
-                setLocalStates(CascadeState.TUCKED_CONE, RotateState.TUCKED_CONE, WristState.TUCKED_CONE);
+                setLocalStates(CascadeState.TUCKED_CONE, (phase == 0) ? RotateState.MID_CONE : RotateState.TUCKED_CONE, WristState.TUCKED_CONE);
             } else if (positionState == PositionState.GROUND_INTAKING) {
                 led.setState(LEDState.YELLOW);
                 System.out.println("cone ground");
-                setLocalStates(CascadeState.GROUND_INTAKE_CONE, RotateState.GROUND_INTAKE_CONE, WristState.GROUND_INTAKE_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.GROUND_INTAKE_CONE, RotateState.GROUND_INTAKE_CONE, WristState.GROUND_INTAKE_CONE);
             } else if (positionState == PositionState.SINGLE_SUBSTATION) {
                 led.setState(LEDState.YELLOW);
                 System.out.println("cone single");
@@ -129,7 +131,7 @@ public class StateController extends SubsystemBase {
             } else if (positionState == PositionState.LOW_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone low");
-                setLocalStates(CascadeState.LOW_CONE, RotateState.LOW_CONE, WristState.LOW_CONE);
+                setLocalStates((phase == 0) ? CascadeState.TUCKED_CONE : CascadeState.LOW_CONE, RotateState.LOW_CONE, WristState.LOW_CONE);
             } else if (positionState == PositionState.MID_SCORE) {
                 led.setState(LEDState.RAINBOW);
                 System.out.println("cone mid");
@@ -143,7 +145,7 @@ public class StateController extends SubsystemBase {
             if (positionState == PositionState.TUCKED) {
                 led.setState(LEDState.PURPLE);
                 System.out.println("cube tuck");
-                setLocalStates(CascadeState.TUCKED_CUBE, RotateState.TUCKED_CUBE, WristState.TUCKED_CUBE);
+                setLocalStates(CascadeState.TUCKED_CUBE, (phase == 0) ? RotateState.LOW_CUBE : RotateState.TUCKED_CUBE, WristState.TUCKED_CUBE);
             } else if (positionState == PositionState.GROUND_INTAKING) {
                 led.setState(LEDState.PURPLE);
                 System.out.println("cube ground");

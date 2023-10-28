@@ -20,16 +20,20 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SelectCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.VisionConstants;
+import frc.robot.Constants.CascadingArmConstants.CascadeState;
 import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
+import frc.robot.Constants.WristConstants.WristState;
 import frc.robot.Constants.JoystickConstants.PrimaryDrive;
 import frc.robot.Constants.JoystickConstants.PrimaryLeft;
 import frc.robot.Constants.JoystickConstants.Secondary;
+import frc.robot.Constants.RotatingArmConstants.RotateState;
 import frc.robot.commands.AutoCommands;
 import frc.robot.commands.AutoRotateInPlace;
 import frc.robot.commands.TeleopSwerve;
@@ -87,6 +91,9 @@ public class RobotContainer {
     private final JoystickButton doubleIntake = new JoystickButton(secondary, Secondary.doubleIntake);
     
     private final JoystickButton tucked = new JoystickButton(secondary, Secondary.tucked);
+    // private final JoystickButton wristCascadeTuck = new JoystickButton(secondary, Secondary.wristCascadeTuck);
+    // private final JoystickButton rotateTuck = new JoystickButton(secondary, Secondary.rotateTuck);
+
     private final JoystickButton leftTucked = new JoystickButton(secondary, Secondary.leftTucked);
 
     private final JoystickButton forceScore = new JoystickButton(secondary, Secondary.forceScore);
@@ -98,6 +105,7 @@ public class RobotContainer {
     public static final DataBoard dataBoard = new DataBoard();
     public static final CascadingArm cascadingArm = new CascadingArm();
     public static final RotatingArm rotatingArm = new RotatingArm();
+
     public static final Wrist wrist = new Wrist();
     public static final WheeledIntake wheeledIntake = new WheeledIntake();
     public static final LED led = new LED();
@@ -230,6 +238,21 @@ public class RobotContainer {
         doubleIntake.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.DOUBLE_SUBSTATION)));
         
         tucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
+
+        // wristCascadeTuck.onTrue(
+        //     new ParallelCommandGroup(
+        //         new InstantCommand(() -> wrist.setArmState(WristState.TUCKED_CONE)),
+        //         new InstantCommand(() -> cascadingArm.setArmState(CascadeState.TUCKED_CONE))
+        //     ));
+
+        // rotateTuck.onTrue(
+        //     new SequentialCommandGroup(
+        //         new InstantCommand(() -> rotatingArm.setArmState(RotateState.SEMI_TUCK)), 
+        //         new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED_CONE))
+        //     ));
+
+        // rotateTuck.onTrue(new InstantCommand(() -> rotatingArm.setArmState(RotateState.TUCKED_CONE)));
+
         leftTucked.onTrue(new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)));
 
         forceScore.onTrue(new InstantCommand(() -> stateController.toggleForceScore()));

@@ -158,20 +158,21 @@ public final class Constants {
     public static final class RotatingArmConstants {
         public static enum RotateState {
             INITIAL(0),
-            TUCKED_CUBE(8000),
-            GROUND_INTAKE_CUBE(16000),
-            DOUBLE_INTAKE_CUBE(80000),
-            LOW_CUBE(20000),
-            MID_CUBE(60000),
-            HIGH_CUBE(75000),
-            TUCKED_CONE(8000),
-            GROUND_INTAKE_CONE(17000),
-            DOUBLE_INTAKE_CONE(81000),
-            LOW_CONE(30000),
-            MID_CONE(76000),
-            MID_CONE_FORCE(73000),
-            HIGH_CONE(93000),
-            HIGH_CONE_FORCE(90000),
+            TUCKED_CUBE(10000), // 5000
+            GROUND_INTAKE_CUBE(19716),
+            DOUBLE_INTAKE_CUBE(70000), // 74890
+            LOW_CUBE(0),
+            SEMI_TUCK(21600),
+            MID_CUBE(31757),
+            HIGH_CUBE(67847),
+            TUCKED_CONE(10000), // 0
+            GROUND_INTAKE_CONE(14436),
+            DOUBLE_INTAKE_CONE(85000),
+            LOW_CONE(0), // 30000
+            MID_CONE(71000), // 76000
+            MID_CONE_FORCE(58000), // 73000
+            HIGH_CONE(90000), //93000
+            HIGH_CONE_FORCE(74000), // 90000
             OFF(-1);
 
             public final double setpoint;
@@ -188,14 +189,14 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.031;
+        public static final double kP = 0.035;
         public static final double kI = 0;
         public static final double kD = 0.005;
         public static final double kF = 0;
 
         public static final double absoluteMaxSetpoint = 120000;
         
-        public static final double setpointTolerance = 3000;
+        public static final double setpointTolerance = 2000;
 
         public static final int rotateContinuousCurrentLimit = 35;
         public static final int rotatePeakCurrentLimit = 45;
@@ -212,18 +213,18 @@ public final class Constants {
     public static final class CascadingArmConstants {
         public static enum CascadeState {
             INITIAL(0),
-            TUCKED_CUBE(0),
-            GROUND_INTAKE_CUBE(8000),
+            TUCKED_CUBE(-1000), // 0
+            GROUND_INTAKE_CUBE(-4990),
             DOUBLE_INTAKE_CUBE(0),
             LOW_CUBE(0),
             MID_CUBE(0),
-            HIGH_CUBE(5000),
-            TUCKED_CONE(0),
-            GROUND_INTAKE_CONE(4500),
+            HIGH_CUBE(-20811),
+            TUCKED_CONE(-1000), // 0
+            GROUND_INTAKE_CONE(-22688),
             DOUBLE_INTAKE_CONE(0),
-            LOW_CONE(18400),
-            MID_CONE(13500),
-            HIGH_CONE(41000),
+            LOW_CONE(0), // 18400
+            MID_CONE(-24000), /// 13500
+            HIGH_CONE(-50000), //41000
             OFF(-1);
 
             public final double setpoint;
@@ -256,19 +257,19 @@ public final class Constants {
     public static final class WristConstants {
         public static enum WristState {
             INITIAL(0),
-            TUCKED_CUBE(500),
-            GROUND_INTAKE_CUBE(14000),
-            DOUBLE_INTAKE_CUBE(18000),
-            LOW_CUBE(14000),
-            MID_CUBE(14000),
-            HIGH_CUBE(14000),
-            TUCKED_CONE(500),
-            GROUND_INTAKE_CONE(15000),
-            DOUBLE_INTAKE_CONE(18000),
-            LOW_CONE(12000),
-            MID_CONE(10000),
-            HIGH_CONE(10000),
-            FORCE_SCORE(18000),
+            TUCKED_CUBE(10527), // 500
+            GROUND_INTAKE_CUBE(22529), // 14000
+            DOUBLE_INTAKE_CUBE(25000), // 18000
+            LOW_CUBE(10386), // 14000
+            MID_CUBE(10386), // 14000
+            HIGH_CUBE(10386), // 14000
+            TUCKED_CONE(10527), // 500
+            GROUND_INTAKE_CONE(18878), // 15000
+            DOUBLE_INTAKE_CONE(18000), // 18000
+            LOW_CONE(10385), // 12000
+            MID_CONE(9000), // 10000
+            HIGH_CONE(13000), //10000
+            FORCE_SCORE(16549), // 18000
             OFF(-1);
 
             public final double setpoint;
@@ -313,8 +314,8 @@ public final class Constants {
             }
         }
         
-        public static final int wheeledIntake1Id = 5;
-        public static final int wheeledIntake2Id = 6;
+        public static final int wheeledIntake1Id = 6;
+        public static final int wheeledIntake2Id = 5;
     }
 
     public static final class JoystickConstants {
@@ -357,6 +358,8 @@ public final class Constants {
 
             public static final int forceScore = 15;
             
+            // public static final int wristCascadeTuck = 8;
+            // public static final int rotateTuck = 9;
             public static final int tucked = 8;
             public static final int leftTucked = 14;
             
