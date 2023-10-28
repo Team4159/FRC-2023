@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.subsystems.RotatingArm;
+import frc.robot.subsystems.StateController;
 
 
 /*
@@ -87,6 +88,9 @@ public class DataBoard {
         SmartDashboard.putNumber("Rotate", RobotContainer.rotatingArm.getEncoderPosition());
         SmartDashboard.putNumber("Cascade", RobotContainer.cascadingArm.getEncoderPosition());
         SmartDashboard.putNumber("Wrist", RobotContainer.wrist.getEncoderPosition());
+
+        SmartDashboard.putString("Element", RobotContainer.stateController.getGameElementState());
+        SmartDashboard.putString("Position", RobotContainer.stateController.getPositionState());
     }
 
     public Command getCommand() {return new DataBoardCommand().ignoringDisable(true).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);}

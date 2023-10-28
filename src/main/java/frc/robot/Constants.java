@@ -189,7 +189,7 @@ public final class Constants {
         public static final int rotatingArmID1 = 1; 
         public static final int rotatingArmID2 = 2;
 
-        public static final double kP = 0.035;
+        public static final double kP = 0.02;
         public static final double kI = 0;
         public static final double kD = 0.005;
         public static final double kF = 0;
