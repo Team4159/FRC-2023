@@ -207,7 +207,8 @@ public class RobotContainer {
             //     new WaitCommand(4)
             // ));
 
-        
+        // wheeledIntake.setDefaultCommand(wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)));
+
         intake.onTrue(
             new ConditionalCommand(
                 new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.INTAKE_CONE)),
@@ -337,7 +338,6 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        
         if(dataBoard.getAutoPos() == -1) return new PrintCommand("Auto Disabled");
         if(dataBoard.getAutoPos() == 0) return new SequentialCommandGroup(
             new InstantCommand(() -> s_Swerve.resetOdometry(

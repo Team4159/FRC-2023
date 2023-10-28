@@ -31,7 +31,7 @@ public class WheeledIntake extends SubsystemBase{
         m2.restoreFactoryDefaults();
         m2.setSmartCurrentLimit(20);
         m2.setIdleMode(IdleMode.kCoast);
-        m2.follow(m1, true);
+        // m2.follow(m1, true);
     }
 
     @Override
@@ -41,7 +41,7 @@ public class WheeledIntake extends SubsystemBase{
 
     public void setWheeledIntake(double speed) {
         m1.set(speed);
-        // m2.set(speed);
+        m2.set(-speed);
     }
 
     public void setWheeledIntakeState(WheeledIntakeState wheeledIntakeState){
