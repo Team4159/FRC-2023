@@ -91,6 +91,8 @@ public class DataBoard {
 
         SmartDashboard.putString("Element", RobotContainer.stateController.getGameElementState());
         SmartDashboard.putString("Position", RobotContainer.stateController.getPositionState());
+
+        SmartDashboard.putString("Wheeled Intake", RobotContainer.wheeledIntake.getWheeledIntakeState());
     }
 
     public Command getCommand() {return new DataBoardCommand().ignoringDisable(true).withInterruptBehavior(InterruptionBehavior.kCancelIncoming);}

@@ -41,9 +41,26 @@ public class WheeledIntake extends SubsystemBase{
 
     public void setWheeledIntake(double speed) {
         m1.set(speed);
+        // m2.set(speed);
     }
 
     public void setWheeledIntakeState(WheeledIntakeState wheeledIntakeState){
         this.wheeledIntakeState = wheeledIntakeState;
+    }
+
+    public String getWheeledIntakeState() {
+        if (this.wheeledIntakeState == WheeledIntakeState.INTAKE_CONE) {
+            return "Intake cone";
+        } else if (this.wheeledIntakeState == WheeledIntakeState.INTAKE_CUBE) {
+            return "Intake cube";
+        } else if (this.wheeledIntakeState == WheeledIntakeState.OUTTAKE_CUBE) {
+            return "Outtake cube";
+        } else if (this.wheeledIntakeState == WheeledIntakeState.OUTTAKE_CONE) {
+            return "Outtake cone";
+        } else if (this.wheeledIntakeState == WheeledIntakeState.NEUTRAL) {
+            return "Neutral";
+        } else {
+            return "Off"; 
+        }
     }
 }

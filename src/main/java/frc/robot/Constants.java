@@ -159,15 +159,15 @@ public final class Constants {
         public static enum RotateState {
             INITIAL(0),
             TUCKED_CUBE(10000), // 5000
-            GROUND_INTAKE_CUBE(19716),
-            DOUBLE_INTAKE_CUBE(70000), // 74890
-            LOW_CUBE(0),
-            SEMI_TUCK(21600),
-            MID_CUBE(31757),
-            HIGH_CUBE(67847),
+            GROUND_INTAKE_CUBE(30000), // 19716
+            DOUBLE_INTAKE_CUBE(85000), // 74890
+            LOW_CUBE(0), // 0
+            SEMI_TUCK(21600), // 21600
+            MID_CUBE(41757), // 21600
+            HIGH_CUBE(67847), // 21600
             TUCKED_CONE(10000), // 0
-            GROUND_INTAKE_CONE(14436),
-            DOUBLE_INTAKE_CONE(85000),
+            GROUND_INTAKE_CONE(30000), // 14436
+            DOUBLE_INTAKE_CONE(85000), // 85000
             LOW_CONE(0), // 30000
             MID_CONE(71000), // 76000
             MID_CONE_FORCE(58000), // 73000
@@ -214,11 +214,11 @@ public final class Constants {
         public static enum CascadeState {
             INITIAL(0),
             TUCKED_CUBE(-1000), // 0
-            GROUND_INTAKE_CUBE(-4990),
+            GROUND_INTAKE_CUBE(-10000),
             DOUBLE_INTAKE_CUBE(0),
-            LOW_CUBE(0),
-            MID_CUBE(0),
-            HIGH_CUBE(-20811),
+            LOW_CUBE(0), // 0
+            MID_CUBE(0), // 0
+            HIGH_CUBE(-20811), // 20811
             TUCKED_CONE(-1000), // 0
             GROUND_INTAKE_CONE(-22688),
             DOUBLE_INTAKE_CONE(0),
@@ -258,13 +258,13 @@ public final class Constants {
         public static enum WristState {
             INITIAL(0),
             TUCKED_CUBE(10527), // 500
-            GROUND_INTAKE_CUBE(22529), // 14000
-            DOUBLE_INTAKE_CUBE(25000), // 18000
+            GROUND_INTAKE_CUBE(22000), // 15000
+            DOUBLE_INTAKE_CUBE(18000), // 18000
             LOW_CUBE(10386), // 14000
             MID_CUBE(10386), // 14000
             HIGH_CUBE(10386), // 14000
             TUCKED_CONE(10527), // 500
-            GROUND_INTAKE_CONE(18878), // 15000
+            GROUND_INTAKE_CONE(18000), // 15000
             DOUBLE_INTAKE_CONE(18000), // 18000
             LOW_CONE(10385), // 12000
             MID_CONE(9000), // 10000

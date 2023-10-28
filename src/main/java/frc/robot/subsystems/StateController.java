@@ -14,7 +14,7 @@ public class StateController extends SubsystemBase {
     private Wrist wrist;
 
     public GameElementState gameElementState;
-    public PositionState positionState;
+    private PositionState positionState;
     private boolean forceScore;
 
     private int phase;
@@ -56,8 +56,6 @@ public class StateController extends SubsystemBase {
 
     @Override
     public void periodic() {
-        System.out.println("Position: " + positionState);
-        System.out.println("Element: " + gameElementState);
     }
 
     public void setGameElementState(GameElementState gameElementState) {
@@ -85,9 +83,9 @@ public class StateController extends SubsystemBase {
         } else if (this.positionState == PositionState.GROUND_INTAKING) {
             return "Ground intaking";
         } else if (this.positionState == PositionState.SINGLE_SUBSTATION) {
-            return "Single station";
+            return "Single";
         } else if (this.positionState == PositionState.DOUBLE_SUBSTATION) {
-            return "Double station";
+            return "Double";
         } else if (this.positionState == PositionState.LOW_SCORE) {
             return "Low";
         } else if (this.positionState == PositionState.MID_SCORE) {
