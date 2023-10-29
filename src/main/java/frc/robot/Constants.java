@@ -164,15 +164,15 @@ public final class Constants {
             LOW_CUBE(0), // 0
             SEMI_TUCK(21600), // 21600
             MID_CUBE(41757), // 21600
-            HIGH_CUBE(77847), // 21600
+            HIGH_CUBE(97847), // 21600
             TUCKED_CONE(10000), // 0
             GROUND_INTAKE_CONE(28000), // 14436
-            DOUBLE_INTAKE_CONE(85000), // 85000
+            DOUBLE_INTAKE_CONE(87000), // 85000
             LOW_CONE(0), // 30000
             MID_CONE(71000), // 76000
             MID_CONE_FORCE(70000), // 73000
-            HIGH_CONE(95000), //93000
-            HIGH_CONE_FORCE(94000), // 90000
+            HIGH_CONE(97000), //93000
+            HIGH_CONE_FORCE(95000), // 90000
             OFF(-1);
 
             public final double setpoint;
@@ -214,11 +214,11 @@ public final class Constants {
         public static enum CascadeState {
             INITIAL(0),
             TUCKED_CUBE(-1000), // 0
-            GROUND_INTAKE_CUBE(-10000),
+            GROUND_INTAKE_CUBE(-13000),
             DOUBLE_INTAKE_CUBE(0),
             LOW_CUBE(0), // 0
             MID_CUBE(0), // 0
-            HIGH_CUBE(-20811), // 20811
+            HIGH_CUBE(-25811), // 20811
             TUCKED_CONE(-1000), // 0
             GROUND_INTAKE_CONE(-24688),
             DOUBLE_INTAKE_CONE(0),
@@ -258,11 +258,11 @@ public final class Constants {
         public static enum WristState {
             INITIAL(0),
             TUCKED_CUBE(10527), // 500
-            GROUND_INTAKE_CUBE(21000), // 15000
+            GROUND_INTAKE_CUBE(20000), // 15000
             DOUBLE_INTAKE_CUBE(20000), // 18000
-            LOW_CUBE(10386), // 14000
+            LOW_CUBE(8386), // 14000
             MID_CUBE(10386), // 14000
-            HIGH_CUBE(10386), // 14000
+            HIGH_CUBE(13386), // 14000
             TUCKED_CONE(10527), // 500
             GROUND_INTAKE_CONE(17000), // 15000
             DOUBLE_INTAKE_CONE(20000), // 18000

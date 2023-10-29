@@ -71,12 +71,6 @@ public class AutoCommands {
             new WaitCommand(1),
             new InstantCommand(() -> stateController.setPositionState(PositionState.LOW_SCORE)),
             new WaitCommand(1),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED)), 
-            new WaitCommand(1),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)),
-            new WaitUntilCommand(rotatingArm::atDebouncedSetPoint).withTimeout(1.5),
-            new InstantCommand(() -> stateController.setPositionState(PositionState.GROUND_INTAKING)),
-            new WaitUntilCommand(cascadingArm::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> stateController.setPositionState(PositionState.TUCKED))
         );
     }
