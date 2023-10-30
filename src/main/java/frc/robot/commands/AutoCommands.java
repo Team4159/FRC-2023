@@ -5,15 +5,16 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.WaitUntilCommand;
-import frc.robot.RobotContainer;
 import frc.robot.Constants.WheeledIntakeConstants.WheeledIntakeState;
+import frc.robot.RobotContainer;
 import frc.robot.commands.StraightAutobalance.AutobalanceDirection;
 import frc.robot.subsystems.CascadingArm;
 import frc.robot.subsystems.RotatingArm;
 import frc.robot.subsystems.StateController;
-import frc.robot.subsystems.WheeledIntake;
 import frc.robot.subsystems.StateController.GameElementState;
 import frc.robot.subsystems.StateController.PositionState;
+import frc.robot.subsystems.WheeledIntake;
+import frc.robot.subsystems.Wrist;
 
 // Container class to hold lots of commands for auto
 public class AutoCommands {
@@ -22,6 +23,7 @@ public class AutoCommands {
     private StateController stateController = RobotContainer.stateController;
     private RotatingArm rotatingArm = RobotContainer.rotatingArm;
     private CascadingArm cascadingArm = RobotContainer.cascadingArm;
+    private Wrist wrist = RobotContainer.wrist; 
     private WheeledIntake wheeledIntake = RobotContainer.wheeledIntake;
 
     // sequential command to score cubes in low
@@ -64,6 +66,8 @@ public class AutoCommands {
             new WaitUntilCommand(rotatingArm::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
             new WaitUntilCommand(cascadingArm::atDebouncedSetPoint).withTimeout(1.5),
+            new InstantCommand(() -> stateController.setPositionState(PositionState.HIG_SCORE)),
+            new WaitUntilCommand(wrist::atDebouncedSetPoint).withTimeout(1.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.OUTTAKE_CUBE)),
             new WaitCommand(0.5),
             new InstantCommand(() -> wheeledIntake.setWheeledIntakeState(WheeledIntakeState.NEUTRAL)),

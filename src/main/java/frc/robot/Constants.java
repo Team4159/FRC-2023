@@ -160,7 +160,7 @@ public final class Constants {
             INITIAL(0),
             TUCKED_CUBE(10000), // 5000
             GROUND_INTAKE_CUBE(30000), // 19716
-            DOUBLE_INTAKE_CUBE(85000), // 74890
+            DOUBLE_INTAKE_CUBE(87000), // 74890
             LOW_CUBE(0), // 0
             SEMI_TUCK(21600), // 21600
             MID_CUBE(41757), // 21600
@@ -219,12 +219,12 @@ public final class Constants {
             LOW_CUBE(0), // 0
             MID_CUBE(0), // 0
             HIGH_CUBE(-25811), // 20811
-            TUCKED_CONE(-1000), // 0
+            TUCKED_CONE(5000), // 0
             GROUND_INTAKE_CONE(-24688),
             DOUBLE_INTAKE_CONE(0),
             LOW_CONE(0), // 18400
             MID_CONE(-24000), /// 13500
-            HIGH_CONE(-55000), //41000
+            HIGH_CONE(-60000), //41000
             OFF(-1);
 
             public final double setpoint;
@@ -262,8 +262,8 @@ public final class Constants {
             DOUBLE_INTAKE_CUBE(20000), // 18000
             LOW_CUBE(8386), // 14000
             MID_CUBE(10386), // 14000
-            HIGH_CUBE(13386), // 14000
-            TUCKED_CONE(10527), // 500
+            HIGH_CUBE(17000), // 14000
+            TUCKED_CONE(8000), // 500
             GROUND_INTAKE_CONE(17000), // 15000
             DOUBLE_INTAKE_CONE(20000), // 18000
             LOW_CONE(10385), // 12000
@@ -301,7 +301,7 @@ public final class Constants {
     
     public static final class WheeledIntakeConstants {
         public static enum WheeledIntakeState{
-            INTAKE_CUBE(0.25),
+            INTAKE_CUBE(0.2),
             INTAKE_CONE(0.6),
             OUTTAKE_CUBE(-0.25),
             OUTTAKE_CONE(-0.12),

@@ -3,6 +3,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonFX;
 
+import edu.wpi.first.math.filter.Debouncer;
+import edu.wpi.first.math.filter.Debouncer.DebounceType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.WristConstants.WristState;
 import frc.robot.Robot;
@@ -13,9 +15,13 @@ public class Wrist extends SubsystemBase {
     private TalonFX wristTalon;
     private WristState wristState;
 
+    private Debouncer setpointDebouncer;
+
     public Wrist() {
         wristTalon = new TalonFX(WristConstants.wristId);
         configMotor();
+
+        setpointDebouncer = new Debouncer(0.2, DebounceType.kRising);
 
         wristState = WristState.INITIAL;
     }
@@ -47,9 +53,13 @@ public class Wrist extends SubsystemBase {
     }
 
     public boolean atDesiredSetPoint() {
-        return true;
-        // if (wristState.equals(WristState.OFF)) return true;
-        // return isAtSetpoint(wristState.setpoint, WristConstants.setpointTolerance);
+        // return true;
+        if (wristState.equals(WristState.OFF)) return true;
+        return isAtSetpoint(wristState.setpoint, WristConstants.setpointTolerance);
+    }
+
+    public boolean atDebouncedSetPoint() {
+        return setpointDebouncer.calculate(atDesiredSetPoint());
     }
 
     public boolean isAtSetpoint(double setpoint) {
